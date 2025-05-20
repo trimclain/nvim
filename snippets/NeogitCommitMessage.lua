@@ -12,7 +12,7 @@ local c = ls.choice_node
 return {
     -- lazy-lock
     s("ll", {
-        t("chore(nvim): update lazy-lock"),
+        t("chore: update lazy-lock"),
     }),
     -- config update
     s("cu", {
