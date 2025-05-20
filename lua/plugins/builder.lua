@@ -10,7 +10,7 @@ return {
             -- {"<C-m>", function() require("builder").build({ color = true }) end, desc = "Build current buffer"},
         },
         opts = {
-            type = CONFIG.plugins.builder_type,
+            type = "bot", -- "bot": bottom horizontal split, "vert": right vertical split, "float": floating window
             float_border = CONFIG.ui.border,
             commands = {
                 c = "gcc % -o $basename.out && ./$basename.out",

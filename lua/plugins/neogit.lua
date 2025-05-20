@@ -5,6 +5,7 @@ return {
         -- dir = "~/projects/open-source/nvim-plugins/neogit",
         -- https://github.com/NeogitOrg/neogit/tree/68a3e90e9d1ed9e362317817851d0f34b19e426b?tab=readme-ov-file#configuration
         commit = "68a3e90", -- pin to the version I like more
+        cond = CONFIG.git.enabled,
         dependencies = {
             "plenary.nvim",
             "diffview.nvim",

@@ -13,8 +13,13 @@
 --                                                                           --
 -------------------------------------------------------------------------------
 
--- Fast way to switch to minimal (in terms of ui) config
-local type = "default" --- @usage: "default" | "minimal"
+--- @usage: "default" | "minimal"
+local mode = "default"
+
+if jit.os:find("Windows") and (vim.g.neovide or vim.fn.has("gui_running") == 1) then
+    -- I want neovide to start fast, until I fix 15 minute startup time on garbage os
+    mode = "minimal"
+end
 
 -- Important settings for easy modification
 CONFIG = {
@@ -24,10 +29,11 @@ CONFIG = {
         -- escape_keys = { "jk", "JK", "jj" },
     },
     lsp = {
+        enabled = mode == "default",
         format_on_save = false,
         virtual_text = false,
-        show_signature_help = true,
-        enable_copilot = vim.fn.has("unix") == 1 and vim.fn.has("wsl") == 0,
+        show_signature_help = not jit.os:find("Windows"),
+        enable_copilot = not jit.os:find("Windows"),
     },
     ui = {
         -- Colorschemes (note/10):
@@ -46,33 +52,36 @@ CONFIG = {
         inlay_hints = false,
     },
     git = {
+        enabled = mode == "default",
         show_line_blame = true,
         show_signcolumn = true,
     },
     plugins = {
+        enable_completion = mode == "default",
         -- use blink.cmp or nvim-cmp
         use_blink_completion = false,
         -- use fzf-lua or telescope.nvim
         use_fzf_lua = vim.fn.executable("fzf") == 1 and false,
 
-        neoscroll = true,
+        neoscroll = not jit.os:find("Windows"),
         smear_cursor = false, -- found out about kitty's cursor trail
-        -- workflow: no bufferline, use tabs as workspaces with tabby(?), switch between buffers using telescope and harpoon
-        bufferline = false, -- to force myself to use harpoon more
-        dashboard = type == "default",
-        illuminate = type == "default",
-        indentline = type == "default",
-        lualine = type == "default",
-        spinner = type == "default", -- animation shown when tasks are ongoing
-        spinner_type = "dots_pulse", -- spinners: dots_pulse, moon, meter, zip, pipe, dots, arc
 
-        -- Builder
-        builder_type = "bot", -- "bot": bottom horizontal split, "vert": right vertical split, "float": floating window
+        autopairs = mode == "default",
+        bufferline = false, -- to use harpoon more
+        dashboard = mode == "default",
+        dressing = mode == "default",
+        illuminate = mode == "default",
+        indentline = mode == "default",
+        lualine = mode == "default",
+        spinner = mode == "default", -- animation shown when tasks are ongoing
+        spinner_mode = "dots_pulse", -- spinners: dots_pulse, moon, meter, zip, pipe, dots, arc
+        todo_comments = mode == "default",
+        treesj = mode == "default",
     },
 }
 
 -- -- Check for neovim dependencies:
--- -- gcc: nvim-treesitter
+-- -- gcc: nvim-treesitter, telescope-fzf-native
 -- -- make: telescope-fzf-native
 -- -- ripgrep: telescope, grug-far, todo-comments, fzf-lua
 -- -- node: mason, nvim-lspconfig

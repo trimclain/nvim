@@ -18,12 +18,12 @@ return {
     s("cu", {
         t("chore"),
         c(1, {
+            t(""),
             sn(nil, {
                 t("("),
                 i(1, "scope"),
                 t(")"),
             }),
-            t(""),
         }),
         t(": update config"),
     }),

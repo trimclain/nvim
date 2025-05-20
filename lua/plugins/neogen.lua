@@ -2,6 +2,7 @@
 return {
     {
         "danymat/neogen",
+        enabled = not jit.os:find("Windows"),
         dependencies = "nvim-treesitter/nvim-treesitter",
         keys = {
             {

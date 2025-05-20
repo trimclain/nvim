@@ -2,6 +2,7 @@
 return {
     {
         "lewis6991/gitsigns.nvim",
+        cond = CONFIG.git.enabled,
         event = { "BufReadPre", "BufNewFile" },
         opts = function()
             local bold_line_left = require("core.icons").ui.BoldLineLeft

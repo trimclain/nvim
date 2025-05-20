@@ -6,17 +6,21 @@ end
 return {
     {
         "hrsh7th/nvim-cmp",
+        cond = CONFIG.plugins.enable_completion,
         version = false, -- last release is way too old
         event = "VeryLazy", -- '/' and ':' autocomplete won't always work on InsertEnter
         dependencies = {
-            "hrsh7th/cmp-nvim-lsp",
+            "hrsh7th/cmp-nvim-lsp", -- depends on neovim/nvim-lspconfig
             "hrsh7th/cmp-buffer",
             "hrsh7th/cmp-path",
             "L3MON4D3/LuaSnip",
             "saadparwaiz1/cmp_luasnip",
             "hrsh7th/cmp-cmdline",
             "f3fora/cmp-spell",
-            "kdheepak/cmp-latex-symbols",
+            {
+                "kdheepak/cmp-latex-symbols",
+                enabled = not jit.os:find("Windows"),
+            },
 
             -- "lukas-reineke/cmp-rg" -- source for using ripgrep
             -- "ray-x/cmp-treesitter" -- source for treesitter nodes
@@ -31,7 +35,7 @@ return {
             {
                 "zbirenbaum/copilot-cmp",
                 enabled = CONFIG.lsp.enable_copilot and vim.fn.executable("node") == 1,
-                cond = vim.g.neovide == nil,
+                cond = vim.g.neovide == nil, -- I didn't figure out a way for neovide to get access to node
                 dependencies = "copilot.lua",
                 opts = {},
                 config = function(_, opts)
@@ -245,6 +249,7 @@ return {
         -- PERF: it takes 15-25 ms to load on startup
         "L3MON4D3/LuaSnip",
         version = "v2.*",
+        cond = CONFIG.plugins.enable_completion,
         dependencies = {
             -- PERF: it takes 8 ms to load on startup
             "rafamadriz/friendly-snippets",

@@ -4,6 +4,7 @@ local Icons = require("core.icons")
 return {
     {
         "folke/todo-comments.nvim",
+        cond = CONFIG.plugins.todo_comments,
         cmd = { "TodoTrouble", "TodoTelescope" },
         -- stylua: ignore
         keys = {

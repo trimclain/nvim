@@ -19,19 +19,5 @@ local t = ls.text_node
 -- local fmt = require("luasnip.extras.fmt").fmt
 
 return {
-	s("trig", t("loaded!")),
-
-    -- -- config update
-    -- s("cu", {
-    --     t("chore"),
-    --     c(1, {
-    --         sn(nil, {
-    --             t("("),
-    --             i(1, "scope"),
-    --             t(")"),
-    --         }),
-    --         t(""),
-    --     }),
-    --     t(": update config"),
-    -- }),
+    s("trig", t("loaded!")),
 }

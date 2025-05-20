@@ -2,6 +2,7 @@
 return {
     {
         "ThePrimeagen/refactoring.nvim",
+        enabled = not jit.os:find("Windows"),
         -- stylua: ignore
         keys = {
             { "<leader>rb", function() require("refactoring").refactor("Extract Block") end, desc = "Extract Block (Refactor)" },

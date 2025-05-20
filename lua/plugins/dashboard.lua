@@ -2,7 +2,7 @@
 return {
     {
         "nvimdev/dashboard-nvim",
-        enabled = CONFIG.plugins.dashboard,
+        cond = CONFIG.plugins.dashboard,
         event = "VimEnter",
         dependencies = "nvim-web-devicons",
         opts = function()

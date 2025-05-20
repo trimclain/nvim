@@ -2,6 +2,7 @@
 return {
     {
         "sindrets/diffview.nvim",
+        cond = CONFIG.git.enabled,
         dependencies = "nvim-web-devicons",
         cmd = { "DiffviewOpen", "DiffviewClose", "DiffviewToggleFiles", "DiffviewFocusFiles" },
         keys = {

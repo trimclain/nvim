@@ -5,6 +5,7 @@ return {
     -- LSP Configuration & Plugins
     {
         "neovim/nvim-lspconfig",
+        cond = CONFIG.lsp.enabled,
         event = { "BufReadPre", "BufNewFile" },
         dependencies = {
             -- used by some keymaps
@@ -163,6 +164,7 @@ return {
     -- cmdline tools and lsp servers
     {
         "williamboman/mason.nvim",
+        cond = CONFIG.lsp.enabled,
         dependencies = {
             "williamboman/mason-lspconfig.nvim",
             "WhoIsSethDaniel/mason-tool-installer.nvim",
@@ -240,6 +242,7 @@ return {
                 volar = {}, -- vue-language-server
                 graphql = {},
                 jsonls = {},
+                lemminx = {}, -- xml language server
 
                 -- yamlls = {},
                 -- texlab = {}, -- latex
@@ -276,32 +279,90 @@ return {
                         },
                     },
                 },
+
+                powershell_es = {
+                    settings = {
+                        powershell = {
+                            codeFormatting = {
+                                preset = "Custom", -- using OTBS with additional config
+                                newLineAfterCloseBrace = false, -- default: true
+                                newLineAfterOpenBrace = false, -- default: true
+                                addWhitespaceAroundPipe = true,
+                                alignPropertyValuePairs = true,
+                                autoCorrectAliases = false,
+                                avoidSemicolonsAsLineTerminators = false,
+                                ignoreOneLineBlock = true,
+                                openBraceOnSameLine = true,
+                                pipelineIndentationStyle = "NoIndentation",
+                                trimWhitespaceAroundPipe = false,
+                                useConstantStrings = false,
+                                useCorrectCasing = false,
+                                whitespaceAfterSeparator = true,
+                                whitespaceAroundOperator = true,
+                                whitespaceAroundPipe = true,
+                                whitespaceBeforeOpenBrace = true,
+                                whitespaceBeforeOpenParen = true,
+                                whitespaceBetweenParameters = false,
+                                whitespaceInsideBrace = true,
+                            },
+                        },
+                    },
+                },
             }
 
-            local formatters_and_linters = {
-                -- Formatters
+            local formatters = {
                 "isort",
                 "autopep8",
                 "prettierd",
                 "stylua",
                 "shfmt", -- "beautysh",
                 "gofumpt",
+            }
 
-                -- Linters
+            local linters = {
                 -- "eslint_d", -- need config file, annoying
                 -- "luacheck", -- "selene",
                 -- "markdownlint",
                 -- "stylelint", -- css linter
                 "shellcheck", -- extends bashls
+
             }
 
+            if vim.fn.executable("go") == 0 then
+                servers.gopls = nil
+                -- WARN: update gofumpt index after updating formatters_and_linters table
+                table.remove(formatters, 6)
+            end
+            if vim.fn.executable("pwsh") == 0 then
+                servers.powershell_es = nil
+            end
+            if jit.os:find("Windows") then
+                servers.bashls = nil
+                servers.dockerls = nil
+                servers.cssls = nil
+                servers.emmet_ls = nil
+                servers.tailwindcss = nil
+                servers.ts_ls = nil
+                servers.volar = nil
+                servers.graphql = nil
+                servers.vimls = nil
+
+                -- WARN: update shfmt and shellcheck indices after updating their tables
+                table.remove(formatters, 5)
+                table.remove(linters, 1)
+            else
+                servers.lemminx = nil
+            end
+
             local ensure_installed = vim.tbl_keys(servers or {})
-            vim.list_extend(ensure_installed, formatters_and_linters)
+            vim.list_extend(ensure_installed, formatters)
+            vim.list_extend(ensure_installed, linters)
             require("mason-tool-installer").setup({ ensure_installed = ensure_installed })
 
             require("mason-lspconfig").setup({
                 ensure_installed = {},
                 automatic_installation = false,
+                automatic_enable = true,
                 handlers = {
                     function(server_name)
                         local server = servers[server_name] or {}

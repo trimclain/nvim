@@ -26,19 +26,39 @@ return {
                 "google-chrome",
                 "brave",
                 "brave-browser",
+
             }
-            for _, browser in ipairs(browserlist) do
-                if vim.fn.executable(browser) == 1 then
-                    vim.g.mkdp_browser = browser
-                    break
+            local browserlist_on_windows = {
+                "C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe",
+                "C:\\Program Files (x86)\\Microsoft\\Edge\\Application\\msedge.exe",
+            }
+
+            local on_windows = jit.os:find("Windows")
+            if on_windows then
+                for _, browser in ipairs(browserlist_on_windows) do
+                    if vim.fn.executable(browser) == 1 then
+                        vim.g.mkdp_browser = browser
+                        break
+                    end
                 end
+            else
+                for _, browser in ipairs(browserlist) do
+                    if vim.fn.executable(browser) == 1 then
+                        vim.g.mkdp_browser = browser
+                        break
+                    end
+                end
+            end
+
+            if not vim.g.mkdp_browser then
+                vim.notify("Couldn't find installed browser", vim.log.levels.ERROR, { title = "Markdown Previewer" })
             end
 
             -- Open preview in a new window
             -- doesn't work on mac: https://github.com/iamcco/markdown-preview.nvim#faq
             vim.cmd([[
-                function OpenMarkdownPreview(url)
-                    execute "silent ! " . g:mkdp_browser . " --new-window " . a:url
+                function! OpenMarkdownPreview(url)
+                    execute 'silent ! "' . g:mkdp_browser . '" --new-window ' . a:url
                 endfunction
                 let g:mkdp_browserfunc = "OpenMarkdownPreview"
             ]])

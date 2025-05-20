@@ -2,6 +2,7 @@
 return {
     {
         "stevearc/dressing.nvim",
+        cond = CONFIG.plugins.dressing,
         lazy = true,
         init = function()
             ---@diagnostic disable-next-line: duplicate-set-field

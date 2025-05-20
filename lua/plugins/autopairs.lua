@@ -2,6 +2,7 @@ return {
     -- auto pairs
     {
         "windwp/nvim-autopairs",
+        cond = CONFIG.plugins.autopairs,
         event = "InsertEnter",
         opts = {
             check_ts = true, -- work with treesitter
@@ -68,6 +69,7 @@ return {
     -- close tags using treesitter
     {
         "windwp/nvim-ts-autotag",
+        cond = CONFIG.plugins.autopairs,
         dependencies = "nvim-treesitter",
         event = "InsertEnter",
         config = true,

@@ -3,7 +3,7 @@ return {
     -- althernative: https://github.com/declancm/cinnamon.nvim
     {
         "karb94/neoscroll.nvim",
-        cond = CONFIG.plugins.neoscroll,
+        cond = CONFIG.plugins.neoscroll and vim.g.neovide == nil,
         event = { "BufReadPost" },
         opts = {
             -- All these keys will be mapped to their corresponding default scrolling animation

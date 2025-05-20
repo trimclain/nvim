@@ -4,6 +4,7 @@ return {
     {
         "ThePrimeagen/harpoon",
         branch = "harpoon2",
+        enabled = not jit.os:find("Windows"),
         dependencies = "plenary.nvim",
         -- dir = "~/projects/open-source/nvim-plugins/harpoon",
         -- stylua: ignore

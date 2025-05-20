@@ -103,6 +103,10 @@ return {
             -- Prefer git instead of curl in order to improve connectivity in some environments
             require("nvim-treesitter.install").prefer_git = true
 
+            if jit.os:find("Windows") then
+                table.insert(opts.ensure_installed, "powershell")
+            end
+
             -- automatically install missing parsers when entering buffer if `tree-sitter` cli is installed
             if vim.fn.executable("tree-sitter") == 1 then
                 opts.auto_install = true
