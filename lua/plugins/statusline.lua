@@ -12,8 +12,10 @@ return {
             -- Conditions to disable sections
             -----------------------------------------------------------------------------------------------------------
             local hide_in_width = function(min_width)
+                local has_splits = #vim.api.nvim_tabpage_list_wins(0) > 1
+                local multiplier = has_splits and 0.4 or 1
                 if min_width then
-                    return vim.api.nvim_win_get_width(0) > min_width
+                    return vim.api.nvim_win_get_width(0) > min_width * multiplier
                 end
                 return vim.api.nvim_win_get_width(0) > 80
             end
