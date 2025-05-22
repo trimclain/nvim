@@ -56,7 +56,7 @@ vim.api.nvim_create_autocmd("BufReadPost", {
 -- Trim whitespaces on save
 vim.api.nvim_create_autocmd("BufWritePre", {
     callback = function()
-        if vim.bo.filetype ~= "markdown" then
+        if not vim.b.editorconfig.trim_trailing_whitespace and vim.bo.filetype ~= "markdown" then
             -- To restore the cursor position if I want to someday
             -- let l:save = winsaveview()
             vim.cmd("%s/\\s\\+$//e")
