@@ -239,7 +239,7 @@ return {
                 emmet_ls = {},
                 tailwindcss = {},
                 ts_ls = {}, -- Extended: https://github.com/pmizio/typescript-tools.nvim
-                volar = {}, -- vue-language-server
+                vue_ls = {}, -- vue-language-server
                 graphql = {},
                 jsonls = {},
                 lemminx = {}, -- xml language server
@@ -343,7 +343,7 @@ return {
                 servers.emmet_ls = nil
                 servers.tailwindcss = nil
                 servers.ts_ls = nil
-                servers.volar = nil
+                servers.vue_ls = nil
                 servers.graphql = nil
                 servers.vimls = nil
 
