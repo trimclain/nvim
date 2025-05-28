@@ -16,8 +16,9 @@ local t = ls.text_node
 -- local r = ls.restore_node
 
 -- NOTE: for future snippets use fmt
--- local fmt = require("luasnip.extras.fmt").fmt
+-- URL: https://github.com/L3MON4D3/LuaSnip/blob/faf3c94a44508cec1b961406d36cc65113ff3b98/lua/luasnip/extras/fmt.lua
+--local fmt = require("luasnip.extras.fmt").fmt
 
 return {
-    s("trig", t("loaded!")),
+    -- s("trig", t("loaded!")),
 }
