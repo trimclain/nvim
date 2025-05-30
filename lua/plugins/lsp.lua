@@ -163,10 +163,10 @@ return {
 
     -- cmdline tools and lsp servers
     {
-        "williamboman/mason.nvim",
+        "mason-org/mason.nvim",
         cond = CONFIG.lsp.enabled,
         dependencies = {
-            "williamboman/mason-lspconfig.nvim",
+            "mason-org/mason-lspconfig.nvim", -- only there so mason-tool-installer can accept lspconfig package names
             "WhoIsSethDaniel/mason-tool-installer.nvim",
         },
         cmd = "Mason",
@@ -197,14 +197,19 @@ return {
 
             -- LSP Server Settings
             -- Servers listed here will be autoinstalled
+            -- Docs: https://github.com/neovim/nvim-lspconfig/blob/master/doc/configs.md
+            -- Config Examples: https://github.com/neovim/nvim-lspconfig/tree/master/lsp
             local servers = {
-                -- Available servers: https://github.com/williamboman/mason-lspconfig.nvim#available-lsp-servers
                 gopls = {
-                    analyses = {
-                        unusedparams = true,
+                    settings = {
+                        gopls = {
+                            analyses = {
+                                unusedparams = true,
+                            },
+                            staticcheck = true,
+                            gofumpt = true,
+                        },
                     },
-                    staticcheck = true,
-                    gofumpt = true,
                 },
                 pylsp = {
                     settings = {
@@ -246,7 +251,7 @@ return {
 
                 -- yamlls = {},
                 -- texlab = {}, -- latex
-                -- julials = {}, -- https://github.com/williamboman/mason-lspconfig.nvim/blob/main/lua/mason-lspconfig/server_configurations/julials/README.md
+                -- julials = {},
                 -- ansiblels = {},
                 vimls = {},
                 lua_ls = {
@@ -311,27 +316,25 @@ return {
             }
 
             local formatters = {
-                "isort",
-                "autopep8",
-                "prettierd",
-                "stylua",
-                "shfmt", -- "beautysh",
-                "gofumpt",
+                isort = {},
+                autopep8 = {},
+                prettierd = {},
+                stylua = {},
+                shfmt = {}, -- "beautysh",
+                gofumpt = {},
             }
 
             local linters = {
-                -- "eslint_d", -- need config file, annoying
-                -- "luacheck", -- "selene",
-                -- "markdownlint",
-                -- "stylelint", -- css linter
-                "shellcheck", -- extends bashls
-
+                -- eslint_d = {}, -- need config file, annoying
+                -- luacheck = {}, -- "selene",
+                -- markdownlint = {},
+                -- stylelint = {}, -- css linter
+                shellcheck = {}, -- extends bashls
             }
 
             if vim.fn.executable("go") == 0 then
                 servers.gopls = nil
-                -- WARN: update gofumpt index after updating formatters_and_linters table
-                table.remove(formatters, 6)
+                formatters.gofumpt = nil
             end
             if vim.fn.executable("pwsh") == 0 then
                 servers.powershell_es = nil
@@ -345,36 +348,39 @@ return {
                 servers.ts_ls = nil
                 servers.vue_ls = nil
                 servers.graphql = nil
-                servers.vimls = nil
 
-                -- WARN: update shfmt and shellcheck indices after updating their tables
-                table.remove(formatters, 5)
-                table.remove(linters, 1)
+                formatters.shfmt = nil
+                linters.shellcheck = nil
             else
                 servers.lemminx = nil
             end
 
             local ensure_installed = vim.tbl_keys(servers or {})
-            vim.list_extend(ensure_installed, formatters)
-            vim.list_extend(ensure_installed, linters)
-            require("mason-tool-installer").setup({ ensure_installed = ensure_installed })
-
-            require("mason-lspconfig").setup({
-                ensure_installed = {},
-                automatic_installation = false,
-                automatic_enable = true,
-                handlers = {
-                    function(server_name)
-                        local server = servers[server_name] or {}
-                        server.capabilities = vim.tbl_deep_extend("force", {}, capabilities, server.capabilities or {})
-                        -- avoid the error in neovide
-                        if server_name == "bashls" and vim.fn.executable("node") == 0 then
-                            return
-                        end
-                        require("lspconfig")[server_name].setup(server)
-                    end,
+            vim.list_extend(ensure_installed, vim.tbl_keys(formatters or {}))
+            vim.list_extend(ensure_installed, vim.tbl_keys(linters or {}))
+            require("mason-tool-installer").setup({
+                ensure_installed = ensure_installed,
+                integrations = {
+                    ['mason-lspconfig'] = true,
+                    ['mason-null-ls'] = false,
+                    ['mason-nvim-dap'] = false,
                 },
             })
+
+            local function setup(server)
+                local server_cfg = servers[server] or {}
+                server_cfg.capabilities = vim.tbl_deep_extend("force", {}, capabilities, server_cfg.capabilities or {})
+                -- avoid the error in neovide
+                if server == "bashls" and vim.fn.executable("node") == 0 then
+                    return
+                end
+                vim.lsp.config(server, server_cfg)
+                vim.lsp.enable(server)
+            end
+
+            for server_name, _ in pairs(servers) do
+                setup(server_name)
+            end
         end,
     },
 }
