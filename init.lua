@@ -74,7 +74,6 @@ CONFIG = {
         indentline = mode == "default",
         lualine = mode == "default",
         spinner = mode == "default", -- animation shown when tasks are ongoing
-        -- TODO: fix this not working
         spinner_type = "dots_pulse", -- spinners: dots_pulse, moon, meter, zip, pipe, dots, arc
         todo_comments = mode == "default",
         treesj = mode == "default",
