@@ -218,7 +218,7 @@ return {
                             -- configurationSources = { "flake8" }, -- (one of: 'pycodestyle', 'flake8')
                             plugins = {
                                 pycodestyle = {
-                                    ignore = { "E501" }, -- ignore long lines
+                                    ignore = { "E501", "W503" }, -- ignore long lines and old line break rule
                                 },
                                 yapf = { enabled = false },
                                 -- autopep8 = { enabled = false },
