@@ -199,6 +199,7 @@ return {
             -- Servers listed here will be autoinstalled
             -- Docs: https://github.com/neovim/nvim-lspconfig/blob/master/doc/configs.md
             -- Config Examples: https://github.com/neovim/nvim-lspconfig/tree/master/lsp
+            -- Mason Server List: https://mason-registry.dev/registry/list
             local servers = {
                 gopls = {
                     settings = {
@@ -286,6 +287,7 @@ return {
                 },
 
                 powershell_es = {
+                    bundle_path = vim.fs.joinpath(vim.fn.stdpath("data"), "mason", "packages", "powershell-editor-services"),
                     settings = {
                         powershell = {
                             codeFormatting = {
