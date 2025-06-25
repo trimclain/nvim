@@ -26,7 +26,6 @@ return {
                 "google-chrome",
                 "brave",
                 "brave-browser",
-
             }
             local browserlist_on_windows = {
                 "C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe",

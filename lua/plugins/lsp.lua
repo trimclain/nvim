@@ -287,7 +287,12 @@ return {
                 },
 
                 powershell_es = {
-                    bundle_path = vim.fs.joinpath(vim.fn.stdpath("data"), "mason", "packages", "powershell-editor-services"),
+                    bundle_path = vim.fs.joinpath(
+                        vim.fn.stdpath("data"),
+                        "mason",
+                        "packages",
+                        "powershell-editor-services"
+                    ),
                     settings = {
                         powershell = {
                             codeFormatting = {
@@ -363,9 +368,9 @@ return {
             require("mason-tool-installer").setup({
                 ensure_installed = ensure_installed,
                 integrations = {
-                    ['mason-lspconfig'] = true,
-                    ['mason-null-ls'] = false,
-                    ['mason-nvim-dap'] = false,
+                    ["mason-lspconfig"] = true,
+                    ["mason-null-ls"] = false,
+                    ["mason-nvim-dap"] = false,
                 },
             })
 
