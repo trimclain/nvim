@@ -3,7 +3,7 @@ return {
     {
         "akinsho/toggleterm.nvim",
         version = "*",
-        enabled = not jit.os:find("Windows"), -- windows has no $SHELL, could pass it in opts but don't care rn
+        enabled = not _G.ON_INFERIOR_OS, -- windows has no $SHELL, could pass it in opts but don't care rn
         event = "VeryLazy",
         opts = {
             open_mapping = [[<c-\>]],

@@ -2,7 +2,7 @@
 return {
     {
         "nvim-neotest/neotest",
-        enabled = not jit.os:find("Windows"),
+        enabled = not _G.ON_INFERIOR_OS,
         dependencies = {
             "plenary.nvim",
             "nvim-treesitter",

@@ -346,7 +346,7 @@ return {
             if vim.fn.executable("pwsh") == 0 then
                 servers.powershell_es = nil
             end
-            if jit.os:find("Windows") then
+            if _G.ON_INFERIOR_OS then
                 servers.bashls = nil
                 servers.dockerls = nil
                 servers.cssls = nil

@@ -16,7 +16,9 @@
 --- @usage: "default" | "minimal"
 local mode = "default"
 
-if jit.os:find("Windows") and (vim.g.neovide or vim.fn.has("gui_running") == 1) then
+_G.ON_INFERIOR_OS  = not not jit.os:find("Windows")
+
+if _G.ON_INFERIOR_OS and (vim.g.neovide or vim.fn.has("gui_running") == 1) then
     -- I want neovide to start fast, until I fix 15 minute startup time on garbage os
     mode = "minimal"
 end
@@ -32,8 +34,8 @@ CONFIG = {
         enabled = mode == "default",
         format_on_save = false,
         virtual_text = false,
-        show_signature_help = not jit.os:find("Windows"),
-        enable_copilot = not jit.os:find("Windows"),
+        show_signature_help = not _G.ON_INFERIOR_OS,
+        enable_copilot = false
     },
     ui = {
         -- Colorschemes (note/10):
@@ -63,7 +65,7 @@ CONFIG = {
         -- use fzf-lua or telescope.nvim
         use_fzf_lua = vim.fn.executable("fzf") == 1 and false,
 
-        neoscroll = not jit.os:find("Windows"),
+        neoscroll = not _G.ON_INFERIOR_OS,
         smear_cursor = false, -- found out about kitty's cursor trail
 
         autopairs = mode == "default",

@@ -32,7 +32,7 @@ return {
                 "C:\\Program Files (x86)\\Microsoft\\Edge\\Application\\msedge.exe",
             }
 
-            local on_windows = jit.os:find("Windows")
+            local on_windows = _G.ON_INFERIOR_OS
             if on_windows then
                 for _, browser in ipairs(browserlist_on_windows) do
                     if vim.fn.executable(browser) == 1 then

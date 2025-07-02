@@ -57,7 +57,7 @@ return {
                 --         "git_files",
                 --         -- Yup, why would $HOME on windows be $HOME and not $HOMEPATH or $USERPROFILE
                 --         {
-                --             cwd = jit.os:find("Windows") and vim.fs.joinpath(vim.env.HOMEPATH, "dotfiles")
+                --             cwd = _G.ON_INFERIOR_OS and vim.fs.joinpath(vim.env.HOMEPATH, "dotfiles")
                 --                 or vim.fs.joinpath(vim.env.HOME, ".dotfiles"),
                 --             prompt_title = "Dotfiles",
                 --         }

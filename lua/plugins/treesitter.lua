@@ -103,7 +103,7 @@ return {
             -- Prefer git instead of curl in order to improve connectivity in some environments
             require("nvim-treesitter.install").prefer_git = true
 
-            if jit.os:find("Windows") then
+            if _G.ON_INFERIOR_OS then
                 table.insert(opts.ensure_installed, "powershell")
             end
 
