@@ -223,21 +223,4 @@ return {
             integrations = { blink_cmp = true },
         },
     },
-
-    -- github copilot
-    {
-        "zbirenbaum/copilot.lua",
-        cmd = "Copilot",
-        build = ":Copilot auth",
-        enabled = CONFIG.lsp.enable_copilot and vim.fn.executable("node") == 1,
-        cond = vim.g.neovide == nil,
-        opts = {
-            suggestion = { enabled = false },
-            panel = { enabled = false },
-            filetypes = {
-                markdown = true,
-                help = true,
-            },
-        },
-    },
 }
