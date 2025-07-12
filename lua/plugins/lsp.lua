@@ -202,6 +202,9 @@ return {
             -- Mason Server List: https://mason-registry.dev/registry/list
             local servers = {
                 gopls = {
+                    condition = function() -- used by mason-tool-installer
+                        return vim.fn.executable("go") == 1
+                    end,
                     settings = {
                         gopls = {
                             analyses = {
@@ -339,6 +342,7 @@ return {
                 shellcheck = {}, -- extends bashls
             }
 
+            -- TODO: which is my favorite place for condition?
             if vim.fn.executable("go") == 0 then
                 servers.gopls = nil
                 formatters.gofumpt = nil
@@ -365,8 +369,12 @@ return {
             local ensure_installed = vim.tbl_keys(servers or {})
             vim.list_extend(ensure_installed, vim.tbl_keys(formatters or {}))
             vim.list_extend(ensure_installed, vim.tbl_keys(linters or {}))
+            -- FIX: this doesn't run on start
             require("mason-tool-installer").setup({
                 ensure_installed = ensure_installed,
+                run_on_start = true,
+                start_delay = 0,
+                debounce_hours = nil,
                 integrations = {
                     ["mason-lspconfig"] = true,
                     ["mason-null-ls"] = false,
