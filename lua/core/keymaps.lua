@@ -61,7 +61,7 @@ keymap("n", "<C-Right>", ":vertical resize +5<cr>", opts)
 --
 -- Execute lua/vim code
 keymap("n", "<leader>x", ":.lua<cr>", { desc = "Source Current Lua Line" })
-keymap("v", "<leader>x", ":lua<cr>", { desc = "Source Selected Lua Lines" })
+keymap("x", "<leader>x", ":lua<cr>", { desc = "Source Selected Lua Lines" })
 keymap("n", "<leader><cr>", "<cmd>source %<cr>", add_desc("Source Lua/Vim Buffer"))
 
 --
@@ -81,15 +81,15 @@ keymap("i", ",", ",<c-g>u", opts) -- set a break point for undo after ,
 keymap("i", ".", ".<c-g>u", opts) -- after .
 keymap("i", "!", "!<c-g>u", opts) -- after !
 keymap("i", "?", "?<c-g>u", opts) -- after ?
-keymap("v", "K", ":m '<-2<cr>gv=gv", opts) -- move higlighted lines up a line
-keymap("v", "J", ":m '>+1<cr>gv=gv", opts) -- and down a line
-keymap("v", "<", "<gv", opts) -- stay in
-keymap("v", ">", ">gv", opts) -- indent mode
-keymap("v", "<S-h>", "<gv", opts) -- feels
-keymap("v", "<S-l>", ">gv", opts) -- natural
-keymap("v", "y", "myy`y", opts) -- maintain the cursor position
-keymap("v", "Y", "myy`y", opts) -- when yanking a visual selection
-keymap("v", "p", "P", opts) -- when replacing a higlighted text, don't yank it
+keymap("x", "K", ":m '<-2<cr>gv=gv", opts) -- move higlighted lines up a line
+keymap("x", "J", ":m '>+1<cr>gv=gv", opts) -- and down a line
+keymap("x", "<", "<gv", opts) -- stay in
+keymap("x", ">", ">gv", opts) -- indent mode
+keymap("x", "<S-h>", "<gv", opts) -- feels
+keymap("x", "<S-l>", ">gv", opts) -- natural
+keymap("x", "y", "myy`y", opts) -- maintain the cursor position
+keymap("x", "Y", "myy`y", opts) -- when yanking a visual selection
+keymap("x", "p", "P", opts) -- when replacing a higlighted text, don't yank it
 -- keymap("n", "<leader>d", '"_d', add_desc("Delete to blackhole"))
 keymap("i", "<C-r>", "<C-r>+", opts) -- paste from clipboard in insert mode
 keymap("c", "<C-r>", "<C-r>+", opts) -- paste from clipboard in command mode
