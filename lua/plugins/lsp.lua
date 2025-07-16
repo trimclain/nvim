@@ -166,8 +166,7 @@ return {
         "mason-org/mason.nvim",
         cond = CONFIG.lsp.enabled,
         dependencies = {
-            "mason-org/mason-lspconfig.nvim", -- only there so mason-tool-installer can accept lspconfig package names
-            "WhoIsSethDaniel/mason-tool-installer.nvim",
+            "mason-org/mason-lspconfig.nvim",
         },
         cmd = "Mason",
         keys = { { "<leader>lm", "<cmd>Mason<cr>", desc = "[M]ason" } },
@@ -184,17 +183,6 @@ return {
         config = function(_, opts)
             require("mason").setup(opts)
 
-            local has_cmp, cmp_nvim_lsp = pcall(require, "cmp_nvim_lsp")
-            local has_blink, blink = pcall(require, "blink.cmp")
-            local capabilities = vim.tbl_deep_extend(
-                "force",
-                {},
-                vim.lsp.protocol.make_client_capabilities(),
-                has_cmp and cmp_nvim_lsp.default_capabilities() or {},
-                has_blink and blink.get_lsp_capabilities() or {},
-                opts.capabilities or {}
-            )
-
             -- LSP Server Settings
             -- Servers listed here will be autoinstalled
             -- Docs: https://github.com/neovim/nvim-lspconfig/blob/master/doc/configs.md
@@ -202,9 +190,7 @@ return {
             -- Mason Server List: https://mason-registry.dev/registry/list
             local servers = {
                 gopls = {
-                    condition = function() -- used by mason-tool-installer
-                        return vim.fn.executable("go") == 1
-                    end,
+                    cond = vim.fn.executable("go") == 1,
                     settings = {
                         gopls = {
                             analyses = {
@@ -239,19 +225,19 @@ return {
                         },
                     },
                 },
-                bashls = {}, -- requires node installed
+                bashls = { cond = not _G.ON_INFERIOR_OS and vim.fn.executable("node") == 1 }, -- requires node installed
                 marksman = {}, -- markdown
-                dockerls = {},
+                dockerls = { cond = not _G.ON_INFERIOR_OS },
 
                 html = {},
-                cssls = {},
-                emmet_ls = {},
-                tailwindcss = {},
-                ts_ls = {}, -- Extended: https://github.com/pmizio/typescript-tools.nvim
-                vue_ls = {}, -- vue-language-server
-                graphql = {},
+                cssls = { cond = not _G.ON_INFERIOR_OS },
+                emmet_ls = { cond = not _G.ON_INFERIOR_OS },
+                tailwindcss = { cond = not _G.ON_INFERIOR_OS },
+                ts_ls = { cond = not _G.ON_INFERIOR_OS }, -- Extended: https://github.com/pmizio/typescript-tools.nvim
+                vue_ls = { cond = not _G.ON_INFERIOR_OS }, -- vue-language-server
+                graphql = { cond = not _G.ON_INFERIOR_OS },
                 jsonls = {},
-                lemminx = {}, -- xml language server
+                lemminx = { cond = _G.ON_INFERIOR_OS }, -- xml language server
 
                 -- yamlls = {},
                 -- texlab = {}, -- latex
@@ -290,6 +276,7 @@ return {
                 },
 
                 powershell_es = {
+                    cond = vim.fn.executable("pwsh") == 1,
                     bundle_path = vim.fs.joinpath(
                         vim.fn.stdpath("data"),
                         "mason",
@@ -330,8 +317,8 @@ return {
                 autopep8 = {},
                 prettierd = {},
                 stylua = {},
-                shfmt = {}, -- "beautysh",
-                gofumpt = {},
+                shfmt = { cond = not _G.ON_INFERIOR_OS }, -- "beautysh",
+                gofumpt = { cond = vim.fn.executable("go") == 1 },
             }
 
             local linters = {
@@ -339,62 +326,98 @@ return {
                 -- luacheck = {}, -- "selene",
                 -- markdownlint = {},
                 -- stylelint = {}, -- css linter
-                shellcheck = {}, -- extends bashls
+                shellcheck = { cond = not _G.ON_INFERIOR_OS }, -- extends bashls
             }
 
-            -- TODO: which is my favorite place for condition?
-            if vim.fn.executable("go") == 0 then
-                servers.gopls = nil
-                formatters.gofumpt = nil
-            end
-            if vim.fn.executable("pwsh") == 0 then
-                servers.powershell_es = nil
-            end
-            if _G.ON_INFERIOR_OS then
-                servers.bashls = nil
-                servers.dockerls = nil
-                servers.cssls = nil
-                servers.emmet_ls = nil
-                servers.tailwindcss = nil
-                servers.ts_ls = nil
-                servers.vue_ls = nil
-                servers.graphql = nil
+            local ensure_installed = vim.tbl_extend("error", servers, formatters, linters)
 
-                formatters.shfmt = nil
-                linters.shellcheck = nil
-            else
-                servers.lemminx = nil
-            end
-
-            local ensure_installed = vim.tbl_keys(servers or {})
-            vim.list_extend(ensure_installed, vim.tbl_keys(formatters or {}))
-            vim.list_extend(ensure_installed, vim.tbl_keys(linters or {}))
-            -- FIX: this doesn't run on start
-            require("mason-tool-installer").setup({
-                ensure_installed = ensure_installed,
-                run_on_start = true,
-                start_delay = 0,
-                debounce_hours = nil,
-                integrations = {
-                    ["mason-lspconfig"] = true,
-                    ["mason-null-ls"] = false,
-                    ["mason-nvim-dap"] = false,
-                },
-            })
-
-            local function setup(server)
-                local server_cfg = servers[server] or {}
-                server_cfg.capabilities = vim.tbl_deep_extend("force", {}, capabilities, server_cfg.capabilities or {})
-                -- avoid the error in neovide
-                if server == "bashls" and vim.fn.executable("node") == 0 then
+            ---------------------------------------------------------------------------------------
+            -- Install All Mason Tools
+            -- Alternative: "WhoIsSethDaniel/mason-tool-installer.nvim"
+            ---------------------------------------------------------------------------------------
+            local mlsp_mappings = require("mason-lspconfig").get_mappings()
+            local function ensure_tool_installed(tool)
+                local cond = ensure_installed[tool].cond
+                if cond == false then
                     return
                 end
-                vim.lsp.config(server, server_cfg)
+
+                local mr = require("mason-registry")
+
+                mr:on("package:install:success", function()
+                    vim.defer_fn(function()
+                        -- trigger FileType event to possibly load this newly installed LSP server
+                        require("lazy.core.handler.event").trigger({
+                            event = "FileType",
+                            buf = vim.api.nvim_get_current_buf(),
+                        })
+                    end, 100)
+                end)
+
+                mr.refresh(function()
+                    local name = mlsp_mappings.lspconfig_to_package[tool] or tool
+                    local p = mr.get_package(name)
+
+                    -- let me know how u doin
+                    p:once("install:success", function()
+                        vim.notify(string.format("%s: successfully installed", p.name), vim.log.levels.INFO, { title = 'Mason Tool Installer' })
+                    end)
+                    p:once("install:failed", function()
+                        vim.notify(string.format("%s: failed to install", p.name), vim.log.levels.ERROR, { title = 'Mason Tool Installer' })
+                    end)
+
+                    if not p:is_installed() then
+                        p:install()
+                    end
+                end)
+            end
+
+            for tool_name, _ in pairs(ensure_installed) do
+                ensure_tool_installed(tool_name)
+            end
+
+
+            -- -- TODO: test if this is faster
+            -- require("mason-tool-installer").setup({
+            --     ensure_installed = ensure_installed,
+            --     run_on_start = true,
+            --     start_delay = 0,
+            --     debounce_hours = nil,
+            --     integrations = {
+            --         ["mason-lspconfig"] = true,
+            --         ["mason-null-ls"] = false,
+            --         ["mason-nvim-dap"] = false,
+            --     },
+            -- })
+            --
+            ---------------------------------------------------------------------------------------
+            -- Configure and Enable LSP Servers
+            ---------------------------------------------------------------------------------------
+            local has_cmp, cmp_nvim_lsp = pcall(require, "cmp_nvim_lsp")
+            local has_blink, blink = pcall(require, "blink.cmp")
+            local capabilities = vim.tbl_deep_extend(
+                "force",
+                {},
+                vim.lsp.protocol.make_client_capabilities(),
+                has_cmp and cmp_nvim_lsp.default_capabilities() or {},
+                has_blink and blink.get_lsp_capabilities() or {},
+                opts.capabilities or {}
+            )
+
+            local function configure_and_enable(server, server_settings)
+                local cond = server_settings.cond
+                if cond == false then
+                    return
+                end
+
+                server_settings.capabilities =
+                    vim.tbl_deep_extend("force", {}, capabilities, server_settings.capabilities or {})
+                vim.lsp.config(server, server_settings)
                 vim.lsp.enable(server)
             end
 
-            for server_name, _ in pairs(servers) do
-                setup(server_name)
+            for server_name, server_settings in pairs(servers) do
+                configure_and_enable(server_name, server_settings)
             end
         end,
     },
