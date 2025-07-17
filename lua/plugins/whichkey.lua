@@ -35,6 +35,7 @@ return {
                     mode = { "n" },
                     { "g", group = "goto" },
                     -- {"gz", group = "surround" },
+                    { "g?", group = "debug-print" },
                     { "]", group = "next" },
                     { "[", group = "prev" },
                     -- {"<leader><tab>", group = "tabs" },
