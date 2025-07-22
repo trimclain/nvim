@@ -357,7 +357,9 @@ return {
                         if not lvl then
                             lvl = vim.log.levels.INFO
                         end
-                        vim.notify(msg, lvl, { title = "Mason Tool Installer" })
+                        vim.schedule(function()
+                            vim.notify(msg, lvl, { title = "Mason Tool Installer" })
+                        end)
                     end
                     -- notify(string.format('%s: installing', p.name))
                     p:once("install:success", function()
