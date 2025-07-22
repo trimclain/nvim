@@ -1,6 +1,147 @@
 local Util = require("core.util")
 local Icons = require("core.icons")
 
+-- LSP Server Settings
+-- Servers listed here will be autoinstalled
+-- Docs: https://github.com/neovim/nvim-lspconfig/blob/master/doc/configs.md
+-- Config Examples: https://github.com/neovim/nvim-lspconfig/tree/master/lsp
+-- Mason Server List: https://mason-registry.dev/registry/list
+local servers = {
+    gopls = {
+        cond = vim.fn.executable("go") == 1,
+        settings = {
+            gopls = {
+                analyses = {
+                    unusedparams = true,
+                },
+                staticcheck = true,
+                gofumpt = true,
+            },
+        },
+    },
+    pylsp = {
+        settings = {
+            -- docs: https://github.com/python-lsp/python-lsp-server/blob/develop/CONFIGURATION.md
+            pylsp = {
+                -- configurationSources = { "flake8" }, -- (one of: 'pycodestyle', 'flake8')
+                plugins = {
+                    pycodestyle = {
+                        ignore = { "E501", "W503" }, -- ignore long lines and old line break rule
+                    },
+                    yapf = { enabled = false },
+                    -- autopep8 = { enabled = false },
+                    -- mccabe = { enabled = false },
+                    -- preload = { enabled = false },
+                    -- pycodestyle = { enabled = false },
+                    -- pyflakes = { enabled = false },
+
+                    -- flake8 = { enabled = true },
+                    -- pydocstyle = { enabled = true },
+                    -- pylint = { enabled = true },
+                    -- rope_autoimport = { enabled = true },
+                },
+            },
+        },
+    },
+    bashls = { cond = not _G.ON_INFERIOR_OS and vim.fn.executable("node") == 1 }, -- requires node installed
+    marksman = {}, -- markdown
+    dockerls = { cond = not _G.ON_INFERIOR_OS },
+
+    html = {},
+    cssls = { cond = not _G.ON_INFERIOR_OS },
+    emmet_ls = { cond = not _G.ON_INFERIOR_OS },
+    tailwindcss = { cond = not _G.ON_INFERIOR_OS },
+    ts_ls = { not _G.ON_INFERIOR_OS }, -- Extended: https://github.com/pmizio/typescript-tools.nvim
+    vue_ls = { cond = not _G.ON_INFERIOR_OS }, -- vue-language-server
+    graphql = { cond = not _G.ON_INFERIOR_OS },
+    jsonls = {},
+    lemminx = { cond = not _G.ON_INFERIOR_OS }, -- xml language server
+
+    -- yamlls = {},
+    -- texlab = {}, -- latex
+    -- julials = {},
+    -- ansiblels = {},
+    vimls = {},
+    lua_ls = {
+        -- cmd = {...}, -- Override the default command used to start the server
+        -- filetypes = { ...}, -- Override the default list of associated filetypes for the server
+        -- capabilities = {}, -- Override fields in capabilities. Can be used to disable certain LSP features.
+        settings = { -- Override the default settings passed when initializing the server.
+            -- docs: https://luals.github.io/wiki/settings/
+            Lua = {
+                completion = {
+                    -- "Disable" - Only show function name (default)
+                    -- "Both" - Show function name and snippet
+                    -- "Replace" - Only show the call snippet
+                    callSnippet = "Replace",
+                },
+
+                diagnostics = {
+                    globals = { "describe", "it", "before_each", "after_each", "vim" },
+                    -- ignore Lua_LS's noisy `missing-fields` warnings
+                    -- disable = { 'missing-fields' },
+                },
+                hint = {
+                    enable = true,
+                    setType = true,
+                    -- semicolon = "Disable" -- default: "SameLine"
+                },
+                workspace = {
+                    checkThirdParty = false,
+                },
+            },
+        },
+    },
+
+    powershell_es = {
+        cond = vim.fn.executable("pwsh") == 1,
+        bundle_path = vim.fs.joinpath(vim.fn.stdpath("data"), "mason", "packages", "powershell-editor-services"),
+        settings = {
+            powershell = {
+                codeFormatting = {
+                    preset = "Custom", -- using OTBS with additional config
+                    newLineAfterCloseBrace = false, -- default: true
+                    newLineAfterOpenBrace = false, -- default: true
+                    addWhitespaceAroundPipe = true,
+                    alignPropertyValuePairs = true,
+                    autoCorrectAliases = false,
+                    avoidSemicolonsAsLineTerminators = false,
+                    ignoreOneLineBlock = true,
+                    openBraceOnSameLine = true,
+                    pipelineIndentationStyle = "NoIndentation",
+                    trimWhitespaceAroundPipe = false,
+                    useConstantStrings = false,
+                    useCorrectCasing = false,
+                    whitespaceAfterSeparator = true,
+                    whitespaceAroundOperator = true,
+                    whitespaceAroundPipe = true,
+                    whitespaceBeforeOpenBrace = true,
+                    whitespaceBeforeOpenParen = true,
+                    whitespaceBetweenParameters = false,
+                    whitespaceInsideBrace = true,
+                },
+            },
+        },
+    },
+}
+
+local formatters = {
+    isort = {},
+    autopep8 = {},
+    prettierd = {},
+    stylua = {},
+    shfmt = { cond = not _G.ON_INFERIOR_OS }, -- "beautysh",
+    gofumpt = { cond = vim.fn.executable("go") == 1 },
+}
+
+local linters = {
+    -- eslint_d = {}, -- need config file, annoying
+    -- luacheck = {}, -- "selene",
+    -- markdownlint = {},
+    -- stylelint = {}, -- css linter
+    shellcheck = { cond = not _G.ON_INFERIOR_OS }, -- extends bashls
+}
+
 return {
     -- LSP Configuration & Plugins
     {
@@ -85,7 +226,7 @@ return {
                     map("<leader>li", "<cmd>LspInfo<cr>", "[L]sp [I]nfo")
 
                     if CONFIG.plugins.use_fzf_lua then
-                        if client and client.supports_method(methods.textDocument_definition) then
+                        if client and client:supports_method(methods.textDocument_definition) then
                             map("gd", require("fzf-lua").lsp_definitions, "[G]oto [D]efinition")
                         end
                         map("gr", require("fzf-lua").lsp_references, "[G]oto [R]eferences")
@@ -93,7 +234,7 @@ return {
                         map("gt", require("fzf-lua").lsp_typedefs, "[G]oto [T]ype Definition")
                         map("<leader>ls", require("fzf-lua").lsp_document_symbols, "Document [S]ymbols")
                     else
-                        if client and client.supports_method(methods.textDocument_definition) then
+                        if client and client:supports_method(methods.textDocument_definition) then
                             map("gd", require("telescope.builtin").lsp_definitions, "[G]oto [D]efinition")
                         end
                         map("gr", require("telescope.builtin").lsp_references, "[G]oto [R]eferences")
@@ -166,7 +307,7 @@ return {
         "mason-org/mason.nvim",
         cond = CONFIG.lsp.enabled,
         dependencies = {
-            "mason-org/mason-lspconfig.nvim",
+            "mason-org/mason-lspconfig.nvim", -- to convert server names to their Mason package names
         },
         cmd = "Mason",
         keys = { { "<leader>lm", "<cmd>Mason<cr>", desc = "[M]ason" } },
@@ -183,158 +324,11 @@ return {
         config = function(_, opts)
             require("mason").setup(opts)
 
-            -- LSP Server Settings
-            -- Servers listed here will be autoinstalled
-            -- Docs: https://github.com/neovim/nvim-lspconfig/blob/master/doc/configs.md
-            -- Config Examples: https://github.com/neovim/nvim-lspconfig/tree/master/lsp
-            -- Mason Server List: https://mason-registry.dev/registry/list
-            local servers = {
-                gopls = {
-                    cond = vim.fn.executable("go") == 1,
-                    settings = {
-                        gopls = {
-                            analyses = {
-                                unusedparams = true,
-                            },
-                            staticcheck = true,
-                            gofumpt = true,
-                        },
-                    },
-                },
-                pylsp = {
-                    settings = {
-                        -- docs: https://github.com/python-lsp/python-lsp-server/blob/develop/CONFIGURATION.md
-                        pylsp = {
-                            -- configurationSources = { "flake8" }, -- (one of: 'pycodestyle', 'flake8')
-                            plugins = {
-                                pycodestyle = {
-                                    ignore = { "E501", "W503" }, -- ignore long lines and old line break rule
-                                },
-                                yapf = { enabled = false },
-                                -- autopep8 = { enabled = false },
-                                -- mccabe = { enabled = false },
-                                -- preload = { enabled = false },
-                                -- pycodestyle = { enabled = false },
-                                -- pyflakes = { enabled = false },
-
-                                -- flake8 = { enabled = true },
-                                -- pydocstyle = { enabled = true },
-                                -- pylint = { enabled = true },
-                                -- rope_autoimport = { enabled = true },
-                            },
-                        },
-                    },
-                },
-                bashls = { cond = not _G.ON_INFERIOR_OS and vim.fn.executable("node") == 1 }, -- requires node installed
-                marksman = {}, -- markdown
-                dockerls = { cond = not _G.ON_INFERIOR_OS },
-
-                html = {},
-                cssls = { cond = not _G.ON_INFERIOR_OS },
-                emmet_ls = { cond = not _G.ON_INFERIOR_OS },
-                tailwindcss = { cond = not _G.ON_INFERIOR_OS },
-                ts_ls = { cond = not _G.ON_INFERIOR_OS }, -- Extended: https://github.com/pmizio/typescript-tools.nvim
-                vue_ls = { cond = not _G.ON_INFERIOR_OS }, -- vue-language-server
-                graphql = { cond = not _G.ON_INFERIOR_OS },
-                jsonls = {},
-                lemminx = { cond = _G.ON_INFERIOR_OS }, -- xml language server
-
-                -- yamlls = {},
-                -- texlab = {}, -- latex
-                -- julials = {},
-                -- ansiblels = {},
-                vimls = {},
-                lua_ls = {
-                    -- cmd = {...}, -- Override the default command used to start the server
-                    -- filetypes = { ...}, -- Override the default list of associated filetypes for the server
-                    -- capabilities = {}, -- Override fields in capabilities. Can be used to disable certain LSP features.
-                    settings = { -- Override the default settings passed when initializing the server.
-                        -- docs: https://luals.github.io/wiki/settings/
-                        Lua = {
-                            completion = {
-                                -- "Disable" - Only show function name (default)
-                                -- "Both" - Show function name and snippet
-                                -- "Replace" - Only show the call snippet
-                                callSnippet = "Replace",
-                            },
-
-                            diagnostics = {
-                                globals = { "describe", "it", "before_each", "after_each", "vim" },
-                                -- ignore Lua_LS's noisy `missing-fields` warnings
-                                -- disable = { 'missing-fields' },
-                            },
-                            hint = {
-                                enable = true,
-                                setType = true,
-                                -- semicolon = "Disable" -- default: "SameLine"
-                            },
-                            workspace = {
-                                checkThirdParty = false,
-                            },
-                        },
-                    },
-                },
-
-                powershell_es = {
-                    cond = vim.fn.executable("pwsh") == 1,
-                    bundle_path = vim.fs.joinpath(
-                        vim.fn.stdpath("data"),
-                        "mason",
-                        "packages",
-                        "powershell-editor-services"
-                    ),
-                    settings = {
-                        powershell = {
-                            codeFormatting = {
-                                preset = "Custom", -- using OTBS with additional config
-                                newLineAfterCloseBrace = false, -- default: true
-                                newLineAfterOpenBrace = false, -- default: true
-                                addWhitespaceAroundPipe = true,
-                                alignPropertyValuePairs = true,
-                                autoCorrectAliases = false,
-                                avoidSemicolonsAsLineTerminators = false,
-                                ignoreOneLineBlock = true,
-                                openBraceOnSameLine = true,
-                                pipelineIndentationStyle = "NoIndentation",
-                                trimWhitespaceAroundPipe = false,
-                                useConstantStrings = false,
-                                useCorrectCasing = false,
-                                whitespaceAfterSeparator = true,
-                                whitespaceAroundOperator = true,
-                                whitespaceAroundPipe = true,
-                                whitespaceBeforeOpenBrace = true,
-                                whitespaceBeforeOpenParen = true,
-                                whitespaceBetweenParameters = false,
-                                whitespaceInsideBrace = true,
-                            },
-                        },
-                    },
-                },
-            }
-
-            local formatters = {
-                isort = {},
-                autopep8 = {},
-                prettierd = {},
-                stylua = {},
-                shfmt = { cond = not _G.ON_INFERIOR_OS }, -- "beautysh",
-                gofumpt = { cond = vim.fn.executable("go") == 1 },
-            }
-
-            local linters = {
-                -- eslint_d = {}, -- need config file, annoying
-                -- luacheck = {}, -- "selene",
-                -- markdownlint = {},
-                -- stylelint = {}, -- css linter
-                shellcheck = { cond = not _G.ON_INFERIOR_OS }, -- extends bashls
-            }
-
-            local ensure_installed = vim.tbl_extend("error", servers, formatters, linters)
-
             ---------------------------------------------------------------------------------------
             -- Install All Mason Tools
             -- Alternative: "WhoIsSethDaniel/mason-tool-installer.nvim"
             ---------------------------------------------------------------------------------------
+            local ensure_installed = vim.tbl_extend("error", servers, formatters, linters)
             local mlsp_mappings = require("mason-lspconfig").get_mappings()
             local function ensure_tool_installed(tool)
                 local cond = ensure_installed[tool].cond
@@ -359,15 +353,24 @@ return {
                     local p = mr.get_package(name)
 
                     -- let me know how u doin
+                    local notify = function(msg, lvl)
+                        if not lvl then
+                            lvl = vim.log.levels.INFO
+                        end
+                        vim.notify(msg, lvl, { title = "Mason Tool Installer" })
+                    end
+                    -- notify(string.format('%s: installing', p.name))
                     p:once("install:success", function()
-                        vim.notify(string.format("%s: successfully installed", p.name), vim.log.levels.INFO, { title = 'Mason Tool Installer' })
+                        notify(string.format("%s: successfully installed", p.name))
                     end)
                     p:once("install:failed", function()
-                        vim.notify(string.format("%s: failed to install", p.name), vim.log.levels.ERROR, { title = 'Mason Tool Installer' })
+                        notify(string.format("%s: failed to install", p.name), vim.log.levels.ERROR)
                     end)
 
                     if not p:is_installed() then
-                        p:install()
+                        if not p:is_installing() then
+                            p:install()
+                        end
                     end
                 end)
             end
@@ -376,20 +379,6 @@ return {
                 ensure_tool_installed(tool_name)
             end
 
-
-            -- -- TODO: test if this is faster
-            -- require("mason-tool-installer").setup({
-            --     ensure_installed = ensure_installed,
-            --     run_on_start = true,
-            --     start_delay = 0,
-            --     debounce_hours = nil,
-            --     integrations = {
-            --         ["mason-lspconfig"] = true,
-            --         ["mason-null-ls"] = false,
-            --         ["mason-nvim-dap"] = false,
-            --     },
-            -- })
-            --
             ---------------------------------------------------------------------------------------
             -- Configure and Enable LSP Servers
             ---------------------------------------------------------------------------------------
@@ -405,8 +394,7 @@ return {
             )
 
             local function configure_and_enable(server, server_settings)
-                local cond = server_settings.cond
-                if cond == false then
+                if server_settings.cond == false then
                     return
                 end
 
