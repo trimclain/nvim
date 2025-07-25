@@ -6,70 +6,71 @@ return {
     -- use "mzlogin/vim-markdown-toc"
 
     -- preview markdown files in browser
-    {
-        "iamcco/markdown-preview.nvim",
-        enabled = vim.fn.executable("npm") == 1,
-        build = "cd app && npx --yes yarn install", -- Lazy sync doesn't run `git restore .` so it can't pull
-        -- build = function() vim.fn["mkdp#util#install"]() end, # it's possible to install without npm/yarn
-        -- cmd = { "MarkdownPreviewToggle", "MarkdownPreview", "MarkdownPreviewStop" },
-        ft = { "markdown" },
-        init = function()
-            vim.g.mkdp_filetypes = { "markdown" }
-        end,
-        config = function()
-            vim.g.mkdp_auto_close = 0 -- don't auto close current preview window when change to another buffer
-            vim.g.mkdp_echo_preview_url = 1 -- echo preview page url in command line when open preview page
-
-            -- Detect installed browser
-            local browserlist = {
-                "thorium-browser",
-                "google-chrome",
-                "brave",
-                "brave-browser",
-            }
-            local browserlist_on_windows = {
-                "C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe",
-                "C:\\Program Files (x86)\\Microsoft\\Edge\\Application\\msedge.exe",
-            }
-
-            local on_windows = _G.ON_INFERIOR_OS
-            if on_windows then
-                for _, browser in ipairs(browserlist_on_windows) do
-                    if vim.fn.executable(browser) == 1 then
-                        vim.g.mkdp_browser = browser
-                        break
-                    end
-                end
-            else
-                for _, browser in ipairs(browserlist) do
-                    if vim.fn.executable(browser) == 1 then
-                        vim.g.mkdp_browser = browser
-                        break
-                    end
-                end
-            end
-
-            if not vim.g.mkdp_browser then
-                vim.notify("Couldn't find installed browser", vim.log.levels.ERROR, { title = "Markdown Previewer" })
-            end
-
-            -- Open preview in a new window
-            -- doesn't work on mac: https://github.com/iamcco/markdown-preview.nvim#faq
-            vim.cmd([[
-                function! OpenMarkdownPreview(url)
-                    execute 'silent ! "' . g:mkdp_browser . '" --new-window ' . a:url
-                endfunction
-                let g:mkdp_browserfunc = "OpenMarkdownPreview"
-            ]])
-
-            vim.keymap.set(
-                "n",
-                "<leader>mp",
-                "<cmd>MarkdownPreviewToggle<cr>",
-                { noremap = true, silent = true, buffer = true, desc = "Toggle Markdown Preview" }
-            )
-        end,
-    },
+    --- INFO:Currently replaced this with live-preview.nvim, although this is still a little better
+    -- {
+    --     "iamcco/markdown-preview.nvim",
+    --     enabled = vim.fn.executable("npm") == 1,
+    --     build = "cd app && npx --yes yarn install", -- Lazy sync doesn't run `git restore .` so it can't pull
+    --     -- build = function() vim.fn["mkdp#util#install"]() end, # it's possible to install without npm/yarn
+    --     -- cmd = { "MarkdownPreviewToggle", "MarkdownPreview", "MarkdownPreviewStop" },
+    --     ft = { "markdown" },
+    --     init = function()
+    --         vim.g.mkdp_filetypes = { "markdown" }
+    --     end,
+    --     config = function()
+    --         vim.g.mkdp_auto_close = 0 -- don't auto close current preview window when change to another buffer
+    --         vim.g.mkdp_echo_preview_url = 1 -- echo preview page url in command line when open preview page
+    --
+    --         -- Detect installed browser
+    --         local browserlist = {
+    --             "thorium-browser",
+    --             "google-chrome",
+    --             "brave",
+    --             "brave-browser",
+    --         }
+    --         local browserlist_on_windows = {
+    --             "C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe",
+    --             "C:\\Program Files (x86)\\Microsoft\\Edge\\Application\\msedge.exe",
+    --         }
+    --
+    --         local on_windows = _G.ON_INFERIOR_OS
+    --         if on_windows then
+    --             for _, browser in ipairs(browserlist_on_windows) do
+    --                 if vim.fn.executable(browser) == 1 then
+    --                     vim.g.mkdp_browser = browser
+    --                     break
+    --                 end
+    --             end
+    --         else
+    --             for _, browser in ipairs(browserlist) do
+    --                 if vim.fn.executable(browser) == 1 then
+    --                     vim.g.mkdp_browser = browser
+    --                     break
+    --                 end
+    --             end
+    --         end
+    --
+    --         if not vim.g.mkdp_browser then
+    --             vim.notify("Couldn't find installed browser", vim.log.levels.ERROR, { title = "Markdown Previewer" })
+    --         end
+    --
+    --         -- Open preview in a new window
+    --         -- doesn't work on mac: https://github.com/iamcco/markdown-preview.nvim#faq
+    --         vim.cmd([[
+    --             function! OpenMarkdownPreview(url)
+    --                 execute 'silent ! "' . g:mkdp_browser . '" --new-window ' . a:url
+    --             endfunction
+    --             let g:mkdp_browserfunc = "OpenMarkdownPreview"
+    --         ]])
+    --
+    --         vim.keymap.set(
+    --             "n",
+    --             "<leader>mp",
+    --             "<cmd>MarkdownPreviewToggle<cr>",
+    --             { noremap = true, silent = true, buffer = true, desc = "Toggle Markdown Preview" }
+    --         )
+    --     end,
+    -- },
 
     -- markdown preview alternative using deno
     -- {
