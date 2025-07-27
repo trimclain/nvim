@@ -2,7 +2,7 @@
 return {
     {
         "nvim-neorg/neorg",
-        version = "*",
+        -- version = "*", -- NOTE: neorg latest release is too old for now
         ft = "norg",
         dependencies = {
             "nvim-treesitter",
