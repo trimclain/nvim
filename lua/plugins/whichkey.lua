@@ -45,7 +45,6 @@ return {
                     { "<leader>g", group = "git" },
                     { "<leader>gd", group = "diffview" },
                     { "<leader>h", group = "git hunks" },
-                    { "<leader>l", group = "lsp" },
                     { "<leader>m", group = "make" },
                     { "<leader>n", group = "neorg/neotest" },
                     { "<leader>o", group = "options" },
@@ -62,7 +61,6 @@ return {
                 {
                     mode = { "v" },
                     { "<leader>h", group = "+hunks" },
-                    { "<leader>l", group = "+lsp" },
                     { "<leader>r", group = "+refactor" },
                 },
             },

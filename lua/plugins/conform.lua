@@ -7,20 +7,20 @@ return {
         cmd = { "ConformInfo" },
         keys = {
             {
-                "<leader>lf",
+                "<leader>c",
                 function()
                     require("conform").format({ async = true, lsp_fallback = true })
                 end,
                 mode = "",
-                desc = "LSP: [F]ormat buffer",
+                desc = "Conform: Format buffer",
             },
             {
-                "<leader>lc",
+                "<leader>F",
                 function()
-                    require("conform.health").show_window()
+                    require("conform").format({ async = true, lsp_fallback = true })
                 end,
-                mode = "n",
-                desc = "LSP: [C]onform Info",
+                mode = "",
+                desc = "Conform: Format buffer",
             },
         },
         opts = {

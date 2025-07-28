@@ -223,30 +223,43 @@ return {
                         vim.keymap.set("n", keys, func, { buffer = event.buf, desc = "LSP: " .. desc })
                     end
 
-                    map("<leader>li", "<cmd>LspInfo<cr>", "[L]sp [I]nfo")
+                    -- INFO:
+                    -- These GLOBAL keymaps are created unconditionally when Nvim starts:
+                    -- - "grn" is mapped in Normal mode to |vim.lsp.buf.rename()|
+                    -- - "gra" is mapped in Normal and Visual mode to |vim.lsp.buf.code_action()|
+                    -- - "grr" is mapped in Normal mode to |vim.lsp.buf.references()|
+                    -- - "gri" is mapped in Normal mode to |vim.lsp.buf.implementation()|
+                    -- - "grt" is mapped in Normal mode to |vim.lsp.buf.type_definition()|
+                    -- - "gO" is mapped in Normal mode to |vim.lsp.buf.document_symbol()|
+                    -- - CTRL-S is mapped in Insert mode to |vim.lsp.buf.signature_help()|
+                    require("which-key").add({ "gr", group = "get-from-lsp" })
 
                     if CONFIG.plugins.use_fzf_lua then
                         if client and client:supports_method(methods.textDocument_definition) then
-                            map("gd", require("fzf-lua").lsp_definitions, "[G]oto [D]efinition")
+                            map("gd", require("fzf-lua").lsp_definitions, "Go to Definitions")
                         end
-                        map("gr", require("fzf-lua").lsp_references, "[G]oto [R]eferences")
-                        map("gI", require("fzf-lua").lsp_implementations, "[G]oto [I]mplementation")
-                        map("gt", require("fzf-lua").lsp_typedefs, "[G]oto [T]ype Definition")
-                        map("<leader>ls", require("fzf-lua").lsp_document_symbols, "Document [S]ymbols")
+                        map("grr", require("fzf-lua").lsp_references, "References")
+                        map("gri", require("fzf-lua").lsp_implementations, "Implementations")
+                        map("grt", require("fzf-lua").lsp_typedefs, "Type Definitions")
+                        map("gO", require("fzf-lua").lsp_document_symbols, "Document Symbols")
                     else
                         if client and client:supports_method(methods.textDocument_definition) then
-                            map("gd", require("telescope.builtin").lsp_definitions, "[G]oto [D]efinition")
+                            map("gd", require("telescope.builtin").lsp_definitions, "Go to Definitions")
                         end
-                        map("gr", require("telescope.builtin").lsp_references, "[G]oto [R]eferences")
-                        map("gI", require("telescope.builtin").lsp_implementations, "[G]oto [I]mplementation")
-                        map("gt", require("telescope.builtin").lsp_type_definitions, "[G]oto [T]ype Definition")
-                        map("<leader>ls", require("telescope.builtin").lsp_document_symbols, "Document [S]ymbols")
+                        map("grr", require("telescope.builtin").lsp_references, "References")
+                        map("gri", require("telescope.builtin").lsp_implementations, "Implementations")
+                        map("grt", require("telescope.builtin").lsp_type_definitions, "Type Definitions")
+                        map("gO", require("telescope.builtin").lsp_document_symbols, "Document Symbols")
                     end
 
-                    map("gl", vim.diagnostic.open_float, "[G]et [L]ine Diagnostics")
-                    map("gD", vim.lsp.buf.declaration, "[G]oto [D]eclaration")
-                    map("K", vim.lsp.buf.hover, "Hover Documentation")
-                    map("gK", vim.lsp.buf.signature_help, "Signature Help")
+                    if Util.has_plugin("inc-rename.nvim") then
+                        vim.keymap.set("n", "grn", function()
+                            return ":IncRename " .. vim.fn.expand("<cword>")
+                        end, { buffer = event.buf, desc = "LSP: Rename", expr = true })
+                    end
+
+                    map("gl", vim.diagnostic.open_float, "Get Line Diagnostics")
+                    map("gD", vim.lsp.buf.declaration, "Go to Declaration")
 
                     -- Diagnostic keymaps
                     local function diagnostic_goto(next, severity)
@@ -256,37 +269,13 @@ return {
                             go({ severity = severity })
                         end
                     end
+
                     map("[d", diagnostic_goto(false), "Previous [D]iagnostic")
                     map("]d", diagnostic_goto(true), "Next [D]iagnostic")
                     map("]e", diagnostic_goto(true, "ERROR"), "Next [E]rror")
                     map("[e", diagnostic_goto(false, "ERROR"), "Previous [E]rror")
                     map("]w", diagnostic_goto(true, "WARN"), "Next [W]arning")
                     map("[w", diagnostic_goto(false, "WARN"), "Previous [W]arning")
-
-                    if Util.has_plugin("inc-rename.nvim") then
-                        vim.keymap.set("n", "<leader>lr", function()
-                            return ":IncRename " .. vim.fn.expand("<cword>")
-                        end, { buffer = event.buf, desc = "LSP: [R]ename", expr = true })
-                    else
-                        map("<leader>lr", vim.lsp.buf.rename, "[R]ename")
-                    end
-
-                    vim.keymap.set(
-                        { "n", "v" },
-                        "<leader>la",
-                        vim.lsp.buf.code_action,
-                        { buffer = event.buf, desc = "LSP: Code [A]ction" }
-                    )
-                    map("<leader>lA", function()
-                        vim.lsp.buf.code_action({
-                            context = {
-                                only = {
-                                    "source",
-                                },
-                                diagnostics = {},
-                            },
-                        })
-                    end, "Source [A]ction")
 
                     -- Inlay Hints
                     if client and client.server_capabilities.inlayHintProvider and vim.lsp.inlay_hint then
@@ -310,7 +299,7 @@ return {
             "mason-org/mason-lspconfig.nvim", -- to convert server names to their Mason package names
         },
         cmd = "Mason",
-        keys = { { "<leader>lm", "<cmd>Mason<cr>", desc = "[M]ason" } },
+        keys = { { "<leader>M", "<cmd>Mason<cr>", desc = "[M]ason" } },
         opts = {
             ui = {
                 icons = {
