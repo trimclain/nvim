@@ -1,6 +1,7 @@
 -- preview stuff in browser
-local M = {
+return {
     "brianhuster/live-preview.nvim",
+    dev = true,
     enabled = not _G.ON_INFERIOR_OS,
     dependencies = {
         {
@@ -46,10 +47,3 @@ local M = {
         require("livepreview.config").set(opts)
     end,
 }
-
-local local_nvim_plugins = os.getenv("LOCAL_PLUGINS")
-if local_nvim_plugins then
-    M.dir = vim.fs.joinpath(local_nvim_plugins, "live-preview.nvim")
-end
-
-return M

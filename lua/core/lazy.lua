@@ -29,7 +29,16 @@ require("lazy").setup("plugins", {
         enabled = false, -- turn off for now until I need it
     },
     dev = {
-        path = "~/projects/personal",
+        path = function(plugin)
+            local local_plugin_dir
+            if plugin.name == "builder.nvim" then
+                local_plugin_dir = os.getenv("PERSONAL_PROJECTS")
+            else
+                local_plugin_dir = os.getenv("LOCAL_PLUGINS")
+            end
+            local_plugin_dir = local_plugin_dir or "~/projects" -- fallback to lazy.nvim default
+            return vim.fs.joinpath(local_plugin_dir, plugin.name)
+        end,
         fallback = true, -- fallback to git when local plugin doesn't exist
     },
     -- try to load one of these colorschemes when starting an installation during startup
