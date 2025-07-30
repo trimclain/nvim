@@ -104,10 +104,7 @@ end
 --- Return true if vim was opened from a git repository
 ---@return boolean
 M.in_git_worktree = function()
-    return require("telescope.utils").get_os_command_output(
-        { "git", "rev-parse", "--is-inside-work-tree" },
-        vim.uv.cwd()
-    )[1] == "true"
+    return vim.system({ "git", "rev-parse", "--is-inside-work-tree", vim.uv.cwd() }):wait().stderr == ""
 end
 
 -------------------------------------------------------------------------------
@@ -406,11 +403,9 @@ function M.toggle_executable()
     local file = vim.fn.expand("%:p")
     vim.cmd.write()
     if vim.fn.executable(file) == 0 then
-        ---@diagnostic disable-next-line: assign-type-mismatch
         vim.system({ "chmod", "+x", file }):wait()
         notify("This file is now executable", "Executer")
     else
-        ---@diagnostic disable-next-line: assign-type-mismatch
         vim.system({ "chmod", "-x", file }):wait()
         notify("This file is now not executable", "Executer")
     end
