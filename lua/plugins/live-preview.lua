@@ -17,7 +17,7 @@ return {
     cmd = "LivePreview",
     keys = {
         -- TODO: make this toggle
-        { "<leader>mp", "<cmd>LivePreview<cr>", desc = "Open Markdown/HTML Preview (Live Server)" },
+        { "<leader>mp", "<cmd>LivePreview start<cr>", desc = "Open Markdown/HTML Preview (Live Server)" },
     },
     opts = {
         -- port = 5500,
