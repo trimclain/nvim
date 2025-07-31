@@ -8,6 +8,7 @@ local Icons = require("core.icons")
 -- Mason Server List: https://mason-registry.dev/registry/list
 local servers = {
     gopls = {
+        name = "gopls",
         cond = vim.fn.executable("go") == 1,
         settings = {
             gopls = {
@@ -20,6 +21,7 @@ local servers = {
         },
     },
     pylsp = {
+        name = "python-lsp-server",
         settings = {
             -- docs: https://github.com/python-lsp/python-lsp-server/blob/develop/CONFIGURATION.md
             pylsp = {
@@ -43,26 +45,27 @@ local servers = {
             },
         },
     },
-    bashls = { cond = not _G.ON_INFERIOR_OS and vim.fn.executable("node") == 1 }, -- requires node installed
-    marksman = {}, -- markdown
-    dockerls = { cond = not _G.ON_INFERIOR_OS },
+    bashls = { name = "bash-language-server", cond = not _G.ON_INFERIOR_OS and vim.fn.executable("node") == 1 }, -- requires node to work
+    marksman = { name = "marksman" }, -- markdown
+    dockerls = { name = "dockerfile-language-server", cond = not _G.ON_INFERIOR_OS },
 
-    html = {},
-    cssls = { cond = not _G.ON_INFERIOR_OS },
-    emmet_ls = { cond = not _G.ON_INFERIOR_OS },
-    tailwindcss = { cond = not _G.ON_INFERIOR_OS },
-    ts_ls = { not _G.ON_INFERIOR_OS }, -- Extended: https://github.com/pmizio/typescript-tools.nvim
-    vue_ls = { cond = not _G.ON_INFERIOR_OS }, -- vue-language-server
-    graphql = { cond = not _G.ON_INFERIOR_OS },
-    jsonls = {},
-    lemminx = { cond = not _G.ON_INFERIOR_OS }, -- xml language server
+    html = { name = "html-lsp" },
+    cssls = { name = "css-lsp", cond = not _G.ON_INFERIOR_OS },
+    emmet_ls = { name = "emmet-ls", cond = not _G.ON_INFERIOR_OS },
+    tailwindcss = { name = "tailwindcss-language-server", cond = not _G.ON_INFERIOR_OS },
+    ts_ls = { name = "typescript-language-server", not _G.ON_INFERIOR_OS }, -- Extended: https://github.com/pmizio/typescript-tools.nvim
+    vue_ls = { name = "vue-language-server", cond = not _G.ON_INFERIOR_OS }, -- vue-language-server
+    graphql = { name = "graphql-language-service-cli", cond = not _G.ON_INFERIOR_OS },
+    jsonls = { name = "json-lsp" },
+    lemminx = { name = "lemminx", cond = not _G.ON_INFERIOR_OS }, -- xml language server
 
-    -- yamlls = {},
-    -- texlab = {}, -- latex
-    -- julials = {},
-    -- ansiblels = {},
-    vimls = {},
+    -- yamlls = { name = "yaml-language-server" },
+    -- texlab = { name = "texlab" }, -- latex
+    -- julials = { name = "julia-lsp" },
+    -- ansiblels = { name = "ansible-language-server" },
+    vimls = { name = "vim-language-server" },
     lua_ls = {
+        name = "lua-language-server",
         -- cmd = {...}, -- Override the default command used to start the server
         -- filetypes = { ...}, -- Override the default list of associated filetypes for the server
         -- capabilities = {}, -- Override fields in capabilities. Can be used to disable certain LSP features.
@@ -94,6 +97,7 @@ local servers = {
     },
 
     powershell_es = {
+        name = "powershell-editor-services",
         cond = vim.fn.executable("pwsh") == 1,
         bundle_path = vim.fs.joinpath(vim.fn.stdpath("data"), "mason", "packages", "powershell-editor-services"),
         settings = {
@@ -295,9 +299,6 @@ return {
     {
         "mason-org/mason.nvim",
         cond = CONFIG.lsp.enabled,
-        dependencies = {
-            "mason-org/mason-lspconfig.nvim", -- to convert server names to their Mason package names
-        },
         cmd = "Mason",
         keys = { { "<leader>M", "<cmd>Mason<cr>", desc = "[M]ason" } },
         opts = {
@@ -318,7 +319,7 @@ return {
             -- Alternative: "WhoIsSethDaniel/mason-tool-installer.nvim"
             ---------------------------------------------------------------------------------------
             local ensure_installed = vim.tbl_extend("error", servers, formatters, linters)
-            local mlsp_mappings = require("mason-lspconfig").get_mappings()
+
             local function ensure_tool_installed(tool)
                 local cond = ensure_installed[tool].cond
                 if cond == false then
@@ -338,8 +339,7 @@ return {
                 end)
 
                 mr.refresh(function()
-                    local name = mlsp_mappings.lspconfig_to_package[tool] or tool
-                    local p = mr.get_package(name)
+                    local p = mr.get_package(ensure_installed[tool].name or tool)
 
                     -- let me know how u doin
                     local notify = function(msg, lvl)
