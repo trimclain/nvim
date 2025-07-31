@@ -96,7 +96,7 @@ keymap("c", "<C-r>", "<C-r>+", opts) -- paste from clipboard in command mode
 keymap("n", "M", "<cmd>Man<cr>", opts) -- open manual entry for word under cursor
 keymap("n", "<leader>r.", ":%s/\\<<c-r><c-w>\\>/", add_desc("Replace Word Vim Style"))
 keymap("n", "<leader>Y", 'gg"+yG', add_desc("Yank Whole File"))
-keymap("n", "<leader>w", "<cmd>w<cr>", add_desc("Save File"))
+keymap("n", "<leader>w", "<cmd>write<cr>", add_desc("Save File")) -- or maybe use :update instead?
 
 -- Store relative line number jumps in the jumplist if they exceed a threshold.
 keymap("n", "k", '(v:count > 5 ? "m\'" . v:count : "") . "k"', { expr = true })

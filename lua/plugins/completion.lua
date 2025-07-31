@@ -106,7 +106,7 @@ return {
             },
             snippets = { preset = "luasnip" },
             sources = {
-                default = { "lsp", "path", "snippets", "buffer", "spell", "latex"},
+                default = { "lsp", "path", "snippets", "buffer", "spell", "latex" },
                 -- Docs: https://cmp.saghen.dev/configuration/reference.html#providers
                 providers = {
                     buffer = {
