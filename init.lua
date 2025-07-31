@@ -61,7 +61,7 @@ CONFIG = {
     plugins = {
         enable_completion = mode == "default",
         -- use blink.cmp or nvim-cmp
-        use_blink_completion = false,
+        use_blink_completion = true,
         -- use fzf-lua or telescope.nvim
         use_fzf_lua = vim.fn.executable("fzf") == 1 and false,
 

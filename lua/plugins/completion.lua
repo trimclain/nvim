@@ -2,29 +2,31 @@ if not CONFIG.plugins.use_blink_completion then
     return {}
 end
 
--- My blink problems:
--- 1. Copilot integration doesn't work
--- 2. Snippets are a whole mess, need to figure them out if I wanna replace luasnip
+-- Reasons I still use Luasnip instead of builtin vim.snippet:
+-- 1. It has jump_or_expandable(), so I can expand only snippets with <C-k>
+-- 2. Ability to swap between choices in a snippet with <C-l> and <C-h>
+-- 3. Advanced snippet creation in lua
 
 return {
     {
         "saghen/blink.cmp",
-        -- use a release tag to download pre-built binaries
-        version = "*",
-        -- AND/OR build from source, requires nightly: https://rust-lang.github.io/rustup/concepts/channels.html#working-with-nightly-rust
-        -- build = "cargo build --release",
+        cond = CONFIG.plugins.enable_completion,
+        version = "1.*", -- use a release tag to download pre-built binaries
         event = "VeryLazy", -- '/' and ':' autocomplete won't always work on InsertEnter
         dependencies = {
             "rafamadriz/friendly-snippets",
-            -- "Kaiser-Yang/blink-cmp-dictionary"
+            "ribru17/blink-cmp-spell",
             {
-                "giuxtaposition/blink-cmp-copilot",
+                "erooke/blink-cmp-latex",
+                enabled = not _G.ON_INFERIOR_OS,
+            },
+            {
+                "giuxtaposition/blink-cmp-copilot", -- NOTE: this might be not setup properly. Didn't work last time.
                 enabled = CONFIG.lsp.enable_copilot and vim.fn.executable("node") == 1,
                 cond = vim.g.neovide == nil,
                 dependencies = "copilot.lua",
             },
         },
-
         -- Docs: https://cmp.saghen.dev/configuration/general.html
         opts = {
             keymap = {
@@ -33,40 +35,16 @@ return {
                 ["<C-space>"] = { "show", "show_documentation", "hide_documentation" },
                 ["<C-e>"] = { "hide", "fallback" },
                 ["<C-y>"] = { "select_and_accept" },
-                -- cmdline forces to press enter twice to run a command and this is the problem
-                ["<CR>"] = {
-                    function(cmp)
-                        if not cmp.is_visible() then
-                            return
-                        end
+                ["<CR>"] = { "accept", "fallback" },
 
-                        -- fallback for cmdtypes :@/?
-                        if vim.api.nvim_get_mode().mode == "c" then
-                            return
-                        end
-
-                        cmp.accept()
-                        return true
-                    end,
-                    "fallback",
-                },
-                -- { "select_and_accept", "fallback" },
-
-                ["<C-p>"] = { "select_prev", "fallback" },
-                ["<C-n>"] = { "select_next", "fallback" },
+                ["<C-p>"] = { "select_prev", "fallback_to_mappings" },
+                ["<C-n>"] = { "select_next", "fallback_to_mappings" },
 
                 ["<Tab>"] = { "select_next", "snippet_forward", "fallback" },
                 ["<S-Tab>"] = { "select_prev", "snippet_backward", "fallback" },
 
                 ["<C-u>"] = { "scroll_documentation_up", "fallback" },
                 ["<C-d>"] = { "scroll_documentation_down", "fallback" },
-
-                -- snippets
-                -- FIX: accept should only select_and_accept for snippet
-                ["<C-k>"] = { "accept", "snippet_forward" },
-                ["<C-j>"] = { "snippet_backward" },
-                -- ["C-l"]
-                -- ["C-h"]
             },
             completion = {
                 keyword = {
@@ -79,7 +57,7 @@ return {
                 list = {
                     -- per mode config: https://cmp.saghen.dev/recipes#change-selection-type-per-mode
                     selection = { preselect = false, auto_insert = true },
-                    max_items = 10, -- defaul: 200
+                    -- max_items = 10, -- default: 200
                 },
                 menu = {
                     -- Docs: https://cmp.saghen.dev/configuration/reference.html#completion-menu-draw
@@ -99,15 +77,15 @@ return {
                             source_name = {
                                 text = function(ctx)
                                     local custom_source_names = {
-                                        copilot = "[copilot]",
-                                        LSP = "[LSP]",
-                                        -- latex_symbols = "[symb]",
-                                        -- luasnip = "[snip]",
-                                        Snippets = "[snip]",
-                                        Path = "[path]",
-                                        -- spell = "[spell]",
                                         Buffer = "[buf]",
+                                        LSP = "[LSP]",
+                                        Path = "[path]",
+                                        Snippets = "[snip]",
                                         cmdline = "[cmd]",
+                                        copilot = "[copilot]",
+                                        Latex = "[symb]",
+                                        LazyDev = "[dev]",
+                                        Spell = "[spell]",
                                     }
                                     return custom_source_names[ctx.source_name]
                                 end,
@@ -121,17 +99,14 @@ return {
                     auto_show_delay_ms = 200, -- default: 500
                     window = { border = CONFIG.ui.border },
                 },
-                -- ghost_text = {
-                --     enabled = true,
-                -- },
+                ghost_text = { enabled = CONFIG.ui.ghost_text },
             },
             appearance = {
-                -- TODO: remove after updating astrospeed
-                use_nvim_cmp_as_default = true,
                 kind_icons = require("core.icons").kinds,
             },
+            snippets = { preset = "luasnip" },
             sources = {
-                default = { "lsp", "buffer", "path" },
+                default = { "lsp", "path", "snippets", "buffer", "spell", "latex"},
                 -- Docs: https://cmp.saghen.dev/configuration/reference.html#providers
                 providers = {
                     buffer = {
@@ -139,45 +114,88 @@ return {
                     },
                     cmdline = {
                         min_keyword_length = 2,
+                        -- min_keyword_length = function(ctx)
+                        --     -- when typing a command, only show when the keyword is 3 characters or longer
+                        --     if ctx.mode == 'cmdline' and string.find(ctx.line, ' ') == nil then return 3 end
+                        --     return 0
+                        -- end
                     },
                     path = {
                         opts = {
                             trailing_slash = false,
-                            label_trailing_slash = true,
-                            -- PROBLEM: no option to show hidden only after I type .
+                            -- TODO: show hidden ONLY after I type .
                             -- show_hidden_files_by_default = true,
                         },
                     },
-                    snippets = {
-                        score_offset = 100, -- show at a higher priority than lsp
+                    -- Externals: https://cmp.saghen.dev/configuration/sources.html#community-sources
+                    spell = {
+                        name = "Spell",
+                        module = "blink-cmp-spell",
+                        -- opts = {
+                        --     -- EXAMPLE: Only enable source in `@spell` captures, and disable it
+                        --     -- in `@nospell` captures.
+                        --     enable_in_context = function()
+                        --         local curpos = vim.api.nvim_win_get_cursor(0)
+                        --         local captures = vim.treesitter.get_captures_at_pos(0, curpos[1] - 1, curpos[2] - 1)
+                        --         local in_spell_capture = false
+                        --         for _, cap in ipairs(captures) do
+                        --             if cap.capture == "spell" then
+                        --                 in_spell_capture = true
+                        --             elseif cap.capture == "nospell" then
+                        --                 return false
+                        --             end
+                        --         end
+                        --         return in_spell_capture
+                        --     end,
+                        -- },
+                    },
+                    latex = {
+                        name = "Latex",
+                        module = "blink-cmp-latex",
+                        opts = {
+                            -- set to true to insert the latex command instead of the symbol
+                            insert_command = false,
+                            -- insert_command = function(ctx)
+                            --     local ft = vim.api.nvim_get_option_value("filetype", {
+                            --         scope = "local",
+                            --         buf = ctx.bufnr,
+                            --     })
+                            --     if ft == "tex" then
+                            --         return true
+                            --     end
+                            --     return false
+                            -- end
+                        },
                     },
                 },
             },
-            snippets = { preset = "default" },
-            -- Experimental signature help support
-            -- signature = {
-            --     enabled = true,
-            --     window = { border = CONFIG.ui.border }
-            -- },
+            cmdline = {
+                sources = { "path", "buffer", "cmdline" },
+
+                completion = {
+                    list = {
+                        selection = { preselect = false, auto_insert = true },
+                    },
+                    menu = { auto_show = true },
+                    ghost_text = { enabled = CONFIG.ui.ghost_text },
+                },
+            },
+            signature = {
+                enabled = CONFIG.lsp.show_signature_help,
+                window = {
+                    show_documentation = true,
+                    border = CONFIG.ui.border,
+                },
+            },
         },
         config = function(_, opts)
-            -- disable snippet completions inside comments and strings:
-            local ts_ok, node = pcall(vim.treesitter.get_node)
-            if
-                ts_ok
-                and node
-                and not vim.tbl_contains({ "string", "comment", "line_comment", "block_comment" }, node:type())
-            then
-                table.insert(opts.sources.default, "snippets")
-            end
-
             -- setup lazydev
             if require("core.util").has_plugin("lazydev") then
                 table.insert(opts.sources.default, 1, "lazydev")
                 opts.sources.providers.lazydev = {
                     name = "LazyDev",
                     module = "lazydev.integrations.blink",
-                    score_offset = 100, -- show at a higher priority than lsp
+                    score_offset = 100,
                 }
             end
 
