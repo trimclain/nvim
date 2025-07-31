@@ -149,6 +149,7 @@ local linters = {
 return {
     -- LSP Configuration & Plugins
     {
+        -- TODO: no more need for this package, I don't use it since nvim 0.11
         "neovim/nvim-lspconfig",
         cond = CONFIG.lsp.enabled,
         event = { "BufReadPre", "BufNewFile" },
@@ -197,7 +198,11 @@ return {
 
                     -- configure diagnostics
                     vim.diagnostic.config({
-                        underline = true,
+                        severity_sort = true,
+                        underline = { severity = vim.diagnostic.severity.ERROR },
+                        virtual_text = CONFIG.lsp.virtual_text and { spacing = 4, source = "if_many", prefix = "●" }
+                            or false,
+                        float = { border = CONFIG.ui.border, source = "if_many" },
                         update_in_insert = false,
                         signs = {
                             text = {
@@ -206,17 +211,6 @@ return {
                                 [vim.diagnostic.severity.INFO] = Icons.diagnostics.Info,
                                 [vim.diagnostic.severity.HINT] = Icons.diagnostics.Hint,
                             },
-                        },
-                        virtual_text = CONFIG.lsp.virtual_text and { spacing = 4, source = "if_many", prefix = "●" }
-                            or false,
-                        severity_sort = true,
-                        float = {
-                            focusable = false,
-                            style = "minimal",
-                            border = CONFIG.ui.border,
-                            source = "if_many",
-                            header = "",
-                            prefix = "",
                         },
                     })
 
@@ -375,6 +369,7 @@ return {
             ---------------------------------------------------------------------------------------
             local has_cmp, cmp_nvim_lsp = pcall(require, "cmp_nvim_lsp")
             local has_blink, blink = pcall(require, "blink.cmp")
+            -- TODO: rewrite for nvim 0.11
             local capabilities = vim.tbl_deep_extend(
                 "force",
                 {},
