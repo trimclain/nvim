@@ -75,7 +75,6 @@ M.kinds = { -- referenced
     Variable = "󰀫", -- ""
 }
 ---------------------------------------------------------------------------
--- TODO: nvim-comment gcap should not comment empty lines below to touch next comment block!!!
 M.ui = {
     ArrowCircleDown = "",
     ArrowCircleLeft = "",
