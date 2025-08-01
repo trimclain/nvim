@@ -283,7 +283,7 @@ return {
                                 modified = Icons.ui.Circle, -- default: "[+]"
                                 readonly = Icons.ui.Lock, -- default: "[-]"
                                 unnamed = "", -- default: "[No Name]"
-                                newfile = Icons.ui.NewFile, -- default: "[New]"
+                                newfile = " " .. Icons.ui.NewFile, -- default: "[New]"
                             },
                             cond = function()
                                 return hide_in_width(100) and disable_for_ui_filetypes()
