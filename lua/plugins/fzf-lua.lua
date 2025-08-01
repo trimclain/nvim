@@ -110,7 +110,6 @@ return {
                 --     desc = "Recently opened files",
                 -- },
 
-                -- TODO: could be interesting (currently which-key has it bound)
                 { "z=", "<cmd>FzfLua spell_suggest<cr>", desc = "Spelling suggestions" },
             }
         end,

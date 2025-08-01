@@ -1,6 +1,3 @@
-local Util = require("core.util")
-local Icons = require("core.icons")
-
 -- LSP Server Settings
 -- Servers listed here will be autoinstalled
 -- Docs: https://github.com/neovim/nvim-lspconfig/blob/master/doc/configs.md
@@ -149,26 +146,18 @@ local linters = {
 return {
     -- LSP Configuration & Plugins
     {
-        -- TODO: no more need for this package, I don't use it since nvim 0.11
         "neovim/nvim-lspconfig",
         cond = CONFIG.lsp.enabled,
         event = { "BufReadPre", "BufNewFile" },
         dependencies = {
             -- used by some keymaps
-            {
-                "nvim-telescope/telescope.nvim",
-                cond = not CONFIG.plugins.use_fzf_lua,
-            },
-            {
-                "ibhagwan/fzf-lua",
-                cond = CONFIG.plugins.use_fzf_lua,
-            },
+            { "fzf-lua", cond = CONFIG.plugins.use_fzf_lua },
+            { "telescope.nvim", cond = not CONFIG.plugins.use_fzf_lua },
+
+            { "blink.cmp", cond = CONFIG.plugins.use_blink_completion },
+            { "hrsh7th/cmp-nvim-lsp", cond = not CONFIG.plugins.use_blink_completion },
 
             "mason.nvim",
-            {
-                "hrsh7th/cmp-nvim-lsp",
-                cond = Util.has_plugin("nvim-cmp"),
-            },
             {
                 "smjonas/inc-rename.nvim",
                 opts = { preview_empty_name = false },
@@ -250,7 +239,7 @@ return {
                         map("gO", require("telescope.builtin").lsp_document_symbols, "Document Symbols")
                     end
 
-                    if Util.has_plugin("inc-rename.nvim") then
+                    if require("core.util").has_plugin("inc-rename.nvim") then
                         vim.keymap.set("n", "grn", function()
                             return ":IncRename " .. vim.fn.expand("<cword>")
                         end, { buffer = event.buf, desc = "LSP: Rename", expr = true })
@@ -295,18 +284,19 @@ return {
         cond = CONFIG.lsp.enabled,
         cmd = "Mason",
         keys = { { "<leader>M", "<cmd>Mason<cr>", desc = "[M]ason" } },
-        opts = {
-            ui = {
-                icons = {
-                    package_installed = Icons.ui.UnicodeCheck,
-                    package_uninstalled = Icons.ui.UnicodeBallotX,
-                    package_pending = Icons.ui.UnicodeCircleArrow,
+        config = function()
+            local Icons = require("core.icons")
+
+            require("mason").setup({
+                ui = {
+                    icons = {
+                        package_installed = Icons.ui.UnicodeCheck,
+                        package_uninstalled = Icons.ui.UnicodeBallotX,
+                        package_pending = Icons.ui.UnicodeCircleArrow,
+                    },
+                    border = CONFIG.ui.border,
                 },
-                border = CONFIG.ui.border,
-            },
-        },
-        config = function(_, opts)
-            require("mason").setup(opts)
+            })
 
             ---------------------------------------------------------------------------------------
             -- Install All Mason Tools
