@@ -26,9 +26,10 @@ end
 -- Important settings for easy modification
 CONFIG = {
     opts = {
-        -- textwidth = 120,
         tabwidth = 4,
-        -- escape_keys = { "jk", "JK", "jj" },
+        colorcolumn = true,
+        word_wrap = false,
+        spaces_over_tabs = true, -- there's only one correct option here
     },
     lsp = {
         enabled = mode == "default",
