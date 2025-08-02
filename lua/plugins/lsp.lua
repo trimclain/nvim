@@ -186,6 +186,7 @@ return {
                         })
 
                     -- configure diagnostics
+                    local icons = require("core.icons")
                     vim.diagnostic.config({
                         severity_sort = true,
                         underline = { severity = vim.diagnostic.severity.ERROR },
@@ -195,10 +196,10 @@ return {
                         update_in_insert = false,
                         signs = {
                             text = {
-                                [vim.diagnostic.severity.ERROR] = Icons.diagnostics.Error,
-                                [vim.diagnostic.severity.WARN] = Icons.diagnostics.Warn,
-                                [vim.diagnostic.severity.INFO] = Icons.diagnostics.Info,
-                                [vim.diagnostic.severity.HINT] = Icons.diagnostics.Hint,
+                                [vim.diagnostic.severity.ERROR] = icons.diagnostics.Error,
+                                [vim.diagnostic.severity.WARN] = icons.diagnostics.Warn,
+                                [vim.diagnostic.severity.INFO] = icons.diagnostics.Info,
+                                [vim.diagnostic.severity.HINT] = icons.diagnostics.Hint,
                             },
                         },
                     })
@@ -285,14 +286,13 @@ return {
         cmd = "Mason",
         keys = { { "<leader>M", "<cmd>Mason<cr>", desc = "[M]ason" } },
         config = function()
-            local Icons = require("core.icons")
-
+            local icons = require("core.icons")
             require("mason").setup({
                 ui = {
                     icons = {
-                        package_installed = Icons.ui.UnicodeCheck,
-                        package_uninstalled = Icons.ui.UnicodeBallotX,
-                        package_pending = Icons.ui.UnicodeCircleArrow,
+                        package_installed = icons.ui.UnicodeCheck,
+                        package_uninstalled = icons.ui.UnicodeBallotX,
+                        package_pending = icons.ui.UnicodeCircleArrow,
                     },
                     border = CONFIG.ui.border,
                 },
@@ -365,8 +365,7 @@ return {
                 {},
                 vim.lsp.protocol.make_client_capabilities(),
                 has_cmp and cmp_nvim_lsp.default_capabilities() or {},
-                has_blink and blink.get_lsp_capabilities() or {},
-                opts.capabilities or {}
+                has_blink and blink.get_lsp_capabilities() or {}
             )
 
             local function configure_and_enable(server, server_settings)
