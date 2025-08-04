@@ -72,24 +72,22 @@ return {
     --     end,
     -- },
 
-    -- markdown preview alternative using deno
-    -- {
-    --     "toppair/peek.nvim",
-    --     build = "deno task --quiet build:fast",
-    --     keys = {
-    --         {
-    --             "<leader>op",
-    --             function()
-    --                 local peek = require("peek")
-    --                 if peek.is_open() then
-    --                     peek.close()
-    --                 else
-    --                     peek.open()
-    --                 end
-    --             end,
-    --             desc = "Peek (Markdown Preview)",
-    --         },
-    --     },
-    --     opts = { theme = "light" },
-    -- },
+    -- render markdown in neovim
+    {
+        "MeanderingProgrammer/render-markdown.nvim",
+        dependencies = {
+            "nvim-treesitter",
+            "nvim-web-devicons",
+        },
+        ft = { "markdown" },
+        opts = {
+            render_modes = true, -- default: { "n", "c", "t" }
+            code = {
+                sign = false, -- default: true
+                width = "block", -- default: "full"
+                right_pad = 1, -- default: 0
+                border = "thin" -- default: "hide"
+            },
+        },
+    },
 }
