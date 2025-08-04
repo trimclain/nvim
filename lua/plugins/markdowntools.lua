@@ -83,10 +83,15 @@ return {
         opts = {
             render_modes = true, -- default: { "n", "c", "t" }
             code = {
-                sign = false, -- default: true
+                sign = false,
                 width = "block", -- default: "full"
                 right_pad = 1, -- default: 0
                 border = "thin" -- default: "hide"
+            },
+            heading = {
+                sign = false,
+                -- use basic icons from neorg
+                icons = { "◉ ", "◎ ", "○ ", "✺ ", "▶ ", "⤷ " }, -- default: { "󰲡 ", "󰲣 ", "󰲥 ", "󰲧 ", "󰲩 ", "󰲫 " },
             },
         },
     },
