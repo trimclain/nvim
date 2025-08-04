@@ -190,8 +190,9 @@ return {
                     vim.diagnostic.config({
                         severity_sort = true,
                         underline = { severity = vim.diagnostic.severity.ERROR },
-                        virtual_text = CONFIG.lsp.virtual_text and { spacing = 4, source = "if_many", prefix = "●" }
-                            or false,
+                        -- virtual_text = CONFIG.lsp.virtual_text and { spacing = 4, source = "if_many", prefix = "●" }
+                        --     or false,
+                        virtual_lines = CONFIG.lsp.virtual_text,
                         float = { border = CONFIG.ui.border, source = "if_many" },
                         update_in_insert = false,
                         signs = {
