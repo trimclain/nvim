@@ -41,14 +41,14 @@ CONFIG = {
     ui = {
         -- Colorschemes (note/10):
         -- astrospeed (10)
-        -- astrotheme (9), catppuccin (9), tokyonight (9), rose-pine (9), tundra (9)
-        -- darkplus (8.5), primer-dark (8), nightfox (8), vscode (8), gruvbox (8)
-        -- github-dark (7), onedark (7), kanagawa (7), zephyr (7), poimandres (7)
+        -- astrotheme (9), catppuccin (9), tokyonight (9), rose-pine (9) nightfox (9)
+        -- duskfox (8.8), carbonfox (8.7) tundra (8.5), darkplus (8.5), primer-dark (8), vscode (8)
+        -- gruvbox (7.9), github-dark (7), onedark (7), kanagawa (7), zephyr (7), poimandres (7)
         -- embark(6), sonokai (6), omni (6),
         colorscheme = "astrotheme",
         transparent_background = false,
         cursorline = true,
-        -- border = "rounded", -- see `:h nvim_open_win()`
+        -- border = "rounded", -- see `:h winborder`
         border = "none",
         italic_comments = true,
         ghost_text = false,
