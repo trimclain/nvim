@@ -291,14 +291,14 @@ return {
         "EdenEast/nightfox.nvim",
         lazy = false,
         priority = 1000,
-        cond = CONFIG.ui.colorscheme == "nightfox",
+        cond = vim.list_contains({ "nightfox", "duskfox", "carbonfox" }, CONFIG.ui.colorscheme),
         opts = {
-            transparent = false, -- Disable setting background
-            dim_inactive = false, -- Non focused panes set to alternative background
+            transparent = CONFIG.ui.transparent_background,
+            dim_inactive = false, -- non focused panes set to alternative background
         },
         config = function(_, opts)
             require("nightfox").setup(opts)
-            vim.cmd.colorscheme("nightfox")
+            vim.cmd.colorscheme(CONFIG.ui.colorscheme)
         end,
     },
 
