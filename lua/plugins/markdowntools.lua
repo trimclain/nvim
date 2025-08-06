@@ -79,6 +79,7 @@ return {
             "nvim-treesitter",
             "nvim-web-devicons",
         },
+        cmd = "RenderMarkdown",
         ft = { "markdown" },
         opts = {
             render_modes = true, -- default: { "n", "c", "t" }
@@ -86,7 +87,7 @@ return {
                 sign = false,
                 width = "block", -- default: "full"
                 right_pad = 1, -- default: 0
-                border = "thin" -- default: "hide"
+                border = "thin", -- default: "hide"
             },
             heading = {
                 sign = false,
