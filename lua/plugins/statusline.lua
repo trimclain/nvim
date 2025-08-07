@@ -219,8 +219,7 @@ return {
 
             return {
                 options = {
-                    -- TODO: fix "auto" not correctly setting normal mode colors in astrotheme
-                    theme = CONFIG.ui.colorscheme, -- "auto",
+                    theme = "auto",
                     section_separators = { left = " ", right = "" },
                     component_separators = { left = "", right = "" },
                     -- block = { left = "█", right = "█" },
