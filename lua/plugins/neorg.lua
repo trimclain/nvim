@@ -11,7 +11,8 @@ return {
             "nui.nvim",
             "plenary.nvim",
             "nvim-neotest/nvim-nio",
-            "nvim-neorg/lua-utils.nvim",
+            -- TODO: Switch back to "nvim-neorg/lua-utils.nvim" after my PR is merged
+            { "trimclain/lua-utils.nvim", branch = "fix-deprecated" },
             "pysan3/pathlib.nvim",
         },
         config = function()
