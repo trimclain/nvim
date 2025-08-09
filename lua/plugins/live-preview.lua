@@ -1,7 +1,7 @@
 -- preview stuff in browser
 return {
     "brianhuster/live-preview.nvim",
-    dev = true,
+    -- dev = true,
     enabled = not _G.ON_INFERIOR_OS,
     dependencies = {
         {
