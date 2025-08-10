@@ -154,8 +154,11 @@ vim.opt.formatoptions = vim.opt.formatoptions
     + "j" -- Auto-remove comments if possible.
     - "2" -- I'm not in gradeschool anymore
 
--- Sometimes them fingers do be fat
-vim.cmd([[com! Q q]])
-vim.cmd([[com! Qa qa]])
-vim.cmd("com! X x")
-vim.cmd("com! W w")
+local com = function(new, old)
+    vim.api.nvim_create_user_command(new, old, {})
+end
+
+com("Q", "q")
+com("Qa", "qa")
+com("X", "x")
+com("W", "w")
