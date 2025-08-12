@@ -107,18 +107,36 @@ return {
             snippets = { preset = "luasnip" },
             sources = {
                 default = { "lsp", "path", "snippets", "buffer", "spell", "latex" },
+                -- Dynamically picking providers by treesitter node/filetype
+                -- default = function(ctx)
+                --     local success, node = pcall(vim.treesitter.get_node)
+                --     if
+                --         success
+                --         and node
+                --         and vim.tbl_contains({ "comment", "line_comment", "block_comment" }, node:type())
+                --     then
+                --         return { "buffer" }
+                --     elseif vim.bo.filetype == "lua" then
+                --         return { "lsp", "path" }
+                --     else
+                --         return { "lsp", "path", "snippets", "buffer" }
+                --     end
+                -- end,
+
                 -- Docs: https://cmp.saghen.dev/configuration/reference.html#providers
                 providers = {
                     buffer = {
                         min_keyword_length = 1,
                     },
                     cmdline = {
-                        min_keyword_length = 2,
-                        -- min_keyword_length = function(ctx)
-                        --     -- when typing a command, only show when the keyword is 3 characters or longer
-                        --     if ctx.mode == 'cmdline' and string.find(ctx.line, ' ') == nil then return 3 end
-                        --     return 0
-                        -- end
+                        min_keyword_length = function(ctx)
+                            -- when typing a command, only show when the keyword
+                            -- is 2 characters or longer unless a space was typed
+                            if ctx.mode == "cmdline" and string.find(ctx.line, " ") == nil then
+                                return 2
+                            end
+                            return 0
+                        end,
                     },
                     path = {
                         opts = {
