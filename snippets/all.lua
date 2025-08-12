@@ -9,16 +9,21 @@ local s = ls.snippet
 -- local sn = ls.snippet_node
 -- local isn = ls.indent_snippet_node
 local t = ls.text_node
--- local i = ls.insert_node
+local i = ls.insert_node
 -- local f = ls.function_node
 -- local c = ls.choice_node
 -- local d = ls.dynamic_node
 -- local r = ls.restore_node
 
 -- NOTE: for future snippets use fmt
+-- DOCS: https://github.com/L3MON4D3/LuaSnip/blob/master/DOC.md#fmt
 -- URL: https://github.com/L3MON4D3/LuaSnip/blob/faf3c94a44508cec1b961406d36cc65113ff3b98/lua/luasnip/extras/fmt.lua
---local fmt = require("luasnip.extras.fmt").fmt
+local fmt = require("luasnip.extras.fmt").fmt
 
 return {
     -- s("trig", t("loaded!")),
+    s("example1", fmt("just an {iNode1} for {iNode2}", {
+        iNode2 = i(2, "me"),
+        iNode1 = i(1, "example")
+    })),
 }
