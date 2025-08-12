@@ -5,6 +5,7 @@ return {
     cond = CONFIG.plugins.enable_completion,
     dependencies = {
         -- PERF: it takes 8 ms to load on startup
+        -- TODO: take the snippets I use and remove this plugin
         "rafamadriz/friendly-snippets",
         config = function()
             require("luasnip.loaders.from_vscode").lazy_load()
