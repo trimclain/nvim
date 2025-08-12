@@ -2,11 +2,6 @@ if not CONFIG.plugins.use_blink_completion then
     return {}
 end
 
--- Reasons I still use Luasnip instead of builtin vim.snippet:
--- 1. It has jump_or_expandable(), so I can expand only snippets with <C-k>
--- 2. Ability to swap between choices in a snippet with <C-l> and <C-h>
--- 3. Advanced snippet creation in lua
-
 return {
     {
         "saghen/blink.cmp",
@@ -14,7 +9,6 @@ return {
         version = "1.*", -- use a release tag to download pre-built binaries
         event = "VeryLazy", -- '/' and ':' autocomplete won't always work on InsertEnter
         dependencies = {
-            "rafamadriz/friendly-snippets",
             "ribru17/blink-cmp-spell",
             {
                 "erooke/blink-cmp-latex",
