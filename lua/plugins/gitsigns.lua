@@ -2,6 +2,7 @@
 return {
     {
         "lewis6991/gitsigns.nvim",
+        version = "*", -- TODO: remove after https://github.com/lewis6991/gitsigns.nvim/issues/1381 is closed
         cond = CONFIG.git.enabled,
         event = { "BufReadPre", "BufNewFile" },
         opts = function()
