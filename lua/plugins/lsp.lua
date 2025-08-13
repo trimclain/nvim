@@ -127,7 +127,7 @@ local servers = {
 }
 
 local formatters = {
-    isort = {},
+    usort = {}, -- better isort
     autopep8 = {},
     prettierd = {},
     stylua = {},

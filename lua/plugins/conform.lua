@@ -47,7 +47,7 @@ return {
                 sh = { "shfmt" }, -- beautysh
                 go = { "gofumpt" },
                 -- run multiple formatters sequentially
-                python = { "isort", "autopep8" }, -- ruff
+                python = { "usort", "autopep8" }, -- ruff
                 -- use a sub-list to tell conform to run *until* a formatter is found
 
                 javascript = { "prettierd", "prettier", stop_after_first = true },
