@@ -1,7 +1,7 @@
 -- LSP Server Settings
 -- Servers listed here will be autoinstalled
 -- Docs: https://github.com/neovim/nvim-lspconfig/blob/master/doc/configs.md
--- Config Examples: https://github.com/neovim/nvim-lspconfig/tree/master/lsp
+-- Configs: https://github.com/neovim/nvim-lspconfig/tree/master/lsp
 -- Mason Server List: https://mason-registry.dev/registry/list
 local servers = {
     gopls = {
@@ -17,10 +17,20 @@ local servers = {
             },
         },
     },
+    -- For now disabled in favor of python-lsp-server
+    -- basedpyright = {
+    --     name = "basedpyright",
+    --     settings = {
+    --         -- Docs: https://docs.basedpyright.com/latest/configuration/language-server-settings/
+    --         basedpyright = {
+    --             disableOrganizeImports = false, -- prefer usort instead
+    --         },
+    --     },
+    -- },
     pylsp = {
         name = "python-lsp-server",
         settings = {
-            -- docs: https://github.com/python-lsp/python-lsp-server/blob/develop/CONFIGURATION.md
+            -- Docs: https://github.com/python-lsp/python-lsp-server/blob/develop/CONFIGURATION.md
             pylsp = {
                 -- configurationSources = { "flake8" }, -- (one of: 'pycodestyle', 'flake8')
                 plugins = {
@@ -67,7 +77,7 @@ local servers = {
         -- filetypes = { ...}, -- Override the default list of associated filetypes for the server
         -- capabilities = {}, -- Override fields in capabilities. Can be used to disable certain LSP features.
         settings = { -- Override the default settings passed when initializing the server.
-            -- docs: https://luals.github.io/wiki/settings/
+            -- Docs: https://luals.github.io/wiki/settings/
             Lua = {
                 completion = {
                     -- "Disable" - Only show function name (default)
