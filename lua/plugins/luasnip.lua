@@ -12,6 +12,7 @@ return {
         end,
     },
     opts = {
+        -- FIX: in the snippet whenever I use tab completion with blink, I get out of the snippet...
         update_events = { "TextChanged", "TextChangedI" },
         delete_check_events = "TextChanged",
     },
