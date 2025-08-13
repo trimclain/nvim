@@ -14,4 +14,6 @@ local t = ls.text_node
 
 return {
     s("#ign", t("# noqa: E501")), -- pylsp: ignore long lines
+    -- TODO: # fmt of \n \n # fmt on
+    -- TODO: # nopep8
 }
