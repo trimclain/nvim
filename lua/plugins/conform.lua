@@ -68,7 +68,11 @@ return {
             },
             formatters = {
                 autopep8 = {
-                    prepend_args = { "--ignore=W503" }, -- use newer W504 instead
+                    -- Ignoring:
+                    -- E401 - Put imports on separate lines -- let usort format the imports
+                    -- E402 - Fix module level import not at top of file -- let usort format the imports
+                    -- W503 - Fix line break before binary operator -- prefer W504 (line break after operator) instead
+                    prepend_args = { "--ignore=W503,E401,E402" },
                 },
                 -- prettierd = {
                 --     -- use .editorconfig instead
