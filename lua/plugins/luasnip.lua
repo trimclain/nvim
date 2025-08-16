@@ -3,14 +3,14 @@ return {
     "L3MON4D3/LuaSnip",
     version = "v2.*",
     cond = CONFIG.plugins.enable_completion,
-    dependencies = {
-        -- PERF: it takes 8 ms to load on startup
-        -- TODO: take the snippets I use and remove this plugin
-        "rafamadriz/friendly-snippets",
-        config = function()
-            require("luasnip.loaders.from_vscode").lazy_load()
-        end,
-    },
+    -- dependencies = {
+    --     -- PERF: it takes 8 ms to load on startup
+    --     -- TODO: take the snippets I use and remove this plugin
+    --     "rafamadriz/friendly-snippets",
+    --     config = function()
+    --         require("luasnip.loaders.from_vscode").lazy_load()
+    --     end,
+    -- },
     opts = {
         update_events = { "TextChanged", "TextChangedI" },
         delete_check_events = "TextChanged",
@@ -23,6 +23,7 @@ return {
         luasnip.filetype_extend("typescriptreact", { "javascript", "html" }) -- add js and html snippets to tsx
 
         -- my own snippets
+        -- INFO: these files are reloaded on save
         require("luasnip.loaders.from_lua").lazy_load({
             paths = {
                 -- Load local snippets if present
