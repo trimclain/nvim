@@ -35,8 +35,20 @@ return {
     keys = function()
         local luasnip = require("luasnip")
         return {
+            {
+                "<C-k>",
+                function()
+                    -- Fixes the case where a collapsed choice node gets expanded into a new snippet
+                    if luasnip.jumpable(1) then
+                        luasnip.jump(1)
+                    elseif luasnip.expandable() then
+                        luasnip.expand({}) -- TODO: remove {} in luasnip v2.5
+                    end
+                end,
+                silent = true,
+                mode = { "i", "s" },
+            },
             -- stylua: ignore start
-            { "<C-k>", function() if luasnip.expand_or_jumpable() then luasnip.expand_or_jump() end end, silent = true, mode = { "i", "s" } },
             { "<C-j>", function() if luasnip.jumpable(-1) then luasnip.jump(-1) end end, silent = true, mode = { "i", "s" } },
             { "<C-h>", function() if luasnip.choice_active() then luasnip.change_choice(-1) end end, mode = { "i", "s" } },
             { "<C-l>", function() if luasnip.choice_active() then luasnip.change_choice(1) end end, mode = { "i", "s" } },
