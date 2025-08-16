@@ -144,6 +144,7 @@ return {
                     spell = {
                         name = "Spell",
                         module = "blink-cmp-spell",
+                        score_offset = -4, -- prefer snippets over this
                         -- opts = {
                         --     -- EXAMPLE: Only enable source in `@spell` captures, and disable it
                         --     -- in `@nospell` captures.
