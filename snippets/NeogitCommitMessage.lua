@@ -1,20 +1,22 @@
 ---@diagnostic disable: undefined-global
 
 local function create_conventional_commit_snippet(commit_type, is_breaking)
-    local scope_opts
+    local scope_opts, body_start
     if is_breaking then
         scope_opts = { fmt("({})!:", { i(1, "scope") }), t("!:") }
+        body_start = commit_type .. "{scope} {}\n\n{}"
     else
         scope_opts = { fmt("({}):", { i(1, "scope") }), t(":") }
+        body_start = commit_type .. "{scope} {}"
     end
     local trigger = is_breaking and commit_type .. "!" or commit_type
     local description = commit_type .. " conventional commit" .. (is_breaking and " with breaking changes" or "")
     return s(
         { trig = trigger, desc = description },
-        fmt(commit_type .. "{scope} {}\n\n{}", {
+        fmt(body_start, {
             scope = c(1, scope_opts),
             i(2, "title"),
-            is_breaking and t("BREAKING CHANGE: ") or i(0),
+            is_breaking and t("BREAKING CHANGE: "),
         })
     )
 end
