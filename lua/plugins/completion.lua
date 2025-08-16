@@ -9,6 +9,7 @@ return {
         version = "1.*", -- use a release tag to download pre-built binaries
         event = "VeryLazy", -- '/' and ':' autocomplete won't always work on InsertEnter
         dependencies = {
+            "L3MON4D3/LuaSnip",
             "ribru17/blink-cmp-spell",
             {
                 "erooke/blink-cmp-latex",
@@ -34,8 +35,8 @@ return {
                 ["<C-p>"] = { "select_prev", "fallback_to_mappings" },
                 ["<C-n>"] = { "select_next", "fallback_to_mappings" },
 
-                ["<Tab>"] = { "select_next", "snippet_forward", "fallback" },
-                ["<S-Tab>"] = { "select_prev", "snippet_backward", "fallback" },
+                ["<Tab>"] = { "select_next", "fallback" },
+                ["<S-Tab>"] = { "select_prev", "fallback" },
 
                 ["<C-u>"] = { "scroll_documentation_up", "fallback" },
                 ["<C-d>"] = { "scroll_documentation_down", "fallback" },
