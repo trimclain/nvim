@@ -103,7 +103,7 @@ return {
             },
             snippets = { preset = "luasnip" },
             sources = {
-                default = { "lsp", "path", "snippets", "buffer", "spell", "latex" },
+                default = { "lsp", "path", "snippets", "buffer", "spell" },
                 -- Dynamically picking providers by treesitter node/filetype
                 -- default = function(ctx)
                 --     local success, node = pcall(vim.treesitter.get_node)
@@ -165,24 +165,6 @@ return {
                         --     end,
                         -- },
                     },
-                    latex = {
-                        name = "Latex",
-                        module = "blink-cmp-latex",
-                        opts = {
-                            -- set to true to insert the latex command instead of the symbol
-                            insert_command = false,
-                            -- insert_command = function(ctx)
-                            --     local ft = vim.api.nvim_get_option_value("filetype", {
-                            --         scope = "local",
-                            --         buf = ctx.bufnr,
-                            --     })
-                            --     if ft == "tex" then
-                            --         return true
-                            --     end
-                            --     return false
-                            -- end
-                        },
-                    },
                 },
             },
             cmdline = {
@@ -212,6 +194,29 @@ return {
                     name = "LazyDev",
                     module = "lazydev.integrations.blink",
                     score_offset = 100,
+                }
+            end
+
+            -- setup latex
+            if require("core.util").has_plugin("blink-cmp-latex") then
+                table.insert(opts.sources.default, "latex")
+                opts.sources.providers.latex = {
+                    name = "Latex",
+                    module = "blink-cmp-latex",
+                    opts = {
+                        -- set to true to insert the latex command instead of the symbol
+                        insert_command = false,
+                        -- insert_command = function(ctx)
+                        --     local ft = vim.api.nvim_get_option_value("filetype", {
+                        --         scope = "local",
+                        --         buf = ctx.bufnr,
+                        --     })
+                        --     if ft == "tex" then
+                        --         return true
+                        --     end
+                        --     return false
+                        -- end
+                    },
                 }
             end
 
