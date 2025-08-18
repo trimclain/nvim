@@ -52,7 +52,11 @@ local servers = {
             },
         },
     },
-    bashls = { name = "bash-language-server", cond = not _G.ON_INFERIOR_OS and vim.fn.executable("node") == 1 }, -- requires node to work
+    bashls = {
+        name = "bash-language-server",
+        cond = not _G.ON_INFERIOR_OS and vim.fn.executable("node") == 1, -- requires node to work
+        filetypes = { "bash", "sh", "zsh" },
+    },
     marksman = { name = "marksman" }, -- markdown
     dockerls = { name = "dockerfile-language-server", cond = not _G.ON_INFERIOR_OS },
 
