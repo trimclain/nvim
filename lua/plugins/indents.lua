@@ -1,4 +1,3 @@
--- Alternative: https://www.lazyvim.org/plugins/ui#snacksnvim
 return {
     -- indent guides for Neovim
     {
@@ -10,10 +9,8 @@ return {
             local Icons = require("core.icons")
             return {
                 indent = {
-                    char = Icons.ui.LineLeft,
-                    -- char = "│",
-                    tab_char = Icons.ui.LineLeft,
-                    -- tab_char = "│",
+                    char = Icons.ui.LineLeft, -- default: "│"
+                    tab_char = Icons.ui.LineLeft, -- default: "│"
                 },
                 scope = { enabled = false },
                 exclude = {
@@ -28,14 +25,6 @@ return {
         "echasnovski/mini.indentscope",
         event = { "BufReadPre", "BufNewFile" },
         cond = CONFIG.plugins.indentline,
-        opts = function()
-            local Icons = require("core.icons")
-            return {
-                symbol = Icons.ui.LineLeft,
-                -- symbol = "│",
-                options = { try_as_border = true },
-            }
-        end,
         init = function()
             vim.api.nvim_create_autocmd("FileType", {
                 pattern = require("core.util").get_disabled_filetypes(),
@@ -44,7 +33,12 @@ return {
                 end,
             })
         end,
-        config = function(_, opts)
+        config = function()
+            local opts = {
+                symbol = require("core.icons").ui.LineLeft, -- default: "│",
+                options = { try_as_border = true },
+            }
+
             require("mini.indentscope").setup(opts)
         end,
     },

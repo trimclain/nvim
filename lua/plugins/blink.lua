@@ -1,7 +1,7 @@
 return {
     {
         "saghen/blink.cmp",
-        cond = CONFIG.plugins.enable_completion,
+        cond = CONFIG.lsp.enable_completion,
         version = "1.*", -- use a release tag to download pre-built binaries
         event = "VeryLazy", -- '/' and ':' autocomplete won't always work on InsertEnter
         dependencies = {

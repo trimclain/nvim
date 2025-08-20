@@ -2,7 +2,7 @@ return {
     -- PERF: it takes 15-25 ms to load on startup
     "L3MON4D3/LuaSnip",
     version = "v2.*",
-    cond = CONFIG.plugins.enable_completion,
+    cond = CONFIG.lsp.enable_completion,
     -- dependencies = {
     --     -- PERF: it takes 8 ms to load on startup
     --     -- TODO: take the snippets I use and remove this plugin

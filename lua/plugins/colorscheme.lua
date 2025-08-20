@@ -25,7 +25,6 @@ return {
             color_overrides = {},
             integrations = {
                 ----
-                cmp = true,
                 gitsigns = true,
                 nvimtree = false,
                 telescope = true,
@@ -192,7 +191,6 @@ return {
             --     treesitter = true,
             --     telescope = true,
             --     nvimtree = false,
-            --     cmp = true,
             --     context = true,
             --     dbui = false,
             --     gitsigns = true,
@@ -357,7 +355,6 @@ return {
                     types = "NONE",
                 },
                 modules = {
-                    cmp = true,
                     dashboard = CONFIG.plugins.dashboard,
                     fidget = true,
                     gitsigns = true,

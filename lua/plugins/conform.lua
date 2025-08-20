@@ -2,7 +2,6 @@
 return {
     {
         "stevearc/conform.nvim",
-        cond = CONFIG.lsp.enabled,
         -- event = { "BufWritePre" },
         cmd = { "ConformInfo" },
         keys = {

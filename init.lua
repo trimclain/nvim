@@ -31,13 +31,6 @@ CONFIG = {
         word_wrap = false,
         spaces_over_tabs = true, -- there's only one correct option here
     },
-    lsp = {
-        enabled = mode == "default",
-        format_on_save = false,
-        virtual_text = false,
-        show_signature_help = not _G.ON_INFERIOR_OS,
-        enable_copilot = false,
-    },
     ui = {
         -- Colorschemes (note/10):
         -- astrospeed (10)
@@ -59,11 +52,16 @@ CONFIG = {
         show_line_blame = true,
         show_signcolumn = true,
     },
+    lsp = {
+        enable_completion = mode == "default", -- LSP, autocomplete, snippets, language servers and tools
+        format_on_save = false,
+        virtual_text = false,
+        show_signature_help = not _G.ON_INFERIOR_OS,
+        enable_copilot = false,
+    },
     plugins = {
-        enable_completion = mode == "default",
-
         neoscroll = not _G.ON_INFERIOR_OS,
-        smear_cursor = false, -- found out about kitty's cursor trail
+        smear_cursor = _G.ON_INFERIOR_OS, -- found out about kitty's cursor trail
 
         autopairs = mode == "default",
         bufferline = false, -- to use harpoon more

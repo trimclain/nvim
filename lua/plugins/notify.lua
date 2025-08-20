@@ -13,7 +13,8 @@ return {
             -- { "<leader>ns", "<cmd>Notifications<cr>", desc = "Show all Notifications" },
         },
         opts = {
-            timeout = 1500,
+            stages = "slide", -- opts: "fade_in_slide_out" (default), "fade", "slide"
+            timeout = 1500, -- default: 5000
             max_height = function()
                 return math.floor(vim.o.lines * 0.75)
             end,
