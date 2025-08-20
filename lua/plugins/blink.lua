@@ -1,7 +1,3 @@
-if not CONFIG.plugins.use_blink_completion then
-    return {}
-end
-
 return {
     {
         "saghen/blink.cmp",
