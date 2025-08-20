@@ -5,15 +5,7 @@ return {
         version = "*", -- use the stable version
         dependencies = {
             -- "echasnovski/mini.hipatterns", -- Optional: Needed for line highlighting ('fine-grained' hipatterns plugin)
-            -- Optional: for `:Debugprint search`
-            {
-                "nvim-telescope/telescope.nvim",
-                cond = not CONFIG.plugins.use_fzf_lua,
-            },
-            {
-                "ibhagwan/fzf-lua",
-                cond = CONFIG.plugins.use_fzf_lua,
-            },
+            "telescope.nvim", -- Optional: for `:Debugprint search`
         },
         opts = {
             keymaps = {

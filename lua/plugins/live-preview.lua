@@ -4,14 +4,7 @@ return {
     -- dev = true,
     enabled = not _G.ON_INFERIOR_OS,
     dependencies = {
-        {
-            "nvim-telescope/telescope.nvim",
-            cond = not CONFIG.plugins.use_fzf_lua,
-        },
-        {
-            "ibhagwan/fzf-lua",
-            cond = CONFIG.plugins.use_fzf_lua,
-        },
+        "telescope.nvim",
     },
     ft = { "markdown", "html", "svg" },
     cmd = "LivePreview",

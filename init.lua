@@ -61,10 +61,6 @@ CONFIG = {
     },
     plugins = {
         enable_completion = mode == "default",
-        -- use blink.cmp or nvim-cmp
-        use_blink_completion = true,
-        -- use fzf-lua or telescope.nvim
-        use_fzf_lua = vim.fn.executable("fzf") == 1 and false,
 
         neoscroll = not _G.ON_INFERIOR_OS,
         smear_cursor = false, -- found out about kitty's cursor trail

@@ -36,13 +36,12 @@ return {
                 vim.split(string.rep("\n", padding_bot), "\n")
             )
 
-            -- actions using fzf-lua or telescope
-            local use_fzf_lua = CONFIG.plugins.use_fzf_lua
-            local files_action = use_fzf_lua and "FzfLua files" or Util.telescope("files")
-            local oldfiles_action = use_fzf_lua and "FzfLua oldfiles" or "Telescope oldfiles"
-            local live_grep_action = use_fzf_lua and "FzfLua live_grep" or "Telescope live_grep"
-            local todo_action = use_fzf_lua and "TodoFzfLua keywords=TODO,FIX" or "TodoTelescope keywords=TODO,FIX"
-            local config_action = use_fzf_lua and "lua vim.notify('Broken')" or Util.config_files
+            -- actions telescope
+            local files_action = Util.telescope("files")
+            local oldfiles_action = "Telescope oldfiles"
+            local live_grep_action = "Telescope live_grep"
+            local todo_action = "TodoTelescope keywords=TODO,FIX"
+            local config_action = Util.config_files
 
             local opts = {
                 theme = "doom",
@@ -90,7 +89,7 @@ return {
             -- end
 
             -- Since I don't have tmux in neovide, add a project manager to dashboard
-            if vim.g.neovide == true and not CONFIG.plugins.use_fzf_lua then
+            if vim.g.neovide == true then
                 table.insert(
                     opts.config.center,
                     2,
