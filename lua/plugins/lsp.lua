@@ -161,16 +161,11 @@ return {
     -- LSP Configuration & Plugins
     {
         "neovim/nvim-lspconfig",
-        cond = CONFIG.lsp.enabled,
+        cond = CONFIG.lsp.enable_completion,
         event = { "BufReadPre", "BufNewFile" },
         dependencies = {
-            -- used by some keymaps
-            { "fzf-lua", cond = CONFIG.plugins.use_fzf_lua },
-            { "telescope.nvim", cond = not CONFIG.plugins.use_fzf_lua },
-
-            { "blink.cmp", cond = CONFIG.plugins.use_blink_completion },
-            { "hrsh7th/cmp-nvim-lsp", cond = not CONFIG.plugins.use_blink_completion },
-
+            "telescope.nvim", -- used by some keymaps
+            "blink.cmp", -- for capabilities
             "mason.nvim",
             {
                 "smjonas/inc-rename.nvim",
@@ -237,23 +232,16 @@ return {
                     -- - CTRL-S is mapped in Insert mode to |vim.lsp.buf.signature_help()|
                     require("which-key").add({ "gr", group = "get-from-lsp" })
 
-                    if CONFIG.plugins.use_fzf_lua then
-                        if client and client:supports_method(methods.textDocument_definition) then
-                            map("gd", require("fzf-lua").lsp_definitions, "Go to Definitions")
-                        end
-                        map("grr", require("fzf-lua").lsp_references, "References")
-                        map("gri", require("fzf-lua").lsp_implementations, "Implementations")
-                        map("grt", require("fzf-lua").lsp_typedefs, "Type Definitions")
-                        map("gO", require("fzf-lua").lsp_document_symbols, "Document Symbols")
-                    else
-                        if client and client:supports_method(methods.textDocument_definition) then
-                            map("gd", require("telescope.builtin").lsp_definitions, "Go to Definitions")
-                        end
-                        map("grr", require("telescope.builtin").lsp_references, "References")
-                        map("gri", require("telescope.builtin").lsp_implementations, "Implementations")
-                        map("grt", require("telescope.builtin").lsp_type_definitions, "Type Definitions")
-                        map("gO", require("telescope.builtin").lsp_document_symbols, "Document Symbols")
+                    if client and client:supports_method(methods.textDocument_definition) then
+                        -- TODO: this one is too bad. Take a look at Snacks.
+                        map("gd", require("telescope.builtin").lsp_definitions, "Go to Definitions")
                     end
+                    -- FIX: fall back to vim.lsp
+                    map("grr", require("telescope.builtin").lsp_references, "References")
+                    -- FIX: fall back to vim.lsp
+                    map("gri", require("telescope.builtin").lsp_implementations, "Implementations")
+                    map("grt", require("telescope.builtin").lsp_type_definitions, "Type Definitions")
+                    map("gO", require("telescope.builtin").lsp_document_symbols, "Document Symbols")
 
                     if require("core.util").has_plugin("inc-rename.nvim") then
                         vim.keymap.set("n", "grn", function()
@@ -297,7 +285,7 @@ return {
     -- cmdline tools and lsp servers
     {
         "mason-org/mason.nvim",
-        cond = CONFIG.lsp.enabled,
+        cond = CONFIG.lsp.enable_completion,
         cmd = "Mason",
         keys = { { "<leader>M", "<cmd>Mason<cr>", desc = "[M]ason" } },
         config = function()
@@ -372,25 +360,13 @@ return {
             ---------------------------------------------------------------------------------------
             -- Configure and Enable LSP Servers
             ---------------------------------------------------------------------------------------
-            local has_cmp, cmp_nvim_lsp = pcall(require, "cmp_nvim_lsp")
-            local has_blink, blink = pcall(require, "blink.cmp")
-            -- TODO: rewrite for nvim 0.11
-            local capabilities = vim.tbl_deep_extend(
-                "force",
-                {},
-                vim.lsp.protocol.make_client_capabilities(),
-                has_cmp and cmp_nvim_lsp.default_capabilities() or {},
-                has_blink and blink.get_lsp_capabilities() or {}
-            )
-
-            local function configure_and_enable(server, server_settings)
-                if server_settings.cond == false then
+            local function configure_and_enable(server, conf)
+                if conf.cond == false then
                     return
                 end
 
-                server_settings.capabilities =
-                    vim.tbl_deep_extend("force", {}, capabilities, server_settings.capabilities or {})
-                vim.lsp.config(server, server_settings)
+                conf.capabilities = require("blink.cmp").get_lsp_capabilities(conf.capabilities or {})
+                vim.lsp.config(server, conf)
                 vim.lsp.enable(server)
             end
 
