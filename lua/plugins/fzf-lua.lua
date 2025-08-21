@@ -1,0 +1,156 @@
+-- fuzzy finder
+
+return {
+    "ibhagwan/fzf-lua",
+    -- TODO: set global?
+    enabled = vim.fn.executable("fzf") == 1,
+    cmd = "FzfLua",
+    dependencies = { "nvim-web-devicons" },
+    keys = function()
+        local Util = require("core.util")
+
+        return {
+            -- find files
+            -- stylua: ignore start
+            { "<C-p>", Util.pick_files(), desc = "Find Files (root dir)" },
+            { "<leader>ff", Util.pick_files({ theme = "default" }), desc = "Find Files with preview" },
+            -- stylua: ignore end
+
+            -- find string
+            { "<C-f>", "<cmd>FzfLua lgrep_curbuf<cr>", desc = "Fzf Buffer" },
+            { "<leader>fs", "<cmd>FzfLua live_grep<cr>", desc = "String in Files" },
+            { "<leader>fw", "<cmd>FzfLua grep_cword<cr>", desc = "Find word under cursor" },
+            { "<leader>fW", "<cmd>FzfLua grep_cWORD<cr>", desc = "Find WORD under cursor" },
+
+            {
+                "<leader>fd",
+                function()
+                    require("fzf-lua").git_files({
+                        -- Yup, why would $HOME on windows be $HOME and not $HOMEPATH or $USERPROFILE
+                        cwd = _G.ON_INFERIOR_OS and vim.fs.joinpath(vim.env.HOMEPATH, "dotfiles")
+                            or vim.fs.joinpath(vim.env.HOME, ".dotfiles"),
+                        winopts = { title = "Dotfiles" },
+                    })
+                end,
+                desc = "Dotfiles",
+            },
+
+            -- TODO:
+            -- find my projects
+            -- { "<leader>fp", Util.open_project, desc = "Open [P]roject" },
+
+            -- edit packages
+            {
+                "<leader>pe",
+                Util.pick_files({ cwd = vim.fn.stdpath("data") .. "/lazy" }),
+                -- Util.telescope("find_files", { cwd = vim.fn.stdpath("data") .. "/lazy" }),
+                desc = "Edit Plugins",
+            },
+
+            { "<leader>fh", "<cmd>FzfLua helptags<cr>", desc = "Help" },
+            { "<leader>fk", "<cmd>FzfLua keymaps<cr>", desc = "Keymaps" },
+            { "<leader>fr", "<cmd>FzfLua oldfiles<cr>", desc = "Recent Files" },
+            { "<leader>fD", "<cmd>FzfLua diagnostics_workspace<cr>", desc = "Diagnostics" },
+            { "<leader>:", "<cmd>FzfLua command_history<cr>", desc = "Command History" },
+            { "<leader>fC", "<cmd>FzfLua commands<cr>", desc = "Commands" },
+            { "<leader>fM", "<cmd>FzfLua manpages<cr>", desc = "Man Pages" },
+            { "<leader>fH", "<cmd>FzfLua highlights<cr>", desc = "Highlight Groups" },
+            -- TODO: worse than telescope, doesn't remember exact line position can I fix it?
+            { "<leader>fl", "<cmd>FzfLua resume<cr>", desc = "Resume Last Search" },
+            { "<leader>fR", "<cmd>FzfLua registers<cr>", desc = "Registers" },
+            { "<leader>fa", "<cmd>FzfLua autocmds<cr>", desc = "Auto Commands" },
+            -- TODO: this needs work: start it normal, show current too, allow to close
+            { "<leader>fb", "<cmd>FzfLua buffers<cr>", desc = "Buffers" },
+            { "<leader>fq", "<cmd>FzfLua quickfix<cr>", desc = "Quickfix Items" },
+            { "<leader>fc", "<cmd>FzfLua colorschemes<cr>", desc = "Colorscheme w/ preview" },
+
+            -- git
+            { "<leader>gb", "<cmd>FzfLua git_branches<cr>", desc = "branches" },
+            { "<leader>gl", "<cmd>FzfLua git_commits<CR>", desc = "commits" },
+
+            -- rebind from which-key
+            { "z=", "<cmd>FzfLua spell_suggest<cr>", desc = "Spelling suggestions" },
+        }
+    end,
+    opts = function()
+        local actions = require("fzf-lua.actions")
+
+        -- Docs: https://github.com/ibhagwan/fzf-lua#customization
+        return {
+            winopts = {
+                title_flags = false, -- don't show "h", "i", "f" if the flags are set
+                preview = {
+                    layout = "horizontal",
+                },
+            },
+            keymap = {
+                builtin = {
+                    ["<C-_>"] = "toggle-help", -- keys from pressing <C-/> in tmux
+                    ["<C-a>"] = "toggle-fullscreen",
+                    ["<C-p>"] = "toggle-preview",
+                    ["<C-f>"] = "preview-page-down",
+                    ["<C-b>"] = "preview-page-up",
+                },
+                fzf = {
+                    -- fzf '--bind=' options
+                    ["tab"] = "down",
+                    ["btab"] = "up",
+                    ["ctrl-j"] = "toggle-down",
+                    ["ctrl-k"] = "toggle-up",
+                },
+            },
+            actions = {
+                files = {
+                    -- Pickers inheriting these actions:
+                    --   files, git_files, git_status, grep, lsp, oldfiles, quickfix, loclist,
+                    --   tags, btags, args, buffers, tabs, lines, blines
+                    ["enter"] = actions.file_edit_or_qf, -- or actions.file_switch_or_edit
+                    ["ctrl-s"] = actions.file_split,
+                    ["ctrl-v"] = actions.file_vsplit,
+                    -- ["ctrl-t"] = actions.file_tabedit,
+                    -- TODO: this should send ALL to qf, not just selected
+                    ["ctrl-q"] = actions.file_sel_to_qf,
+                    -- ["alt-Q"] = actions.file_sel_to_ll,
+                    -- ["alt-i"] = actions.toggle_ignore,
+                    -- TODO: hidden icon is annoying and should be modifable
+                    ["ctrl-h"] = actions.toggle_hidden,
+                    -- ["alt-f"] = actions.toggle_follow,
+                },
+            },
+            fzf_opts = {
+                ["--cycle"] = true,
+                -- ["--layout"] = "reverse-list", -- telescope-like
+            },
+            fzf_colors = true, -- apply colorscheme
+            -- Picker Options:
+            defaults = {
+                git_icons = false,
+                cwd_header = false, -- hide
+                no_header = true, --   all
+                no_header_i = true, -- headers
+                -- FIX: TodoFzfLua broke with headers...
+            },
+            files = { previewer = false, winopts = { height = 0.55, width = 0.65 } },
+            git = { files = { previewer = false, winopts = { height = 0.55, width = 0.65 } } },
+            keymaps = { winopts = { preview = { hidden = "hidden" } } },
+            lsp = { symbols = { symbol_icons = require("core.icons").kinds } },
+            oldfiles = {
+                -- TODO: I want to toggle size too
+                winopts = {
+                    preview = { hidden = "hidden" },
+                    height = 0.55,
+                    width = 0.65,
+                },
+            },
+            grep_curbuf = {
+                -- TODO: I want to toggle size too
+                winopts = {
+                    preview = { hidden = "hidden" },
+                    height = 0.55,
+                    width = 0.65,
+                },
+            },
+            helptags = { winopts = { preview = { hidden = "hidden", horizontal = "right:70%" } } },
+        }
+    end,
+}

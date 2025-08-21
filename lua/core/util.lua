@@ -110,10 +110,35 @@ function M.in_git_worktree(cwd)
 end
 
 -------------------------------------------------------------------------------
--- Telescope
+-- Fuzzy Finder (ex. Telescope)
 -------------------------------------------------------------------------------
--- TODO: update for fzf-lua
 
+-- Use "git_files" if in a git repo, default to "files"
+---@param params table? accepts: theme, cwd
+function M.pick_files(params)
+    params = params or {}
+    local opts = {
+        cwd = params.cwd,
+    }
+    if params.theme == "default" then
+        opts = vim.tbl_extend("error", opts, {
+            previewer = true,
+            winopts = {
+                height = 0.85,
+                width = 0.80,
+            },
+        })
+    end
+    return function()
+        if M.in_git_worktree(params.cwd) then
+            require("fzf-lua").git_files(opts)
+        else
+            require("fzf-lua").files(opts)
+        end
+    end
+end
+
+--- TODO: Remove telescope
 -- Return a function that calls telescope.
 ---@param builtin string
 ---@param opts table | nil
@@ -139,11 +164,14 @@ function M.telescope(builtin, opts, theme)
     end
 end
 
+--- TODO: Remove telescope
 --- Find neovim config files in telescope
 function M.config_files()
     M.telescope("find_files", { cwd = vim.fn.stdpath("config") })()
 end
 
+--- TODO: Rewrite to fzf-lua
+--- TODO: Remove telescope
 --- Choose a project to work on from my $PROJECTLIST using Telescope
 M.open_project = function()
     local projectlist = vim.env.PROJECTLIST
@@ -183,6 +211,7 @@ M.open_project = function()
         :find()
 end
 
+--- TODO: Remove telescope
 --- Fuzzy find in current buffer
 M.curr_buf_search = function()
     local opt = require("telescope.themes").get_dropdown({ height = 10, previewer = false })

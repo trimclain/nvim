@@ -60,6 +60,10 @@ CONFIG = {
         enable_copilot = false,
     },
     plugins = {
+        -- TODO: remove later
+        fzf_lua = vim.fn.executable("fzf") == 1,
+        telescope = false,
+
         neoscroll = not _G.ON_INFERIOR_OS,
         smear_cursor = _G.ON_INFERIOR_OS, -- found out about kitty's cursor trail
 

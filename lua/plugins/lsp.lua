@@ -164,6 +164,7 @@ return {
         cond = CONFIG.lsp.enable_completion,
         event = { "BufReadPre", "BufNewFile" },
         dependencies = {
+            -- TODO: replace with fzf
             "telescope.nvim", -- used by some keymaps
             "blink.cmp", -- for capabilities
             "mason.nvim",
@@ -232,16 +233,16 @@ return {
                     -- - CTRL-S is mapped in Insert mode to |vim.lsp.buf.signature_help()|
                     require("which-key").add({ "gr", group = "get-from-lsp" })
 
-                    if client and client:supports_method(methods.textDocument_definition) then
-                        -- TODO: this one is too bad. Take a look at Snacks.
-                        map("gd", require("telescope.builtin").lsp_definitions, "Go to Definitions")
+                    -- TODO: add better statement? Fallback to mini.pick
+                    if require("core.util").has_plugin("fzf-lua") then
+                        if client and client:supports_method(methods.textDocument_definition) then
+                            map("gd", "<cmd>FzfLua lsp_definitions<cr>", "Go to Definitions")
+                        end
+                        map("grr", "<cmd>FzfLua lsp_references<cr>", "References")
+                        map("gri", "<cmd>FzfLua lsp_implementations<cr>", "Implementations")
+                        map("grt", "<cmd>FzfLua lsp_type_definitions<cr>", "Type Definitions")
+                        map("gO", "<cmd>FzfLua lsp_document_symbols<cr>", "Document Symbols")
                     end
-                    -- FIX: fall back to vim.lsp
-                    map("grr", require("telescope.builtin").lsp_references, "References")
-                    -- FIX: fall back to vim.lsp
-                    map("gri", require("telescope.builtin").lsp_implementations, "Implementations")
-                    map("grt", require("telescope.builtin").lsp_type_definitions, "Type Definitions")
-                    map("gO", require("telescope.builtin").lsp_document_symbols, "Document Symbols")
 
                     if require("core.util").has_plugin("inc-rename.nvim") then
                         vim.keymap.set("n", "grn", function()

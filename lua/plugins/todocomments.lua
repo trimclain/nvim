@@ -5,7 +5,8 @@ return {
     {
         "folke/todo-comments.nvim",
         cond = CONFIG.plugins.todo_comments,
-        cmd = { "TodoTrouble", "TodoTelescope" },
+        -- TODO: remove telescope
+        cmd = { "TodoTrouble", "TodoTelescope", "TodoFzfLua" },
         -- stylua: ignore
         keys = {
             { "]t", function() require("todo-comments").jump_next({ keywords = { "TODO", "FIX" } }) end, desc = "Next todo comment" },
