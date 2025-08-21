@@ -101,10 +101,12 @@ function M.opts(name)
     return Plugin.values(plugin, "opts", false)
 end
 
---- Return true if vim was opened from a git repository
+--- Return true if cwd in a git repository
+---@param cwd string?
 ---@return boolean
-M.in_git_worktree = function()
-    return vim.system({ "git", "rev-parse", "--is-inside-work-tree", vim.uv.cwd() }):wait().stderr == ""
+function M.in_git_worktree(cwd)
+    cwd = cwd or vim.uv.cwd()
+    return vim.system({ "git", "-C", cwd, "rev-parse", "--is-inside-work-tree" }):wait().stderr == ""
 end
 
 -------------------------------------------------------------------------------
