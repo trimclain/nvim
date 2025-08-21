@@ -72,6 +72,7 @@ return {
     --     end,
     -- },
 
+    -- Alternative: https://github.com/OXY2DEV/markview.nvim
     -- render markdown in neovim
     {
         "MeanderingProgrammer/render-markdown.nvim",
