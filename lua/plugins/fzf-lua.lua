@@ -2,8 +2,7 @@
 
 return {
     "ibhagwan/fzf-lua",
-    -- TODO: set global?
-    enabled = vim.fn.executable("fzf") == 1,
+    enabled = CONFIG.plugins.fzf_lua,
     cmd = "FzfLua",
     dependencies = { "nvim-web-devicons" },
     keys = function()
@@ -43,7 +42,6 @@ return {
             {
                 "<leader>pe",
                 Util.pick_files({ cwd = vim.fn.stdpath("data") .. "/lazy" }),
-                -- Util.telescope("find_files", { cwd = vim.fn.stdpath("data") .. "/lazy" }),
                 desc = "Edit Plugins",
             },
 
@@ -79,6 +77,10 @@ return {
         return {
             winopts = {
                 title_flags = false, -- don't show "h", "i", "f" if the flags are set
+                -- height = 0.85,
+                -- width = 0.80,
+                row = 0.5, -- default: 0.35 (0 - top, 1 - bottom)
+                -- col = 0.55, -- (0 - left, 1 - right)
                 preview = {
                     layout = "horizontal",
                 },
@@ -112,10 +114,13 @@ return {
                     ["ctrl-q"] = actions.file_sel_to_qf,
                     -- ["alt-Q"] = actions.file_sel_to_ll,
                     -- ["alt-i"] = actions.toggle_ignore,
-                    -- TODO: hidden icon is annoying and should be modifable
+                    -- TODO: hidden icon is annoying and should be modifable Make a PR or an issue.
                     ["ctrl-h"] = actions.toggle_hidden,
                     -- ["alt-f"] = actions.toggle_follow,
                 },
+                -- grep = {
+                --     actions = { ["ctrl-g"] = { actions.grep_lgrep } }, --  default: toggle fuzzy search
+                -- },
             },
             fzf_opts = {
                 ["--cycle"] = true,
@@ -128,14 +133,12 @@ return {
                 cwd_header = false, -- hide
                 no_header = true, --   all
                 no_header_i = true, -- headers
-                -- FIX: TodoFzfLua broke with headers...
             },
             files = { previewer = false, winopts = { height = 0.55, width = 0.65 } },
             git = { files = { previewer = false, winopts = { height = 0.55, width = 0.65 } } },
             keymaps = { winopts = { preview = { hidden = "hidden" } } },
             lsp = { symbols = { symbol_icons = require("core.icons").kinds } },
             oldfiles = {
-                -- TODO: I want to toggle size too
                 winopts = {
                     preview = { hidden = "hidden" },
                     height = 0.55,
@@ -143,7 +146,6 @@ return {
                 },
             },
             grep_curbuf = {
-                -- TODO: I want to toggle size too
                 winopts = {
                     preview = { hidden = "hidden" },
                     height = 0.55,
