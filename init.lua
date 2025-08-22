@@ -92,7 +92,7 @@ CONFIG = {
 -- local dependencies = {
 --     "gcc",
 --     "make",
---     "ripgrep",
+--     "rg",
 --     "node",
 --     "fzf",
 --     "fd",
