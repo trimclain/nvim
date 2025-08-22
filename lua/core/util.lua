@@ -114,14 +114,15 @@ end
 -------------------------------------------------------------------------------
 
 -- Use "git_files" if in a git repo, default to "files"
----@param params table? accepts: theme, cwd
+---@param params table? accepts: theme, cwd, title
 function M.pick_files(params)
     params = params or {}
     local opts = {
         cwd = params.cwd,
+        winopts = {},
     }
     if params.theme == "default" then
-        opts = vim.tbl_extend("error", opts, {
+        opts = vim.tbl_extend("force", opts, {
             previewer = true,
             winopts = {
                 height = 0.85,
@@ -129,6 +130,10 @@ function M.pick_files(params)
             },
         })
     end
+    if params.title then
+        opts.winopts = vim.tbl_extend("error", opts.winopts, { title = params.title })
+    end
+
     return function()
         if M.in_git_worktree(params.cwd) then
             require("fzf-lua").git_files(opts)
