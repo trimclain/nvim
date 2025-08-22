@@ -164,12 +164,6 @@ function M.telescope(builtin, opts, theme)
     end
 end
 
---- TODO: Remove telescope
---- Find neovim config files in telescope
-function M.config_files()
-    M.telescope("find_files", { cwd = vim.fn.stdpath("config") })()
-end
-
 --- TODO: Rewrite to fzf-lua
 --- TODO: Remove telescope
 --- Choose a project to work on from my $PROJECTLIST using Telescope
@@ -209,14 +203,6 @@ M.open_project = function()
             end,
         })
         :find()
-end
-
---- TODO: Remove telescope
---- Fuzzy find in current buffer
-M.curr_buf_search = function()
-    local opt = require("telescope.themes").get_dropdown({ height = 10, previewer = false })
-    require("telescope.builtin").current_buffer_fuzzy_find(opt)
-    -- require("telescope.builtin").current_buffer_fuzzy_find({ previewer = false })
 end
 
 -------------------------------------------------------------------------------

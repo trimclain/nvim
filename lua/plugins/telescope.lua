@@ -29,7 +29,14 @@ return {
             },
 
             -- find string
-            { "<C-f>", Util.curr_buf_search, desc = "Fzf Buffer" },
+            {
+                "<C-f>",
+                function()
+                    local opt = require("telescope.themes").get_dropdown({ height = 10, previewer = false })
+                    require("telescope.builtin").current_buffer_fuzzy_find(opt)
+                end,
+                desc = "Fzf Buffer",
+            },
             { "<leader>fs", "<cmd>Telescope live_grep<cr>", desc = "String in Files" },
             { "<leader>fw", "<cmd>Telescope grep_string<cr>", desc = "Find word under cursor" },
             {
