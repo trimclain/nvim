@@ -60,8 +60,8 @@ CONFIG = {
         enable_copilot = false,
     },
     plugins = {
-        -- TODO: remove later
         fzf_lua = vim.fn.executable("fzf") == 1,
+        -- TODO: remove later
         telescope = false,
 
         neoscroll = not _G.ON_INFERIOR_OS,
