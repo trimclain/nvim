@@ -122,7 +122,7 @@ end
 
 -- Use "git_files" if in a git repo, default to "files"
 ---@param params table? accepts: theme, cwd, title
-function M.pick_files(params)
+function M.fzf_files(params)
     params = params or {}
     local opts = {
         cwd = params.cwd,

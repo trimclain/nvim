@@ -2,9 +2,8 @@
 
 return {
     "nvim-telescope/telescope.nvim",
-    cond = CONFIG.plugins.telescope, -- prefer fzf-lua, telescope is somewhat abandoned :(
+    cond = CONFIG.plugins.telescope,
     cmd = "Telescope",
-    -- branch = "0.1.x",
     dependencies = {
         "plenary.nvim",
         {

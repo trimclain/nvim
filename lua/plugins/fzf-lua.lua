@@ -11,8 +11,8 @@ return {
         return {
             -- find files
             -- stylua: ignore start
-            { "<C-p>", Util.pick_files(), desc = "Find Files (root dir)" },
-            { "<leader>ff", Util.pick_files({ theme = "default" }), desc = "Find Files with preview" },
+            { "<C-p>", Util.fzf_files(), desc = "Find Files (root dir)" },
+            { "<leader>ff", Util.fzf_files({ theme = "default" }), desc = "Find Files with preview" },
             -- stylua: ignore end
 
             -- find string
