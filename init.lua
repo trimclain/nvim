@@ -61,8 +61,8 @@ CONFIG = {
     },
     plugins = {
         fzf_lua = vim.fn.executable("fzf") == 1,
-        -- TODO: remove later
-        telescope = false,
+        mini_pick = vim.fn.executable("fzf") == 0, -- fallback on systems without fzf
+        telescope = false, -- sadly somewhat abandoned :(
 
         neoscroll = not _G.ON_INFERIOR_OS,
         smear_cursor = _G.ON_INFERIOR_OS, -- found out about kitty's cursor trail

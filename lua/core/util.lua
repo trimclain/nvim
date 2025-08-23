@@ -150,6 +150,37 @@ function M.fzf_files(params)
     end
 end
 
+function M.pick_files(params)
+    params = params or {}
+    -- TODO:
+    -- local opts = {
+    --     cwd = params.cwd,
+    --     winopts = {},
+    -- }
+    -- if params.theme == "default" then
+    --     opts = vim.tbl_extend("force", opts, {
+    --         previewer = true,
+    --         winopts = {
+    --             height = 0.85,
+    --             width = 0.80,
+    --         },
+    --     })
+    -- end
+    -- if params.title then
+    --     opts.winopts = vim.tbl_extend("error", opts.winopts, { title = params.title })
+    -- end
+
+    return function()
+        if M.in_git_worktree(params.cwd) then
+            ---@diagnostic disable-next-line: undefined-global
+            MiniExtra.pickers.git_files()
+        else
+            ---@diagnostic disable-next-line: undefined-global
+            MiniPick.builtin.files()
+        end
+    end
+end
+
 --- TODO: Deprecate and remove
 --- Cat a given file and pipe it's lines into telescope
 ---@param filename string

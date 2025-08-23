@@ -37,14 +37,16 @@ return {
             )
 
             -- actions using fzf-lua or mini.pick
-            -- TODO: add mini.pick as fallback
             local use_fzf_lua = CONFIG.plugins.fzf_lua
-            local files_action = use_fzf_lua and Util.pick_files()
-            local oldfiles_action = use_fzf_lua and "FzfLua oldfiles"
-            local live_grep_action = use_fzf_lua and "FzfLua live_grep"
+            -- TODO: add mini.pick as fallback
+            local files_action = use_fzf_lua and Util.fzf_files() or Util.pick_files()
+            local oldfiles_action = use_fzf_lua and "FzfLua oldfiles" or "Pick oldfiles"
+            local live_grep_action = use_fzf_lua and "FzfLua live_grep" or "Pick grep_live"
+            -- TODO: add mini.pick as fallback
             local todo_action = use_fzf_lua and "TodoFzfLua"
+            -- TODO: add mini.pick as fallback
             local config_action = use_fzf_lua
-                and Util.pick_files({ cwd = vim.fn.stdpath("config"), title = " Neovim Config " })
+                and Util.fzf_files({ cwd = vim.fn.stdpath("config"), title = " Neovim Config " })
 
             local opts = {
                 theme = "doom",
