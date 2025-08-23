@@ -143,36 +143,10 @@ function M.pick_files(params)
     end
 end
 
---- TODO: Remove telescope
--- Return a function that calls telescope.
----@param builtin string
----@param opts table | nil
----@param theme string | nil
-function M.telescope(builtin, opts, theme)
-    local params = { builtin = builtin, opts = opts, theme = theme }
-    return function()
-        builtin = params.builtin
-
-        -- theme can be "dropdown", "cursor" or "ivy"
-        if params.theme == "default" then
-            opts = params.opts or {}
-        else
-            opts = require("telescope.themes").get_dropdown(params.opts or {})
-        end
-
-        -- for `files`, git_files or find_files will be chosen depending on .git
-        if builtin == "files" then
-            -- Check if cwd is in a git worktree
-            builtin = M.in_git_worktree() and "git_files" or "find_files"
-        end
-        require("telescope.builtin")[builtin](opts)
-    end
-end
-
 --- TODO: Rewrite to fzf-lua
 --- TODO: Remove telescope
 --- Choose a project to work on from my $PROJECTLIST using Telescope
-M.open_project = function()
+function M.open_project()
     local projectlist = vim.env.PROJECTLIST
     if not M.file_exists(projectlist) then
         vim.notify("Project List not found", vim.log.levels.ERROR, { title = "Project Manager" })
@@ -201,7 +175,7 @@ M.open_project = function()
                     vim.notify("Opened " .. selection, vim.log.levels.INFO, { title = "Project Manager" })
                     vim.cmd.cd(selection)
                     -- Open files in telescope
-                    M.telescope("files")()
+                    require("telescope.builtin").find_files()
                     -- require("neo-tree.command").execute({ toggle = true, dir = selection })
                 end)
                 return true
