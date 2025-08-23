@@ -109,8 +109,15 @@ function M.in_git_worktree(cwd)
     return vim.system({ "git", "-C", cwd, "rev-parse", "--is-inside-work-tree" }):wait().stderr == ""
 end
 
+--- Use vim.notify to send INFO notifications
+---@param msg string
+---@param title string
+local function notify(msg, title)
+    vim.notify(msg, vim.log.levels.INFO, { title = title })
+end
+
 -------------------------------------------------------------------------------
--- Fuzzy Finder (ex. Telescope)
+-- Fuzzy Finder
 -------------------------------------------------------------------------------
 
 -- Use "git_files" if in a git repo, default to "files"
@@ -143,16 +150,10 @@ function M.pick_files(params)
     end
 end
 
---- TODO: Rewrite to fzf-lua
---- TODO: Remove telescope
---- Choose a project to work on from my $PROJECTLIST using Telescope
-function M.open_project()
-    local projectlist = vim.env.PROJECTLIST
-    if not M.file_exists(projectlist) then
-        vim.notify("Project List not found", vim.log.levels.ERROR, { title = "Project Manager" })
-        return
-    end
-
+--- TODO: Deprecate and remove
+--- Cat a given file and pipe it's lines into telescope
+---@param filename string
+function M.telescat(filename)
     local pickers = require("telescope.pickers")
     local sorters = require("telescope.sorters")
     local finders = require("telescope.finders")
@@ -163,17 +164,27 @@ function M.open_project()
     pickers
         .new({
             results_title = "My Projects",
-            finder = finders.new_oneshot_job({ "cat", projectlist }, {}),
+            finder = finders.new_oneshot_job({ "cat", filename }, {}),
             sorter = sorters.get_fuzzy_file(),
             attach_mappings = function(_, map)
                 -- Define custom action when an item is selected
                 map("i", "<CR>", function(prompt_bufnr)
                     -- Get the selected entry
                     local selection = action_state.get_selected_entry()[1]
+
+                    -- selection has the form <repo>,<owner>
+                    selection = vim.split(selection, ",")[1]
+
                     -- Close the picker
                     actions.close(prompt_bufnr)
-                    vim.notify("Opened " .. selection, vim.log.levels.INFO, { title = "Project Manager" })
+
+                    if not M.dir_exists(selection) then
+                        notify("Project " .. selection .. " not installed", "Project Manager")
+                        return
+                    end
+                    -- notify("Opened " .. selection, "Project Manager")
                     vim.cmd.cd(selection)
+
                     -- Open files in telescope
                     require("telescope.builtin").find_files()
                     -- require("neo-tree.command").execute({ toggle = true, dir = selection })
@@ -184,16 +195,50 @@ function M.open_project()
         :find()
 end
 
+function M.fzcat(filename)
+    local opts = {}
+    opts.winopts = { title = " My Projects " }
+    opts.actions = {
+        ["default"] = function(selected)
+            -- selected has the form <repo>,<owner>
+            local selection = vim.split(selected[1], ",")[1]
+
+            if not M.dir_exists(selection) then
+                notify("Project " .. selection .. " not installed", "Project Manager")
+                return
+            end
+            notify("Opened " .. selection, "Project Manager")
+            vim.cmd.cd(selection)
+
+            require("fzf-lua").files()
+            -- require("neo-tree.command").execute({ toggle = true, dir = selection })
+        end,
+    }
+
+    require("fzf-lua").fzf_exec("cat " .. filename, opts)
+end
+
+--- Choose a project to work on from my $PROJECTLIST using fuzzy finder
+function M.open_project()
+    local projectlist = vim.env.PROJECTLIST
+    if not M.file_exists(projectlist) then
+        vim.notify("Project List not found", vim.log.levels.ERROR, { title = "Project Manager" })
+        return
+    end
+
+    if CONFIG.plugins.fzf_lua then
+        M.fzcat(projectlist)
+    elseif CONFIG.plugins.telescope then
+        --- TODO: Remove telescope
+        M.telescat(projectlist)
+    else
+        vim.notify("No fuzzy finder plugin found", vim.log.levels.ERROR, { title = "Project Manager" })
+    end
+end
+
 -------------------------------------------------------------------------------
 -- OPTION CHANGE
 -------------------------------------------------------------------------------
-
---- Use vim.notify to send INFO notifications
----@param msg string
----@param title string
-local function notify(msg, title)
-    vim.notify(msg, vim.log.levels.INFO, { title = title })
-end
 
 --- Implement python's str.capitalize() method
 ---@param str string
