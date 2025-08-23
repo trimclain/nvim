@@ -2,7 +2,7 @@
 
 return {
     "ibhagwan/fzf-lua",
-    enabled = CONFIG.plugins.fzf_lua,
+    cond = CONFIG.plugins.fzf_lua,
     cmd = "FzfLua",
     dependencies = { "nvim-web-devicons" },
     keys = function()
@@ -40,7 +40,12 @@ return {
             -- edit packages
             {
                 "<leader>pe",
-                Util.pick_files({ cwd = vim.fn.stdpath("data") .. "/lazy" }),
+                function()
+                    require("fzf-lua").files({
+                        cwd = vim.fs.joinpath(vim.fn.stdpath("data"), "lazy"),
+                        winopts = { title = " Installed Plugins " },
+                    })
+                end,
                 desc = "Edit Plugins",
             },
 
