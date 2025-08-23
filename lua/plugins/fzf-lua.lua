@@ -28,15 +28,14 @@ return {
                         -- Yup, why would $HOME on windows be $HOME and not $HOMEPATH or $USERPROFILE
                         cwd = _G.ON_INFERIOR_OS and vim.fs.joinpath(vim.env.HOMEPATH, "dotfiles")
                             or vim.fs.joinpath(vim.env.HOME, ".dotfiles"),
-                        winopts = { title = "Dotfiles" },
+                        winopts = { title = " Dotfiles " },
                     })
                 end,
                 desc = "Dotfiles",
             },
 
-            -- TODO:
             -- find my projects
-            -- { "<leader>fp", Util.open_project, desc = "Open [P]roject" },
+            { "<leader>fp", Util.open_project, desc = "Open [P]roject" },
 
             -- edit packages
             {
@@ -54,10 +53,12 @@ return {
             { "<leader>fM", "<cmd>FzfLua manpages<cr>", desc = "Man Pages" },
             { "<leader>fH", "<cmd>FzfLua highlights<cr>", desc = "Highlight Groups" },
             -- TODO: worse than telescope, doesn't remember exact line position can I fix it?
+            -- NOTE: impossible to fix -- maybe mini.pick fixes this
             { "<leader>fl", "<cmd>FzfLua resume<cr>", desc = "Resume Last Search" },
             { "<leader>fR", "<cmd>FzfLua registers<cr>", desc = "Registers" },
             { "<leader>fa", "<cmd>FzfLua autocmds<cr>", desc = "Auto Commands" },
             -- TODO: this needs work: start it normal, show current too, allow to close
+            -- NOTE: can't do this fully similar, maybe mini.pick will have a solution
             { "<leader>fb", "<cmd>FzfLua buffers<cr>", desc = "Buffers" },
             { "<leader>fq", "<cmd>FzfLua quickfix<cr>", desc = "Quickfix Items" },
             { "<leader>fc", "<cmd>FzfLua colorschemes<cr>", desc = "Colorscheme w/ preview" },
@@ -99,6 +100,7 @@ return {
                     ["btab"] = "up",
                     ["ctrl-j"] = "toggle-down",
                     ["ctrl-k"] = "toggle-up",
+                    ["ctrl-q"] = "select-all+accept", -- together with ["enter"] action sends all to qf
                 },
             },
             actions = {
@@ -110,12 +112,10 @@ return {
                     ["ctrl-s"] = actions.file_split,
                     ["ctrl-v"] = actions.file_vsplit,
                     -- ["ctrl-t"] = actions.file_tabedit,
-                    -- TODO: this should send ALL to qf, not just selected
-                    ["ctrl-q"] = actions.file_sel_to_qf,
-                    -- ["alt-Q"] = actions.file_sel_to_ll,
                     -- ["alt-i"] = actions.toggle_ignore,
-                    -- TODO: hidden icon is annoying and should be modifable Make a PR or an issue.
-                    ["ctrl-h"] = actions.toggle_hidden,
+                    -- ["ctrl-q"]  = actions.file_sel_to_qf, -- using the one above
+                    -- TODO: hidden icon should be modifable. Create a PR or an issue.
+                    ["ctrl-h"] = actions.toggle_hidden, -- default: ["alt-h"]
                     -- ["alt-f"] = actions.toggle_follow,
                 },
                 -- grep = {
@@ -138,20 +138,18 @@ return {
             git = { files = { previewer = false, winopts = { height = 0.55, width = 0.65 } } },
             keymaps = { winopts = { preview = { hidden = "hidden" } } },
             lsp = { symbols = { symbol_icons = require("core.icons").kinds } },
-            oldfiles = {
+            oldfiles = { winopts = { preview = { hidden = "hidden" }, height = 0.55, width = 0.65 } },
+            buffers = {
                 winopts = {
                     preview = { hidden = "hidden" },
                     height = 0.55,
                     width = 0.65,
                 },
+                -- Docs: fzf-lua/lua/fzf-lua/profiles/telescope.lua
+                keymap = { builtin = { ["<C-d>"] = false } },
+                actions = { ["ctrl-x"] = false, ["ctrl-d"] = { actions.buf_del, actions.resume } },
             },
-            grep_curbuf = {
-                winopts = {
-                    preview = { hidden = "hidden" },
-                    height = 0.55,
-                    width = 0.65,
-                },
-            },
+            grep_curbuf = { winopts = { preview = { hidden = "hidden" }, height = 0.55, width = 0.65 } },
             helptags = { winopts = { preview = { hidden = "hidden", horizontal = "right:70%" } } },
         }
     end,
