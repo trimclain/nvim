@@ -4,7 +4,9 @@ return {
     -- dev = true,
     enabled = not _G.ON_INFERIOR_OS,
     dependencies = {
+        -- TODO: remove telescope
         "telescope.nvim",
+        "fzf-lua",
     },
     ft = { "markdown", "html", "svg" },
     cmd = "LivePreview",

@@ -164,8 +164,9 @@ return {
         cond = CONFIG.lsp.enable_completion,
         event = { "BufReadPre", "BufNewFile" },
         dependencies = {
-            -- TODO: replace with fzf
+            -- TODO: remove telescope
             "telescope.nvim", -- used by some keymaps
+            "fzf-lua", -- used by some keymaps
             "blink.cmp", -- for capabilities
             "mason.nvim",
             {

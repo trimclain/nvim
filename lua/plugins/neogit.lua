@@ -9,7 +9,7 @@ return {
         dependencies = {
             "plenary.nvim",
             "diffview.nvim",
-            "telescope.nvim",
+            "fzf-lua", -- NOTE: this is not needed in the pinned commit
         },
         cmd = "Neogit",
         keys = {
