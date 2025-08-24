@@ -173,10 +173,10 @@ function M.pick_files(params)
     return function()
         if M.in_git_worktree(params.cwd) then
             ---@diagnostic disable-next-line: undefined-global
-            MiniExtra.pickers.git_files()
+            require("mini.extra").pickers.git_files()
         else
             ---@diagnostic disable-next-line: undefined-global
-            MiniPick.builtin.files()
+            require("mini.pick").builtin.files()
         end
     end
 end
