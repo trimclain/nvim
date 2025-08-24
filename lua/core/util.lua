@@ -11,7 +11,7 @@ end
 --- Return the list of filetypes where the plugins should be disabled
 ---@param type string | nil
 ---@return table
-M.get_disabled_filetypes = function(type)
+function M.get_disabled_filetypes(type)
     local disabled_filetypes = {
         -- "checkhealth", -- nvim health (quits with q by default)
         "grug-far", -- MagicDuck/grug-far.nvim

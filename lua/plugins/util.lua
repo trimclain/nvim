@@ -91,7 +91,7 @@ return {
     --     dependencies = { "nvim-treesitter/nvim-treesitter" },
     -- },
 
-    -- I might find a use fo this one later
+    -- I might find a use for this one later
     -- tab out from parentheses, quotes, and similar contexts
     -- {
     --     "abecodes/tabout.nvim",

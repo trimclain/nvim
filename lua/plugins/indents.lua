@@ -44,5 +44,14 @@ return {
     },
 
     -- Detect tabstop and shiftwidth automatically
-    { "tpope/vim-sleuth" },
+    {
+        "nmac427/guess-indent.nvim",
+        event = { "BufReadPost", "BufNewFile" },
+        cmd = "GuessIndent",
+        opts = {
+            -- auto_cmd = true, -- Set to false to disable automatic execution
+            -- override_editorconfig = false, -- Set to true to override settings set by .editorconfig
+            filetype_exclude = vim.list_extend({ "netrw", "tutor" }, require("core.util").get_disabled_filetypes()),
+        },
+    },
 }
