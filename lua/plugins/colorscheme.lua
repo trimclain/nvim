@@ -255,17 +255,6 @@ return {
     },
 
     {
-        "trimclain/astrospeed",
-        -- dir = "~/projects/open-source/nvim-plugins/astrospeed",
-        lazy = false,
-        priority = 1000,
-        cond = CONFIG.ui.colorscheme == "astrospeed",
-        config = function()
-            vim.cmd.colorscheme("astrospeed")
-        end,
-    },
-
-    {
         "LunarVim/darkplus.nvim",
         lazy = false,
         priority = 1000,
