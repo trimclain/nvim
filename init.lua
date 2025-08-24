@@ -23,6 +23,9 @@ if _G.ON_INFERIOR_OS and (vim.g.neovide or vim.fn.has("gui_running") == 1) then
     mode = "minimal"
 end
 
+-- Dependency check
+local has_fzf = vim.fn.executable("fzf") == 1
+
 -- Important settings for easy modification
 CONFIG = {
     opts = {
@@ -59,8 +62,8 @@ CONFIG = {
         enable_copilot = false,
     },
     plugins = {
-        fzf_lua = vim.fn.executable("fzf") == 1,
-        mini_pick = vim.fn.executable("fzf") == 0, -- fallback on systems without fzf
+        fzf_lua = has_fzf,
+        mini_pick = not has_fzf, -- fallback on systems without fzf
         telescope = false, -- sadly somewhat abandoned :(
 
         neoscroll = not _G.ON_INFERIOR_OS,
