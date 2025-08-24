@@ -473,7 +473,7 @@ end
 --- Toggle current file being executable
 function M.toggle_executable()
     local file = vim.fn.expand("%:p")
-    vim.cmd.write()
+    vim.cmd.update()
     if vim.fn.executable(file) == 0 then
         vim.system({ "chmod", "+x", file }):wait()
         notify("This file is now executable", "Executer")
