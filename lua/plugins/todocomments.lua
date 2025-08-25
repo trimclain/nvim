@@ -7,7 +7,7 @@ return {
             "plenary.nvim", -- used if ripgrep not found
             "fzf-lua",
         },
-        cmd = { "TodoTrouble", "TodoFzfLua" },
+        cmd = { "TodoFzfLua", "TodoTelescope" },
         keys = {
             -- stylua: ignore start
             { "]t", function() require("todo-comments").jump_next({ keywords = { "TODO", "FIX" } }) end, desc = "Next todo comment" },
@@ -25,6 +25,7 @@ return {
                         vim.notify("Fzf-Lua is not installed", vim.log.levels.ERROR, { title = "Todo Comments" })
                         return
                     end
+                    ---@diagnostic disable-next-line: missing-fields
                     require("fzf-lua.providers.grep").grep({
                         no_esc = true,
                         multiline = true,

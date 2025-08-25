@@ -63,8 +63,7 @@ CONFIG = {
     },
     plugins = {
         fzf_lua = has_fzf,
-        mini_pick = not has_fzf, -- fallback on systems without fzf
-        telescope = false, -- sadly somewhat abandoned :(
+        telescope = not has_fzf, -- sadly somewhat abandoned, use as fallback on systems without fzf
 
         neoscroll = not _G.ON_INFERIOR_OS,
         smear_cursor = _G.ON_INFERIOR_OS, -- found out about kitty's cursor trail

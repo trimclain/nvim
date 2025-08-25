@@ -36,17 +36,12 @@ return {
                 vim.split(string.rep("\n", padding_bot), "\n")
             )
 
-            -- actions using fzf-lua or mini.pick
+            -- actions using fzf-lua or telescope
             local use_fzf_lua = CONFIG.plugins.fzf_lua
-            -- TODO: add mini.pick as fallback
-            local files_action = use_fzf_lua and Util.fzf_files() or Util.pick_files()
-            local oldfiles_action = use_fzf_lua and "FzfLua oldfiles" or "Pick oldfiles"
-            local live_grep_action = use_fzf_lua and "FzfLua live_grep" or "Pick grep_live"
-            -- TODO: add mini.pick as fallback
-            local todo_action = use_fzf_lua and "TodoFzfLua"
-            -- TODO: add mini.pick as fallback
-            local config_action = use_fzf_lua
-                and Util.fzf_files({ cwd = vim.fn.stdpath("config"), title = " Neovim Config " })
+            local files_action = use_fzf_lua and Util.fzf_files() or Util.telescopic_johnson("files")
+            local oldfiles_action = use_fzf_lua and "FzfLua oldfiles" or "Telescope oldfiles"
+            local live_grep_action = use_fzf_lua and "FzfLua live_grep" or "Telescope live_grep"
+            local todo_action = use_fzf_lua and "TodoFzfLua" or "TodoTelescope"
 
             local opts = {
                 theme = "doom",
@@ -63,7 +58,7 @@ return {
                         { action = oldfiles_action, desc = "  Recent files", icon = Icons.ui.Files, key = "r" },
                         { action = live_grep_action, desc = "  Find string", icon = Icons.ui.List, key = "s" },
                         { action = todo_action, desc = "  Find todos", icon = Icons.ui.BoxChecked, key = "t" },
-                        { action = config_action, desc = "  Config", icon = Icons.ui.Gear, key = "c" },
+                        { action = Util.config_files, desc = "  Config", icon = Icons.ui.Gear, key = "c" },
                         { action = "Lazy", desc = "  Lazy", icon = Icons.ui.Lazy, key = "l" },
                         { action = "qa", desc = "  Quit", icon = Icons.ui.SignOut, key = "q" },
                     },

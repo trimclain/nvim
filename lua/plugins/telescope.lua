@@ -18,37 +18,12 @@ return {
     keys = function()
         local Util = require("core.util")
 
-        -- Return a function that calls telescope.
-        ---@param builtin string
-        ---@param opts table | nil
-        ---@param theme string | nil
-        local function telescopic_johnson(builtin, opts, theme)
-            local params = { builtin = builtin, opts = opts, theme = theme }
-            return function()
-                builtin = params.builtin
-
-                -- theme can be "dropdown", "cursor" or "ivy"
-                if params.theme == "default" then
-                    opts = params.opts or {}
-                else
-                    opts = require("telescope.themes").get_dropdown(params.opts or {})
-                end
-
-                -- for `files`, git_files or find_files will be chosen depending on .git
-                if builtin == "files" then
-                    -- Check if cwd is in a git worktree
-                    builtin = Util.in_git_worktree() and "git_files" or "find_files"
-                end
-                require("telescope.builtin")[builtin](opts)
-            end
-        end
-
         return {
             -- find files
-            { "<C-p>", telescopic_johnson("files"), desc = "Find Files (root dir)" },
+            { "<C-p>", Util.telescopic_johnson("files"), desc = "Find Files (root dir)" },
             {
                 "<leader>ff",
-                telescopic_johnson("files", { previewer = true }, "default"),
+                Util.telescopic_johnson("files", { previewer = true }, "default"),
                 desc = "Find Files with preview",
             },
 
@@ -74,7 +49,7 @@ return {
             -- find my dotfiles
             {
                 "<leader>fd",
-                telescopic_johnson(
+                Util.telescopic_johnson(
                     "git_files",
                     -- Yup, why would $HOME on windows be $HOME and not $HOMEPATH or $USERPROFILE
                     {
@@ -92,7 +67,7 @@ return {
             -- edit packages
             {
                 "<leader>pe",
-                telescopic_johnson("find_files", { cwd = vim.fn.stdpath("data") .. "/lazy" }),
+                Util.telescopic_johnson("find_files", { cwd = vim.fn.stdpath("data") .. "/lazy" }),
                 desc = "Edit Plugins",
             },
 
@@ -111,7 +86,7 @@ return {
             { "<leader>fq", "<cmd>Telescope quickfix<cr>", desc = "Quickfix Items" },
             {
                 "<leader>fc",
-                telescopic_johnson("colorscheme", { enable_preview = true }),
+                Util.telescopic_johnson("colorscheme", { enable_preview = true }),
                 desc = "Colorscheme w/ preview",
             },
 

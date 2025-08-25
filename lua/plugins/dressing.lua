@@ -1,3 +1,4 @@
+-- TODO: deprecated: replace input with snacks and select with picker
 -- select and input UI
 return {
     {

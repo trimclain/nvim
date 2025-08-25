@@ -150,38 +150,78 @@ function M.fzf_files(params)
     end
 end
 
-function M.pick_files(params)
-    params = params or {}
-    -- TODO:
-    -- local opts = {
-    --     cwd = params.cwd,
-    --     winopts = {},
-    -- }
-    -- if params.theme == "default" then
-    --     opts = vim.tbl_extend("force", opts, {
-    --         previewer = true,
-    --         winopts = {
-    --             height = 0.85,
-    --             width = 0.80,
-    --         },
-    --     })
-    -- end
-    -- if params.title then
-    --     opts.winopts = vim.tbl_extend("error", opts.winopts, { title = params.title })
-    -- end
-
+-- Return a function that calls telescope.
+---@param builtin string
+---@param opts table | nil
+---@param theme string | nil
+function M.telescopic_johnson(builtin, opts, theme)
+    local params = { builtin = builtin, opts = opts, theme = theme }
     return function()
-        if M.in_git_worktree(params.cwd) then
-            ---@diagnostic disable-next-line: undefined-global
-            require("mini.extra").pickers.git_files()
+        builtin = params.builtin
+
+        -- theme can be "dropdown", "cursor" or "ivy"
+        if params.theme == "default" then
+            opts = params.opts or {}
         else
-            ---@diagnostic disable-next-line: undefined-global
-            require("mini.pick").builtin.files()
+            opts = require("telescope.themes").get_dropdown(params.opts or {})
         end
+
+        if builtin == "files" then
+            builtin = M.in_git_worktree(opts.cwd) and "git_files" or "find_files"
+        end
+        require("telescope.builtin")[builtin](opts)
     end
 end
 
---- TODO: Deprecate and remove
+function M.config_files()
+    local cwd = vim.fn.stdpath("config")
+    if CONFIG.plugins.fzf_lua then
+        M.fzf_files({ cwd = cwd, title = " Neovim Config " })()
+    else
+        M.telescopic_johnson("files", { cwd = cwd, prompt_title = "Neovim Config" })()
+    end
+end
+
+--- Choose a project to work on from my $PROJECTLIST using fuzzy finder
+function M.open_project()
+    local projectlist = vim.env.PROJECTLIST
+    if not M.file_exists(projectlist) then
+        vim.notify("Project List not found", vim.log.levels.ERROR, { title = "Project Manager" })
+        return
+    end
+
+    if CONFIG.plugins.fzf_lua then
+        M.fzcat(projectlist)
+    elseif CONFIG.plugins.telescope then
+        M.telescat(projectlist)
+    else
+        vim.notify("No fuzzy finder plugin found", vim.log.levels.ERROR, { title = "Project Manager" })
+    end
+end
+
+function M.fzcat(filename)
+    local opts = {}
+    opts.winopts = { title = " My Projects " }
+    opts.actions = {
+        ["default"] = function(selected)
+            -- selected has the form <repo>,<owner>
+            local selection = vim.split(selected[1], ",")[1]
+
+            if not M.dir_exists(selection) then
+                notify("Project " .. selection .. " not installed", "Project Manager")
+                return
+            end
+            notify("Opened " .. selection, "Project Manager")
+            vim.cmd.cd(selection)
+
+            require("fzf-lua").files()
+            -- require("neo-tree.command").execute({ toggle = true, dir = selection })
+        end,
+    }
+
+    require("fzf-lua").fzf_exec("cat " .. filename, opts)
+end
+
 --- Cat a given file and pipe it's lines into telescope
 ---@param filename string
 function M.telescat(filename)
@@ -224,47 +264,6 @@ function M.telescat(filename)
             end,
         })
         :find()
-end
-
-function M.fzcat(filename)
-    local opts = {}
-    opts.winopts = { title = " My Projects " }
-    opts.actions = {
-        ["default"] = function(selected)
-            -- selected has the form <repo>,<owner>
-            local selection = vim.split(selected[1], ",")[1]
-
-            if not M.dir_exists(selection) then
-                notify("Project " .. selection .. " not installed", "Project Manager")
-                return
-            end
-            notify("Opened " .. selection, "Project Manager")
-            vim.cmd.cd(selection)
-
-            require("fzf-lua").files()
-            -- require("neo-tree.command").execute({ toggle = true, dir = selection })
-        end,
-    }
-
-    require("fzf-lua").fzf_exec("cat " .. filename, opts)
-end
-
---- Choose a project to work on from my $PROJECTLIST using fuzzy finder
-function M.open_project()
-    local projectlist = vim.env.PROJECTLIST
-    if not M.file_exists(projectlist) then
-        vim.notify("Project List not found", vim.log.levels.ERROR, { title = "Project Manager" })
-        return
-    end
-
-    if CONFIG.plugins.fzf_lua then
-        M.fzcat(projectlist)
-    elseif CONFIG.plugins.telescope then
-        --- TODO: Remove telescope
-        M.telescat(projectlist)
-    else
-        vim.notify("No fuzzy finder plugin found", vim.log.levels.ERROR, { title = "Project Manager" })
-    end
 end
 
 -------------------------------------------------------------------------------

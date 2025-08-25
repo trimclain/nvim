@@ -164,8 +164,6 @@ return {
         cond = CONFIG.lsp.enable_completion,
         event = { "BufReadPre", "BufNewFile" },
         dependencies = {
-            -- TODO: remove telescope
-            "telescope.nvim", -- used by some keymaps
             "fzf-lua", -- used by some keymaps
             "blink.cmp", -- for capabilities
             "mason.nvim",
@@ -234,8 +232,7 @@ return {
                     -- - CTRL-S is mapped in Insert mode to |vim.lsp.buf.signature_help()|
                     require("which-key").add({ "gr", group = "get-from-lsp" })
 
-                    -- TODO: add better statement? Fallback to mini.pick
-                    if require("core.util").has_plugin("fzf-lua") then
+                    if CONFIG.plugins.fzf_lua then
                         if client and client:supports_method(methods.textDocument_definition) then
                             map("gd", "<cmd>FzfLua lsp_definitions<cr>", "Go to Definitions")
                         end
