@@ -11,6 +11,7 @@ return {
         return {
             -- find files
             -- stylua: ignore start
+            -- NOTE: hidden problem in dotfiles needs to be fixed if I'm using this
             { "<C-p>", Util.fzf_files(), desc = "Find Files (root dir)" },
             { "<leader>ff", Util.fzf_files({ theme = "default" }), desc = "Find Files with preview" },
             -- stylua: ignore end

@@ -103,6 +103,7 @@ function M.in_git_worktree(cwd)
     return vim.system({ "git", "-C", cwd, "rev-parse", "--is-inside-work-tree" }):wait().stderr == ""
 end
 
+-- TODO: AstroNvim notify this one too
 --- Use vim.notify to send INFO notifications
 ---@param msg string
 ---@param title string
@@ -144,26 +145,24 @@ function M.fzf_files(params)
     end
 end
 
--- Return a function that calls telescope.
----@param builtin string
----@param opts table | nil
----@param theme string | nil
-function M.telescopic_johnson(builtin, opts, theme)
-    local params = { builtin = builtin, opts = opts, theme = theme }
+-- Return a function that calls snacks.picker
+---@param source string picker soruce
+---@param params? table accepts: preview? boolean, cwd? string, title? string
+function M.pick(source, params)
+    params = params or {}
+    local opts = {
+        cwd = params.cwd,
+        title = params.title,
+        layout = {
+            preset = params.preview and "default" or "select", -- Others: "telescope", "vscode" ("select" moved to top)
+        },
+    }
+    if source == "find_files" then
+        source = M.in_git_worktree(params.cwd) and "git_files" or "files"
+    end
+
     return function()
-        builtin = params.builtin
-
-        -- theme can be "dropdown", "cursor" or "ivy"
-        if params.theme == "default" then
-            opts = params.opts or {}
-        else
-            opts = require("telescope.themes").get_dropdown(params.opts or {})
-        end
-
-        if builtin == "files" then
-            builtin = M.in_git_worktree(opts.cwd) and "git_files" or "find_files"
-        end
-        require("telescope.builtin")[builtin](opts)
+        require("snacks.picker")[source](opts)
     end
 end
 
@@ -172,7 +171,7 @@ function M.config_files()
     if CONFIG.plugins.fzf_lua then
         M.fzf_files({ cwd = cwd, title = " Neovim Config " })()
     else
-        M.telescopic_johnson("files", { cwd = cwd, prompt_title = "Neovim Config" })()
+        M.pick("find_files", { cwd = cwd, title = "Neovim Config" })()
     end
 end
 
@@ -187,6 +186,7 @@ function M.open_project()
     if CONFIG.plugins.fzf_lua then
         M.fzcat(projectlist)
     elseif CONFIG.plugins.telescope then
+        -- TODO: replace with snacks
         M.telescat(projectlist)
     else
         vim.notify("No fuzzy finder plugin found", vim.log.levels.ERROR, { title = "Project Manager" })
@@ -216,6 +216,7 @@ function M.fzcat(filename)
     require("fzf-lua").fzf_exec("cat " .. filename, opts)
 end
 
+-- TODO: replace with snacks
 --- Cat a given file and pipe it's lines into telescope
 ---@param filename string
 function M.telescat(filename)

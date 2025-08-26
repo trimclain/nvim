@@ -5,40 +5,18 @@ return {
         cond = CONFIG.plugins.todo_comments,
         dependencies = {
             "plenary.nvim", -- used if ripgrep not found
-            "fzf-lua",
+            "snacks.nvim",
         },
         cmd = { "TodoFzfLua", "TodoTelescope" },
+        -- stylua: ignore
         keys = {
-            -- stylua: ignore start
             { "]t", function() require("todo-comments").jump_next({ keywords = { "TODO", "FIX" } }) end, desc = "Next todo comment" },
             { "[t", function() require("todo-comments").jump_prev({ keywords = { "TODO", "FIX" } }) end, desc = "Previous todo comment" },
-            -- stylua: ignore end
-            { "<leader>ft", "<cmd>TodoFzfLua<cr>", desc = "Todo" },
+            { "<leader>ft", function () require("snacks").picker.todo_comments({ keywords = { "TODO", "FIX" } }) end, desc = "Todo" },
+            -- { "<leader>fT", function() Snacks.picker.todo_comments() end, desc = "Todo" },
         },
         event = { "BufReadPost", "BufNewFile" },
         opts = function()
-            -- Fix some display issues
-            vim.api.nvim_create_user_command(
-                "TodoFzfLua",
-                function()
-                    if not CONFIG.plugins.fzf_lua then
-                        vim.notify("Fzf-Lua is not installed", vim.log.levels.ERROR, { title = "Todo Comments" })
-                        return
-                    end
-                    ---@diagnostic disable-next-line: missing-fields
-                    require("fzf-lua.providers.grep").grep({
-                        no_esc = true,
-                        multiline = true,
-                        search = "\\b(TODO|FIX):",
-                        no_headr = true,
-                        no_header_i = true,
-                        prompt = "> ",
-                        winopts = { title = " Find Todo " },
-                    })
-                end,
-                { bang = true } -- force to redefine the command
-            )
-
             local Icons = require("core.icons")
 
             return {

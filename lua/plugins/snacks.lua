@@ -10,7 +10,32 @@ return {
         opts.input = {}
 
         -- configure picker and `vim.ui.select`
-        opts.picker = { ui_select = true }
+        opts.picker = {
+            ui_select = true,
+            win = {
+                -- input window
+                input = {
+                    keys = {
+                        ["<C-_>"] = { "toggle_help_list", mode = { "i", "n" } }, -- keys from pressing <C-/> in tmux
+                        ["<Tab>"] = { "list_down", mode = { "i", "n" } },
+                        ["<S-Tab>"] = { "list_up", mode = { "i", "n" } },
+                        ["<C-j>"] = { "select_and_next", mode = { "i", "n" } },
+                        ["<C-k>"] = { "select_and_prev", mode = { "i", "n" } },
+                        ["<C-h>"] = { "toggle_hidden", mode = { "i", "n" } },
+                        ["<C-a>"] = { "toggle_maximize", mode = { "i", "n" } },
+                        -- ["<C-p>"] = { "toggle_preview", mode = { "i", "n" } },
+                        ["<C-u>"] = { "preview_scroll_up", mode = { "i", "n" } },
+                        ["<C-d>"] = { "preview_scroll_down", mode = { "i", "n" } },
+                        -- toggle live_grep
+                        ["<C-g>"] = { "toggle_live", mode = { "i", "n" } },
+                    },
+                    b = {
+                        -- TODO: either switch to minipairs or disable autopairs
+                        minipairs_disable = true,
+                    },
+                },
+            },
+        }
 
         -- before: <mark, sign, fold, git>, line_number
         -- after: <mark, sign> <line_number> <fold, git>
@@ -21,13 +46,16 @@ return {
             enabled = true,
             width = 50,
             preset = {
-                pick = CONFIG.plugins.fzf_lua and "fzf-lua" or "telescope.nvim", -- default: nil, (autodetect)
+                -- TODO: change to snacks
+                pick = CONFIG.plugins.fzf_lua and "fzf-lua", -- default: nil, (autodetect)
                 -- stylua: ignore
                 keys = {
-                    { icon = Icons.ui.Search, key = "f", desc = "Find File", action = ":lua Snacks.dashboard.pick('files')" },
+                    -- TODO: change to Util.pick
+                    { icon = Icons.ui.Search, key = "f", desc = "Find File", action = ":lua Snacks.dashboard.pick('files', { hidden = true })" },
                     -- { icon = Icons.kinds.File, key = "n", desc = "New File", action = ":ene | startinsert" },
                     { icon = Icons.ui.Files, key = "r", desc = "Recent Files", action = ":lua Snacks.dashboard.pick('oldfiles')" },
                     { icon = Icons.ui.List, key = "s", desc = "Find Text", action = ":lua Snacks.dashboard.pick('live_grep')" },
+                    -- TODO: change to snacks
                     { icon = Icons.ui.BoxChecked, key = "t", desc = "Find Todo", action = CONFIG.plugins.fzf_lua and ":TodoFzfLua" or ":TodoTelescope" },
                     { icon = Icons.ui.Gear, key = "c", desc = "Config", action = Util.config_files },
                     { icon = Icons.ui.Lazy, key = "L", desc = "Lazy", action = ":Lazy", enabled = package.loaded.lazy ~= nil },
@@ -73,66 +101,40 @@ return {
 
         -- stylua: ignore
         return {
-            -- TODO:
-            -- -- find files
-            -- { "<leader>ff", function() require("snacks").picker.files() end, desc = "Find Files" },
-            -- { "<leader>fg", function() require("snacks").picker.git_files() end, desc = "Find Git Files" },
-            -- { "<C-p>", Util.telescopic_johnson("files"), desc = "Find Files (root dir)" },
-            -- {
-            --     "<leader>ff",
-            --     Util.telescopic_johnson("files", { previewer = true }, "default"),
-            --     desc = "Files with preview",
-            -- },
+            -- find files
+            { "<C-p>", Util.pick("find_files"), desc = "Find Files" },
+            { "<leader>ff", function() require("snacks").picker.files({ hidden = true }) end, desc = "Files with preview" },
 
-            -- find string
-            -- TODO:
-            -- {
-            --     "<C-f>",
-            --     function()
-            --         local opt = require("telescope.themes").get_dropdown({ height = 10, previewer = false })
-            --         require("telescope.builtin").current_buffer_fuzzy_find(opt)
-            --     end,
-            --     desc = "Fzf Buffer",
-            -- },
-            -- { "<C-f>", function() require("snacks").picker.lines() end, desc = "Fzf Buffer" },
+            -- TODO: maybe grep with opts better
+            { "<C-f>", Util.pick("lines"), desc = "Fzf Buffer" },
             { "<leader>fs", function() require("snacks").picker.grep() end, desc = "String in Files" },
             { "<leader>fw", function() require("snacks").picker.grep_word() end, desc = "Visual selection or <cword>", mode = { "n", "x" } },
-            -- TODO: ?
-            -- {
-            --     "<leader>fW",
-            --     function()
-            --         require("telescope.builtin").grep_string({ search = vim.fn.expand("<cWORD>") })
-            --     end,
-            --     desc = "Find WORD under cursor",
-            -- },
 
-            -- TODO:
-            -- -- find my dotfiles
-            -- {
-            --     "<leader>fd",
-            --     Util.telescopic_johnson(
-            --         "git_files",
-            --         -- Yup, why would $HOME on windows be $HOME and not $HOMEPATH or $USERPROFILE
-            --         {
-            --             cwd = _G.ON_INFERIOR_OS and vim.fs.joinpath(vim.env.HOMEPATH, "dotfiles")
-            --                 or vim.fs.joinpath(vim.env.HOME, ".dotfiles"),
-            --             prompt_title = "Dotfiles",
-            --         }
-            --     ),
-            --     desc = "Dotfiles",
-            -- },
+            -- find my dotfiles
+            {
+                "<leader>fd",
+                Util.pick(
+                    "git_files",
+                    -- Yup, why would $HOME on windows be $HOME and not $HOMEPATH or $USERPROFILE
+                    {
+                        cwd = _G.ON_INFERIOR_OS and vim.fs.joinpath(vim.env.HOMEPATH, "dotfiles")
+                            or vim.fs.joinpath(vim.env.HOME, ".dotfiles"),
+                        title = "Dotfiles",
+                    }
+                ),
+                desc = "Dotfiles",
+            },
 
             -- TODO:
             -- -- find my projects
             -- { "<leader>fp", Util.open_project, desc = "Open [P]roject" },
 
-            -- TODO:
-            -- -- edit packages
-            -- {
-            --     "<leader>pe",
-            --     Util.telescopic_johnson("find_files", { cwd = vim.fn.stdpath("data") .. "/lazy" }),
-            --     desc = "Edit Plugins",
-            -- },
+            -- edit packages
+            {
+                "<leader>pe",
+                Util.pick("files", { cwd = vim.fn.stdpath("data") .. "/lazy" }),
+                desc = "Edit Plugins",
+            },
 
             { "<leader>fh", function() require("snacks").picker.help() end, desc = "Help Pages" },
             { "<leader>fk", function() require("snacks").picker.keymaps() end, desc = "Keymaps" },
@@ -147,8 +149,11 @@ return {
             { "<leader>fa", function() require("snacks").picker.autocmds() end, desc = "Autocmds" },
             { "<leader>fb", function() require("snacks").picker.buffers() end, desc = "Buffers" },
             { "<leader>fq", function() require("snacks").picker.qflist() end, desc = "Quickfix List Items" },
-            -- TODO: remove preview window
-            { "<leader>fc", function() require("snacks").picker.colorschemes() end, desc = "Colorschemes w/ preview" },
+            {
+                "<leader>fc",
+                function() require("snacks").picker.colorschemes({ layout = { preset = "dropdown" } }) end,
+                desc = "Colorschemes w/ preview",
+            },
 
             -- git
             { "<leader>gb", function() require("snacks").picker.git_branches() end, desc = "Branches" },
@@ -180,13 +185,14 @@ return {
             --   { "<leader>sS", function() require("snacks").picker.lsp_workspace_symbols() end, desc = "LSP Workspace Symbols" },
 
             --   -- Other
-            -- TODO:
+            -- TODO: ?
             --   { "<leader>z",  function() require("snacks").zen() end, desc = "Toggle Zen Mode" },
             --   { "<leader>Z",  function() require("snacks").zen.zoom() end, desc = "Toggle Zoom" },
             --   { "<leader>.",  function() require("snacks").scratch() end, desc = "Toggle Scratch Buffer" },
             --   { "<leader>S",  function() require("snacks").scratch.select() end, desc = "Select Scratch Buffer" },
             --   { "<leader>n",  function() require("snacks").notifier.show_history() end, desc = "Notification History" },
             { "<leader>q", function() require("snacks").bufdelete({ buf = 0, force = false }) end, desc = "Delete Buffer" },
+            -- TODO: ?
             --   { "<leader>cR", function() require("snacks").rename.rename_file() end, desc = "Rename File" },
             --   { "<leader>gB", function() require("snacks").gitbrowse() end, desc = "Git Browse", mode = { "n", "v" } },
             --   { "<leader>gg", function() require("snacks").lazygit() end, desc = "Lazygit" },
