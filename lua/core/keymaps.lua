@@ -76,7 +76,7 @@ keymap("n", "N", "Nzzzv", opts) -- and backwards
 --     keymap("n", "<C-d>", "<C-d>zz", opts) -- and down
 -- end
 
-keymap("n", "J", "mzJ`z", opts) -- keep it centered when joining lines
+keymap("n", "J", "mzJ`z<cmd>delm z<cr>", opts) -- keep it centered when joining lines
 keymap("i", ",", ",<c-g>u", opts) -- set a break point for undo after ,
 keymap("i", ".", ".<c-g>u", opts) -- after .
 keymap("i", "!", "!<c-g>u", opts) -- after !
@@ -87,8 +87,8 @@ keymap("x", "<", "<gv", opts) -- stay in
 keymap("x", ">", ">gv", opts) -- indent mode
 keymap("x", "<S-h>", "<gv", opts) -- feels
 keymap("x", "<S-l>", ">gv", opts) -- natural
-keymap("x", "y", "myy`y", opts) -- maintain the cursor position
-keymap("x", "Y", "myy`y", opts) -- when yanking a visual selection
+keymap("x", "y", "myy`y<cmd>delm y<cr>", opts) -- maintain the cursor position
+keymap("x", "Y", "myy`y<cmd>delm y<cr>", opts) -- when yanking a visual selection
 keymap("x", "p", "P", opts) -- when replacing a higlighted text, don't yank it
 -- keymap("n", "<leader>d", '"_d', add_desc("Delete to blackhole"))
 keymap("i", "<C-r>", "<C-r>+", opts) -- paste from clipboard in insert mode
