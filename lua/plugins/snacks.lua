@@ -6,27 +6,15 @@ return {
         local Util = require("core.util")
         local Icons = require("core.icons")
 
-        local opts = {
-            -- bigfile = { enabled = true },
-            -- explorer = { enabled = true },
-            -- indent = { enabled = true },
-            -- input = { enabled = true },
-            -- notifier = {
-            --   enabled = true,
-            --   timeout = 3000,
-            -- },
-            -- picker = { enabled = true },
-            -- quickfile = { enabled = true },
-            -- scope = { enabled = true },
-            -- scroll = { enabled = true },
-            -- statuscolumn = { enabled = true },
-            -- words = { enabled = true },
-            -- styles = {
-            --   notification = {
-            --     -- wo = { wrap = true } -- Wrap notifications
-            --   }
-            -- }
-        }
+        local opts = {}
+        -- input = { enabled = true },
+        -- picker = { enabled = true },
+
+        -- before: <mark, sign, fold, git>, line_number
+        -- after: <mark, sign> <line_number> <fold, git>
+        opts.statuscolumn = { folds = { open = true } } -- default: open = false
+
+        -- dashboard at UIEnter
         opts.dashboard = {
             enabled = true,
             width = 50,
