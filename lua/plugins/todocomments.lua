@@ -12,6 +12,7 @@ return {
         keys = {
             { "]t", function() require("todo-comments").jump_next({ keywords = { "TODO", "FIX" } }) end, desc = "Next todo comment" },
             { "[t", function() require("todo-comments").jump_prev({ keywords = { "TODO", "FIX" } }) end, desc = "Previous todo comment" },
+            ---@diagnostic disable-next-line: undefined-field
             { "<leader>ft", function () require("snacks").picker.todo_comments({ keywords = { "TODO", "FIX" } }) end, desc = "Todo" },
             -- { "<leader>fT", function() Snacks.picker.todo_comments() end, desc = "Todo" },
         },

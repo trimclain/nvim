@@ -174,6 +174,28 @@ return {
                     require("inc_rename").setup(opts)
                 end,
             },
+            {
+                "rachartier/tiny-code-action.nvim",
+                dependencies = { "plenary.nvim" },
+                event = "LspAttach",
+                opts = {
+                    picker = {
+                        "buffer",
+                        opts = {
+                            auto_preview = true,
+                            hotkeys = true,
+                            -- Use numeric labels.
+                            hotkeys_mode = function(titles)
+                                return vim.iter(ipairs(titles))
+                                    :map(function(i)
+                                        return tostring(i)
+                                    end)
+                                    :totable()
+                            end,
+                        },
+                    },
+                },
+            },
         },
         config = function()
             vim.api.nvim_create_autocmd("LspAttach", {
@@ -240,6 +262,13 @@ return {
                         map("gri", "<cmd>FzfLua lsp_implementations<cr>", "Implementations")
                         map("grt", "<cmd>FzfLua lsp_type_definitions<cr>", "Type Definitions")
                         map("gO", "<cmd>FzfLua lsp_document_symbols<cr>", "Document Symbols")
+                    end
+
+                    if require("core.util").has_plugin("tiny-code-action.nvim") then
+                        vim.keymap.set({ "n", "x" }, "gra", function()
+                            ---@diagnostic disable-next-line: missing-parameter
+                            require("tiny-code-action").code_action()
+                        end, { noremap = true, silent = true, desc = "Tiny Code Action" })
                     end
 
                     if require("core.util").has_plugin("inc-rename.nvim") then
