@@ -24,21 +24,15 @@ function M.get_disabled_filetypes(type)
     }
 
     local ui_filetypes = {
-        "aerial",
-        "alpha",
-        "dashboard",
-        "dirvish",
-        "DressingSelect",
+        "snacks_dashboard",
+        "DressingSelect", -- TODO: remove
         "Empty",
-        "fugitive",
         "lazy",
         "mason",
         "neo-tree",
         "NeogitCommitMessage",
         "NeogitStatus",
         "notify",
-        "Outline",
-        "packer",
         "TelescopePrompt",
         "toggleterm",
         "Trouble",
