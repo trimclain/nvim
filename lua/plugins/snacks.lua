@@ -2,13 +2,12 @@ return {
     "folke/snacks.nvim",
     priority = 1000,
     lazy = false,
-    opts = function()
+    opts = function(_, opts)
         local Util = require("core.util")
         local Icons = require("core.icons")
 
-        local opts = {}
-        -- input = { enabled = true },
-        -- picker = { enabled = true },
+        -- configure `vim.ui.input`
+        opts.input = {}
 
         -- before: <mark, sign, fold, git>, line_number
         -- after: <mark, sign> <line_number> <fold, git>
