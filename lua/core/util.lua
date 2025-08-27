@@ -148,13 +148,22 @@ function M.fzf_files(params)
 end
 
 -- Return a function that calls snacks.picker
----@param source string picker soruce
----@param params? table accepts: preview? boolean, cwd? string, title? string
+---@param source string picker source
+---@param params? table picker opts
+---@diagnostic disable-next-line: undefined-doc-param
+---@param params.title? string picker title
+---@diagnostic disable-next-line: undefined-doc-param
+---@param params.cwd? string picker cwd
+---@diagnostic disable-next-line: undefined-doc-param
+---@param params.preview? boolean whether to enable preview
+---@diagnostic disable-next-line: undefined-doc-param
+---@param params.focus? string one of "input", "list" or "preview"
 function M.pick(source, params)
     params = params or {}
     local opts = {
         cwd = params.cwd,
         title = params.title,
+        focus = params.focus,
         layout = {
             preset = params.preview and "default" or "select", -- Others: "telescope", "vscode" ("select" moved to top)
         },

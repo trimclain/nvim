@@ -1,9 +1,10 @@
+local Util = require("core.util")
+
 return {
     "folke/snacks.nvim",
     priority = 1000,
     lazy = false,
     opts = function(_, opts)
-        local Util = require("core.util")
         local Icons = require("core.icons")
 
         -- configure `vim.ui.input`
@@ -114,8 +115,6 @@ return {
         return opts
     end,
     keys = function()
-        local Util = require("core.util")
-
         if not CONFIG.plugins.snacks_picker then
             return {}
         end
@@ -168,7 +167,7 @@ return {
             { "<leader>fl", function() require("snacks").picker.resume() end, desc = "Resume Last Search" },
             { "<leader>fR", function() require("snacks").picker.registers() end, desc = "Registers" },
             { "<leader>fa", function() require("snacks").picker.autocmds() end, desc = "Autocmds" },
-            { "<leader>fb", function() require("snacks").picker.buffers() end, desc = "Buffers" },
+            { "<leader>fb", Util.pick("buffers", { focus = "list" }), desc = "Buffers" },
             { "<leader>fq", function() require("snacks").picker.qflist() end, desc = "Quickfix List Items" },
             {
                 "<leader>fc",
