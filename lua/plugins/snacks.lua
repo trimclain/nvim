@@ -119,16 +119,18 @@ return {
             return {}
         end
 
-        -- stylua: ignore
         return {
             -- find files
             { "<C-p>", Util.pick("find_files"), desc = "Find Files" },
+            -- stylua: ignore
             { "<leader>ff", function() require("snacks").picker.files({ hidden = true }) end, desc = "Files with preview" },
 
             -- TODO: maybe grep with opts better
             { "<C-f>", Util.pick("lines"), desc = "Fzf Buffer" },
+            -- stylua: ignore start
             { "<leader>fs", function() require("snacks").picker.grep() end, desc = "String in Files" },
             { "<leader>fw", function() require("snacks").picker.grep_word() end, desc = "Visual selection or <cword>", mode = { "n", "x" } },
+            -- stylua: ignore end
 
             -- find my dotfiles
             {
@@ -149,59 +151,58 @@ return {
             -- -- find my projects
             -- { "<leader>fp", Util.open_project, desc = "Open [P]roject" },
 
-            -- edit packages
-            {
-                "<leader>pe",
-                Util.pick("files", { cwd = vim.fn.stdpath("data") .. "/lazy" }),
-                desc = "Edit Plugins",
-            },
+            -- Plugins
+            -- stylua: ignore
+            { "<leader>fp", function() require("snacks").picker.lazy() end, desc = "Plugin Spec" },
+            { "<leader>pe", Util.pick("files", { cwd = vim.fn.stdpath("data") .. "/lazy" }), desc = "Edit Plugins" },
 
+            -- Used Often
+            -- stylua: ignore start
             { "<leader>fh", function() require("snacks").picker.help() end, desc = "Help Pages" },
             { "<leader>fk", function() require("snacks").picker.keymaps() end, desc = "Keymaps" },
             { "<leader>fr", function() require("snacks").picker.recent() end, desc = "Recent Files" },
-            { "<leader>fD", function() require("snacks").picker.diagnostics() end, desc = "Diagnostics" },
-            { "<leader>:", function() require("snacks").picker.command_history() end, desc = "Command History" },
-            { "<leader>fC", function() require("snacks").picker.commands() end, desc = "Commands" },
-            { "<leader>fM", function() require("snacks").picker.man() end, desc = "Man Pages" },
-            { "<leader>fH", function() require("snacks").picker.highlights() end, desc = "Highlights" },
             { "<leader>fl", function() require("snacks").picker.resume() end, desc = "Resume Last Search" },
+            -- stylua: ignore end
+            { "<leader>fb", Util.pick("buffers", { focus = "list" }), desc = "Buffers" },
+            -- SOMEDAY: make this smaller and under cursor like fzf-lua
+            -- stylua: ignore start
+            { "z=", function() require("snacks").picker.spelling() end, desc = "Spelling suggestions" }, -- rebind from which-key
+
+            -- Used Rare
+            { "<leader>fD", function() require("snacks").picker.diagnostics() end, desc = "Diagnostics" },
+            { "<leader>fq", function() require("snacks").picker.qflist() end, desc = "Quickfix List Items" },
+            { "<leader>fC", function() require("snacks").picker.commands() end, desc = "Commands" },
+            { "<leader>:", function() require("snacks").picker.command_history() end, desc = "Command History" },
+            { "<leader>fM", function() require("snacks").picker.man() end, desc = "Man Pages" },
             { "<leader>fR", function() require("snacks").picker.registers() end, desc = "Registers" },
             { "<leader>fa", function() require("snacks").picker.autocmds() end, desc = "Autocmds" },
-            { "<leader>fb", Util.pick("buffers", { focus = "list" }), desc = "Buffers" },
-            { "<leader>fq", function() require("snacks").picker.qflist() end, desc = "Quickfix List Items" },
+
+            -- Colors and Icons
+            { "<leader>fH", function() require("snacks").picker.highlights() end, desc = "Highlights" },
             {
                 "<leader>fc",
                 function() require("snacks").picker.colorschemes({ layout = { preset = "dropdown" } }) end,
                 desc = "Colorschemes w/ preview",
             },
+            { "<leader>fi", function() require("snacks").picker.icons() end, desc = "Icons" },
 
-            -- git
+            -- Git
             { "<leader>gb", function() require("snacks").picker.git_branches() end, desc = "Branches" },
             { "<leader>gl", function() require("snacks").picker.git_log() end, desc = "Commits" },
-            -- TODO: ?
-            -- { "<leader>gL", function() require("snacks").picker.git_log_line() end, desc = "Git Log Line" },
+            { "<leader>gf", function() require("snacks").picker.git_log_file() end, desc = "Commits (File)" },
+            { "<leader>gL", function() require("snacks").picker.git_log_line() end, desc = "Commits (Line)" },
+            -- { "<leader>gD", function() require("snacks").picker.git_diff() end, desc = "Git Diff (Hunks)" },
             -- { "<leader>gs", function() require("snacks").picker.git_status() end, desc = "Git Status" },
             -- { "<leader>gS", function() require("snacks").picker.git_stash() end, desc = "Git Stash" },
-            -- { "<leader>gd", function() require("snacks").picker.git_diff() end, desc = "Git Diff (Hunks)" },
-            -- { "<leader>gf", function() require("snacks").picker.git_log_file() end, desc = "Git Log File" },
 
-            -- rebind from which-key
-            -- SOMEDAY: make this smaller and under cursor like fzf-lua
-            { "z=", function() require("snacks").picker.spelling() end, desc = "Spelling suggestions" },
-
-            -- TODO: interesting?
-            -- -- search
-            -- { "<leader>si", function() require("snacks").picker.icons() end, desc = "Icons" },
-            -- { "<leader>sp", function() require("snacks").picker.lazy() end, desc = "Search for Plugin Spec" },
-
-            --   -- Other
-            -- TODO: ?
+            -- Other
+            { "<leader>q", function() require("snacks").bufdelete({ buf = 0, force = false }) end, desc = "Delete Buffer" },
+            -- stylua: ignore end
+            -- TODO: switch from zen-mode
             --   { "<leader>z",  function() require("snacks").zen() end, desc = "Toggle Zen Mode" },
             --   { "<leader>Z",  function() require("snacks").zen.zoom() end, desc = "Toggle Zoom" },
-            --   { "<leader>.",  function() require("snacks").scratch() end, desc = "Toggle Scratch Buffer" },
-            --   { "<leader>S",  function() require("snacks").scratch.select() end, desc = "Select Scratch Buffer" },
+            -- TODO: in case I figure out animations in notifier and can switch to it
             --   { "<leader>n",  function() require("snacks").notifier.show_history() end, desc = "Notification History" },
-            { "<leader>q", function() require("snacks").bufdelete({ buf = 0, force = false }) end, desc = "Delete Buffer" },
             -- TODO: ?
             --   { "<leader>cR", function() require("snacks").rename.rename_file() end, desc = "Rename File" },
             --   { "<leader>gB", function() require("snacks").gitbrowse() end, desc = "Git Browse", mode = { "n", "v" } },
