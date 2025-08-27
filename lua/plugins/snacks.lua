@@ -170,16 +170,6 @@ return {
             -- { "<leader>si", function() require("snacks").picker.icons() end, desc = "Icons" },
             -- { "<leader>sp", function() require("snacks").picker.lazy() end, desc = "Search for Plugin Spec" },
 
-            -- TODO: port
-            --   -- LSP
-            --   { "gd", function() require("snacks").picker.lsp_definitions() end, desc = "Goto Definition" },
-            --   { "gD", function() require("snacks").picker.lsp_declarations() end, desc = "Goto Declaration" },
-            --   { "gr", function() require("snacks").picker.lsp_references() end, nowait = true, desc = "References" },
-            --   { "gI", function() require("snacks").picker.lsp_implementations() end, desc = "Goto Implementation" },
-            --   { "gy", function() require("snacks").picker.lsp_type_definitions() end, desc = "Goto T[y]pe Definition" },
-            --   { "<leader>ss", function() require("snacks").picker.lsp_symbols() end, desc = "LSP Symbols" },
-            --   { "<leader>sS", function() require("snacks").picker.lsp_workspace_symbols() end, desc = "LSP Workspace Symbols" },
-
             --   -- Other
             -- TODO: ?
             --   { "<leader>z",  function() require("snacks").zen() end, desc = "Toggle Zen Mode" },

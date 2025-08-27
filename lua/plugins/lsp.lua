@@ -240,7 +240,12 @@ return {
                     -- Keymaps
                     -----------------------------------------------------------
                     local map = function(keys, func, desc)
-                        vim.keymap.set("n", keys, func, { buffer = event.buf, desc = "LSP: " .. desc })
+                        vim.keymap.set("n", keys, func, {
+                            noremap = true,
+                            silent = true,
+                            buffer = event.buf,
+                            desc = "LSP: " .. desc,
+                        })
                     end
 
                     -- INFO:
@@ -264,11 +269,22 @@ return {
                         map("gO", "<cmd>FzfLua lsp_document_symbols<cr>", "Document Symbols")
                     end
 
+                    -- stylua: ignore
+                    if CONFIG.plugins.snacks_picker then
+                        if client and client:supports_method(methods.textDocument_definition) then
+                            map("gd", function() require("snacks").picker.lsp_definitions() end, "Go to Definitions")
+                        end
+                        map("grr", function() require("snacks").picker.lsp_references() end, "References")
+                        map("gri", function() require("snacks").picker.lsp_implementations() end, "Implementations")
+                        map("grt", function() require("snacks").picker.lsp_type_definitions() end, "Type Definitions")
+                        map("gO", function() require("snacks").picker.lsp_symbols() end, "Document Symbols")
+                    end
+
                     if require("core.util").has_plugin("tiny-code-action.nvim") then
                         vim.keymap.set({ "n", "x" }, "gra", function()
                             ---@diagnostic disable-next-line: missing-parameter
                             require("tiny-code-action").code_action()
-                        end, { noremap = true, silent = true, desc = "Tiny Code Action" })
+                        end, { noremap = true, silent = true, desc = "LSP: Tiny Code Action" })
                     end
 
                     if require("core.util").has_plugin("inc-rename.nvim") then
