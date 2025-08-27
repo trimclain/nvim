@@ -5,78 +5,72 @@ return {
     cond = CONFIG.plugins.fzf_lua,
     cmd = "FzfLua",
     dependencies = { "nvim-web-devicons" },
-    keys = function()
-        local Util = require("core.util")
+    keys = {
+        -- find files
+        -- NOTE: hidden problem in dotfiles needs to be fixed if I'm using this
+        { "<C-p>", require("core.util").fzf_files(), desc = "Find Files (root dir)" },
+        { "<leader>ff", require("core.util").fzf_files({ theme = "default" }), desc = "Find Files with preview" },
 
-        return {
-            -- find files
-            -- stylua: ignore start
-            -- NOTE: hidden problem in dotfiles needs to be fixed if I'm using this
-            { "<C-p>", Util.fzf_files(), desc = "Find Files (root dir)" },
-            { "<leader>ff", Util.fzf_files({ theme = "default" }), desc = "Find Files with preview" },
-            -- stylua: ignore end
+        -- find string
+        { "<C-f>", "<cmd>FzfLua lgrep_curbuf<cr>", desc = "Fzf Buffer" },
+        { "<leader>fs", "<cmd>FzfLua live_grep<cr>", desc = "String in Files" },
+        { "<leader>fw", "<cmd>FzfLua grep_cword<cr>", desc = "Find word under cursor" },
+        { "<leader>fW", "<cmd>FzfLua grep_cWORD<cr>", desc = "Find WORD under cursor" },
 
-            -- find string
-            { "<C-f>", "<cmd>FzfLua lgrep_curbuf<cr>", desc = "Fzf Buffer" },
-            { "<leader>fs", "<cmd>FzfLua live_grep<cr>", desc = "String in Files" },
-            { "<leader>fw", "<cmd>FzfLua grep_cword<cr>", desc = "Find word under cursor" },
-            { "<leader>fW", "<cmd>FzfLua grep_cWORD<cr>", desc = "Find WORD under cursor" },
+        {
+            "<leader>fd",
+            function()
+                require("fzf-lua").git_files({
+                    -- Yup, why would $HOME on windows be $HOME and not $HOMEPATH or $USERPROFILE
+                    cwd = _G.ON_INFERIOR_OS and vim.fs.joinpath(vim.env.HOMEPATH, "dotfiles")
+                        or vim.fs.joinpath(vim.env.HOME, ".dotfiles"),
+                    winopts = { title = " Dotfiles " },
+                })
+            end,
+            desc = "Dotfiles",
+        },
 
-            {
-                "<leader>fd",
-                function()
-                    require("fzf-lua").git_files({
-                        -- Yup, why would $HOME on windows be $HOME and not $HOMEPATH or $USERPROFILE
-                        cwd = _G.ON_INFERIOR_OS and vim.fs.joinpath(vim.env.HOMEPATH, "dotfiles")
-                            or vim.fs.joinpath(vim.env.HOME, ".dotfiles"),
-                        winopts = { title = " Dotfiles " },
-                    })
-                end,
-                desc = "Dotfiles",
-            },
+        -- find my projects
+        { "<leader>fp", require("core.util").open_project, desc = "Open [P]roject" },
 
-            -- find my projects
-            { "<leader>fp", Util.open_project, desc = "Open [P]roject" },
+        -- edit packages
+        {
+            "<leader>pe",
+            function()
+                require("fzf-lua").files({
+                    cwd = vim.fs.joinpath(vim.fn.stdpath("data"), "lazy"),
+                    winopts = { title = " Installed Plugins " },
+                })
+            end,
+            desc = "Edit Plugins",
+        },
 
-            -- edit packages
-            {
-                "<leader>pe",
-                function()
-                    require("fzf-lua").files({
-                        cwd = vim.fs.joinpath(vim.fn.stdpath("data"), "lazy"),
-                        winopts = { title = " Installed Plugins " },
-                    })
-                end,
-                desc = "Edit Plugins",
-            },
+        { "<leader>fh", "<cmd>FzfLua helptags<cr>", desc = "Help" },
+        { "<leader>fk", "<cmd>FzfLua keymaps<cr>", desc = "Keymaps" },
+        { "<leader>fr", "<cmd>FzfLua oldfiles<cr>", desc = "Recent Files" },
+        { "<leader>fD", "<cmd>FzfLua diagnostics_workspace<cr>", desc = "Diagnostics" },
+        { "<leader>:", "<cmd>FzfLua command_history<cr>", desc = "Command History" },
+        { "<leader>fC", "<cmd>FzfLua commands<cr>", desc = "Commands" },
+        { "<leader>fM", "<cmd>FzfLua manpages<cr>", desc = "Man Pages" },
+        { "<leader>fH", "<cmd>FzfLua highlights<cr>", desc = "Highlight Groups" },
+        -- TODO: worse than telescope, doesn't remember exact line position can I fix it?
+        -- NOTE: impossible to fix -- maybe mini.pick fixes this
+        { "<leader>fl", "<cmd>FzfLua resume<cr>", desc = "Resume Last Search" },
+        { "<leader>fR", "<cmd>FzfLua registers<cr>", desc = "Registers" },
+        { "<leader>fa", "<cmd>FzfLua autocmds<cr>", desc = "Auto Commands" },
+        -- TODO: this needs work: start it normal, show current too, allow to close
+        -- NOTE: can't do this fully similar, maybe mini.pick will have a solution
+        { "<leader>fb", "<cmd>FzfLua buffers<cr>", desc = "Buffers" },
+        { "<leader>fq", "<cmd>FzfLua quickfix<cr>", desc = "Quickfix Items" },
+        { "<leader>fc", "<cmd>FzfLua colorschemes<cr>", desc = "Colorscheme w/ preview" },
 
-            { "<leader>fh", "<cmd>FzfLua helptags<cr>", desc = "Help" },
-            { "<leader>fk", "<cmd>FzfLua keymaps<cr>", desc = "Keymaps" },
-            { "<leader>fr", "<cmd>FzfLua oldfiles<cr>", desc = "Recent Files" },
-            { "<leader>fD", "<cmd>FzfLua diagnostics_workspace<cr>", desc = "Diagnostics" },
-            { "<leader>:", "<cmd>FzfLua command_history<cr>", desc = "Command History" },
-            { "<leader>fC", "<cmd>FzfLua commands<cr>", desc = "Commands" },
-            { "<leader>fM", "<cmd>FzfLua manpages<cr>", desc = "Man Pages" },
-            { "<leader>fH", "<cmd>FzfLua highlights<cr>", desc = "Highlight Groups" },
-            -- TODO: worse than telescope, doesn't remember exact line position can I fix it?
-            -- NOTE: impossible to fix -- maybe mini.pick fixes this
-            { "<leader>fl", "<cmd>FzfLua resume<cr>", desc = "Resume Last Search" },
-            { "<leader>fR", "<cmd>FzfLua registers<cr>", desc = "Registers" },
-            { "<leader>fa", "<cmd>FzfLua autocmds<cr>", desc = "Auto Commands" },
-            -- TODO: this needs work: start it normal, show current too, allow to close
-            -- NOTE: can't do this fully similar, maybe mini.pick will have a solution
-            { "<leader>fb", "<cmd>FzfLua buffers<cr>", desc = "Buffers" },
-            { "<leader>fq", "<cmd>FzfLua quickfix<cr>", desc = "Quickfix Items" },
-            { "<leader>fc", "<cmd>FzfLua colorschemes<cr>", desc = "Colorscheme w/ preview" },
+        -- git
+        { "<leader>gb", "<cmd>FzfLua git_branches<cr>", desc = "branches" },
+        { "<leader>gl", "<cmd>FzfLua git_commits<CR>", desc = "commits" },
 
-            -- git
-            { "<leader>gb", "<cmd>FzfLua git_branches<cr>", desc = "branches" },
-            { "<leader>gl", "<cmd>FzfLua git_commits<CR>", desc = "commits" },
-
-            -- rebind from which-key
-            { "z=", "<cmd>FzfLua spell_suggest<cr>", desc = "Spelling suggestions" },
-        }
-    end,
+        -- rebind from which-key
+        { "z=", "<cmd>FzfLua spell_suggest<cr>", desc = "Spelling suggestions" },
+    },
     opts = function()
         local actions = require("fzf-lua.actions")
 
