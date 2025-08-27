@@ -90,9 +90,11 @@ vim.api.nvim_create_autocmd({ "FileType" }, {
 -- Enable spell and wrap in following filetypes
 vim.api.nvim_create_autocmd({ "FileType" }, {
     pattern = { "markdown", "NeogitCommitMessage" },
-    callback = function()
-        vim.opt_local.spell = true
-        vim.opt_local.wrap = true
+    callback = function(event)
+        if vim.bo[event.buf].buftype ~= "nofile" then
+            vim.opt_local.spell = true
+            vim.opt_local.wrap = true
+        end
     end,
     desc = "Enable word wrap and spellcheck in markdown and gitcommit filetypes",
     group = augroup("enable_spell_wrap"),
