@@ -26,8 +26,7 @@ return {
                         -- ["<C-p>"] = { "toggle_preview", mode = { "i", "n" } },
                         ["<C-u>"] = { "preview_scroll_up", mode = { "i", "n" } },
                         ["<C-d>"] = { "preview_scroll_down", mode = { "i", "n" } },
-                        -- toggle live_grep
-                        ["<C-g>"] = { "toggle_live", mode = { "i", "n" } },
+                        ["<C-g>"] = { "toggle_live", mode = { "i", "n" } }, -- toggle live_grep
                     },
                     b = {
                         -- TODO: either switch to minipairs or disable autopairs
@@ -46,17 +45,13 @@ return {
             enabled = true,
             width = 50,
             preset = {
-                -- TODO: change to snacks
-                pick = CONFIG.plugins.fzf_lua and "fzf-lua", -- default: nil, (autodetect)
                 -- stylua: ignore
                 keys = {
-                    -- TODO: change to Util.pick
-                    { icon = Icons.ui.Search, key = "f", desc = "Find File", action = ":lua Snacks.dashboard.pick('files', { hidden = true })" },
+                    { icon = Icons.ui.Search, key = "f", desc = "Find File", action = "<leader>ff" },
                     -- { icon = Icons.kinds.File, key = "n", desc = "New File", action = ":ene | startinsert" },
-                    { icon = Icons.ui.Files, key = "r", desc = "Recent Files", action = ":lua Snacks.dashboard.pick('oldfiles')" },
-                    { icon = Icons.ui.List, key = "s", desc = "Find Text", action = ":lua Snacks.dashboard.pick('live_grep')" },
-                    -- TODO: change to snacks
-                    { icon = Icons.ui.BoxChecked, key = "t", desc = "Find Todo", action = CONFIG.plugins.fzf_lua and ":TodoFzfLua" or ":TodoTelescope" },
+                    { icon = Icons.ui.Files, key = "r", desc = "Recent Files", action = "<leader>fr" },
+                    { icon = Icons.ui.List, key = "s", desc = "Find Text", action = "<leader>fs" },
+                    { icon = Icons.ui.BoxChecked, key = "t", desc = "Find Todo", action = "<leader>ft" },
                     { icon = Icons.ui.Gear, key = "c", desc = "Config", action = Util.config_files },
                     { icon = Icons.ui.Lazy, key = "L", desc = "Lazy", action = ":Lazy", enabled = package.loaded.lazy ~= nil },
                     { icon = Icons.ui.SignOut, key = "q", desc = "Quit", action = ":qa" },
@@ -64,7 +59,8 @@ return {
             },
             -- "doom" example (default)
             sections = {
-                { section = "header", padding = 1 }, -- default: padding = 2
+                -- TODO: header padding 2 moves the header too high up on smaller displays. Can I fix it or make it dynamic?
+                { section = "header", padding = 2 }, -- default: padding = 2
                 { section = "keys", gap = 1, padding = 1 },
                 { section = "startup" },
             },
