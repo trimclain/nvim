@@ -25,7 +25,9 @@ function M.get_disabled_filetypes(type)
 
     local ui_filetypes = {
         "snacks_dashboard",
-        "DressingSelect", -- TODO: remove
+        "snacks_picker_input",
+        "snacks_picker_preview",
+        "snacks_picker_list",
         "Empty",
         "lazy",
         "mason",
