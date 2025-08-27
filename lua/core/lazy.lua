@@ -21,7 +21,7 @@ vim.g.maplocalleader = "\\"
 -- Any lua file in ~/.config/nvim/lua/plugins/*.lua will be automatically required
 require("lazy").setup("plugins", {
     defaults = {
-        lazy = false, -- should plugins be lazy-loaded?
+        lazy = true, -- should plugins be lazy-loaded?
         version = false, -- always use the latest git commit
     },
     local_spec = false, -- load project specific .lazy.lua spec files (turn off for now until I need it)
