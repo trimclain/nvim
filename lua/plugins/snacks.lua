@@ -27,10 +27,35 @@ return {
                         ["<C-u>"] = { "preview_scroll_up", mode = { "i", "n" } },
                         ["<C-d>"] = { "preview_scroll_down", mode = { "i", "n" } },
                         ["<C-g>"] = { "toggle_live", mode = { "i", "n" } }, -- toggle live_grep
+                        -- Defaults:
+                        -- ["<a-w>"] = "cycle_win",
                     },
-                    b = {
-                        -- TODO: either switch to minipairs or disable autopairs
-                        minipairs_disable = true,
+                },
+                -- result list window
+                list = {
+                    keys = {
+                        ["<C-c>"] = { "cancel" },
+                        ["<C-_>"] = { "toggle_help_list", mode = { "i", "n" } }, -- keys from pressing <C-/> in tmux
+                        ["<Tab>"] = { "list_down", mode = { "n", "x" } },
+                        ["<S-Tab>"] = { "list_up", mode = { "n", "x" } },
+                        ["<C-j>"] = { "select_and_next" },
+                        ["<C-k>"] = { "select_and_prev" },
+                        ["<C-h>"] = { "toggle_hidden", mode = { "i", "n" } },
+                        ["<C-a>"] = { "toggle_maximize", mode = { "i", "n" } },
+                        ["a"] = "focus_input",
+                        -- Defaults:
+                        -- ["i"] = "focus_input",
+                        -- ["<a-w>"] = "cycle_win",
+                    },
+                },
+                -- preview window
+                preview = {
+                    keys = {
+                        ["<C-c>"] = { "cancel" },
+                        ["a"] = "focus_input",
+                        -- Defaults:
+                        -- ["i"] = "focus_input",
+                        -- ["<a-w>"] = "cycle_win",
                     },
                 },
             },
