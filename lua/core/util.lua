@@ -149,15 +149,13 @@ end
 
 -- Return a function that calls snacks.picker
 ---@param source string picker source
----@param params? table picker opts
----@diagnostic disable-next-line: undefined-doc-param
----@param params.title? string picker title
----@diagnostic disable-next-line: undefined-doc-param
----@param params.cwd? string picker cwd
----@diagnostic disable-next-line: undefined-doc-param
----@param params.preview? boolean whether to enable preview
----@diagnostic disable-next-line: undefined-doc-param
----@param params.focus? string one of "input", "list" or "preview"
+---@param params? PickerOptions picker opts
+---@class PickerOptions
+---@field cwd? string picker cwd
+---@field title? string picker title
+---@field preview? boolean whether to enable preview
+---@field jump? boolean whether to jump to a match (e.g. in "lines")
+---@field focus? string one of "input" or "list"
 function M.pick(source, params)
     params = params or {}
     local opts = {
@@ -167,6 +165,7 @@ function M.pick(source, params)
         layout = {
             preset = params.preview and "default" or "select", -- Others: "telescope", "vscode" ("select" moved to top)
         },
+        jump = not params.jump and  { match = false } or {}
     }
     if source == "find_files" then
         source = M.in_git_worktree(params.cwd) and "git_files" or "files"
