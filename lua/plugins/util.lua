@@ -48,7 +48,7 @@ return {
     -- {
     --     "0x100101/lab.nvim",
     --     build = "cd js && npm ci",
-    --     dependencies = { "nvim-lua/plenary.nvim" },
+    --     dependencies = { "plenary.nvim" },
     --     keys = {
     --         { "<leader>1", "<cmd>Lab code run<cr>", desc = "Code run" },
     --         { "<leader>2", "<cmd>Lab code stop<cr>", desc = "Code stop" },
@@ -88,14 +88,14 @@ return {
     -- wisely add "end" in Ruby, Vimscript, Lua, etc
     -- {
     --     "RRethy/nvim-treesitter-endwise",
-    --     dependencies = { "nvim-treesitter/nvim-treesitter" },
+    --     dependencies = { "nvim-treesitter" },
     -- },
 
     -- I might find a use for this one later
     -- tab out from parentheses, quotes, and similar contexts
     -- {
     --     "abecodes/tabout.nvim",
-    --     dependencies = { "nvim-treesitter/nvim-treesitter" },
+    --     dependencies = { "nvim-treesitter" },
     -- },
 
     -- from plugin/ui.lua

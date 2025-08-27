@@ -186,7 +186,7 @@ return {
             -- { "<leader>gf", function() require("snacks").picker.git_log_file() end, desc = "Git Log File" },
 
             -- rebind from which-key
-            -- TODO: make this smaller like fzf-lua
+            -- SOMEDAY: make this smaller and under cursor like fzf-lua
             { "z=", function() require("snacks").picker.spelling() end, desc = "Spelling suggestions" },
 
             -- TODO: interesting?

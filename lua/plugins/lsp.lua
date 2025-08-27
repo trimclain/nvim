@@ -164,7 +164,9 @@ return {
         cond = CONFIG.lsp.enable_completion,
         event = { "BufReadPre", "BufNewFile" },
         dependencies = {
+            -- TODO: remove deprecated
             "fzf-lua", -- used by some keymaps
+            "snacks.nvim", -- used by some keymaps
             "blink.cmp", -- for capabilities
             "mason.nvim",
             {

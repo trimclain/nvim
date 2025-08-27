@@ -6,7 +6,7 @@ return {
         lazy = false, -- make line highlighting work before debugprint is first used
         dependencies = {
             -- "echasnovski/mini.hipatterns", -- Optional: Needed for line highlighting ('fine-grained' hipatterns plugin)
-            "folke/snacks.nvim", -- Optional: for `:Debugprint search`
+            "snacks.nvim", -- Optional: for `:Debugprint search`
         },
         opts = {
             keymaps = {

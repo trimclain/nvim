@@ -4,8 +4,10 @@ return {
     -- dev = true,
     enabled = not _G.ON_INFERIOR_OS,
     dependencies = {
+        -- TODO: remove deprecated
         "fzf-lua",
         "telescope.nvim",
+        "snacks.nvim",
     },
     ft = { "markdown", "html", "svg" },
     cmd = "LivePreview",

@@ -7,7 +7,7 @@ return {
         dependencies = {
             -- FIX: only in NeogitCommitMessage, whenever I try to autocomplete inside a snippet,
             -- no matter with which keybind, I get kicked out of the snippet.
-            "L3MON4D3/LuaSnip",
+            "LuaSnip",
             "ribru17/blink-cmp-spell",
             {
                 "erooke/blink-cmp-latex",

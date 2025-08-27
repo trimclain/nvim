@@ -2,9 +2,9 @@ return {
     -- indent guides for Neovim
     {
         "lukas-reineke/indent-blankline.nvim",
+        cond = CONFIG.plugins.indentline,
         main = "ibl",
         event = { "BufReadPost", "BufNewFile" },
-        cond = CONFIG.plugins.indentline,
         opts = function()
             local Icons = require("core.icons")
             return {
@@ -23,8 +23,8 @@ return {
     -- active indent guide and indent text objects
     {
         "echasnovski/mini.indentscope",
-        event = { "BufReadPre", "BufNewFile" },
         cond = CONFIG.plugins.indentline,
+        event = { "BufReadPre", "BufNewFile" },
         init = function()
             vim.api.nvim_create_autocmd("FileType", {
                 pattern = require("core.util").get_disabled_filetypes(),
