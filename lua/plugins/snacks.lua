@@ -20,6 +20,12 @@ return {
                         preset = "select", -- default: "ivy"
                     },
                 },
+                buffers = {
+                    focus = "list", -- default: "input"
+                    layout = {
+                        preset = "select",
+                    },
+                },
             },
             win = {
                 -- input window
@@ -128,18 +134,16 @@ return {
             return {}
         end
 
+        -- stylua: ignore
         return {
             -- find files
             { "<C-p>", Util.pick("find_files"), desc = "Find Files" },
-            -- stylua: ignore
             { "<leader>ff", function() require("snacks").picker.files({ hidden = true }) end, desc = "Files with preview" },
 
             -- find string
-            -- stylua: ignore start
             { "<C-f>", function() require("snacks").picker.lines() end, desc = "Fzf Buffer" },
             { "<leader>fs", function() require("snacks").picker.grep() end, desc = "String in Files" },
             { "<leader>fw", function() require("snacks").picker.grep_word() end, desc = "Visual selection or <cword>", mode = { "n", "x" } },
-            -- stylua: ignore end
 
             -- find my dotfiles
             {
@@ -161,20 +165,16 @@ return {
             -- { "<leader>fp", Util.open_project, desc = "Open [P]roject" },
 
             -- Plugins
-            -- stylua: ignore
             { "<leader>fp", function() require("snacks").picker.lazy() end, desc = "Plugin Spec" },
             { "<leader>pe", Util.pick("files", { cwd = vim.fn.stdpath("data") .. "/lazy" }), desc = "Edit Plugins" },
 
             -- Used Often
-            -- stylua: ignore start
             { "<leader>fh", function() require("snacks").picker.help() end, desc = "Help Pages" },
             { "<leader>fk", function() require("snacks").picker.keymaps() end, desc = "Keymaps" },
             { "<leader>fr", function() require("snacks").picker.recent() end, desc = "Recent Files" },
             { "<leader>fl", function() require("snacks").picker.resume() end, desc = "Resume Last Search" },
-            -- stylua: ignore end
-            { "<leader>fb", Util.pick("buffers", { focus = "list" }), desc = "Buffers" },
+            { "<leader>fb", function() require("snacks").picker.buffers() end, desc = "Buffers" },
             -- SOMEDAY: make this smaller and under cursor like fzf-lua
-            -- stylua: ignore start
             { "z=", function() require("snacks").picker.spelling() end, desc = "Spelling suggestions" }, -- rebind from which-key
 
             -- Used Rare
@@ -206,7 +206,6 @@ return {
 
             -- Other
             { "<leader>q", function() require("snacks").bufdelete({ buf = 0, force = false }) end, desc = "Delete Buffer" },
-            -- stylua: ignore end
             -- TODO: switch from zen-mode
             --   { "<leader>z",  function() require("snacks").zen() end, desc = "Toggle Zen Mode" },
             --   { "<leader>Z",  function() require("snacks").zen.zoom() end, desc = "Toggle Zoom" },

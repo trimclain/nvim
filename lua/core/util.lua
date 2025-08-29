@@ -154,18 +154,14 @@ end
 ---@field cwd? string picker cwd
 ---@field title? string picker title
 ---@field preview? boolean whether to enable preview
----@field jump? boolean whether to jump to a match (e.g. in "lines")
----@field focus? string one of "input" or "list"
 function M.pick(source, params)
     params = params or {}
     local opts = {
         cwd = params.cwd,
         title = params.title,
-        focus = params.focus,
         layout = {
             preset = params.preview and "default" or "select", -- Others: "telescope", "vscode" ("select" moved to top)
         },
-        jump = not params.jump and  { match = false } or {}
     }
     if source == "find_files" then
         source = M.in_git_worktree(params.cwd) and "git_files" or "files"
