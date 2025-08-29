@@ -7,12 +7,20 @@ return {
     opts = function(_, opts)
         local Icons = require("core.icons")
 
-        -- configure `vim.ui.input`
+        -- `vim.ui.input`
         opts.input = {}
 
-        -- configure picker and `vim.ui.select`
+        -- picker and `vim.ui.select`
         opts.picker = {
             ui_select = true,
+            sources = {
+                lines = {
+                    layout = {
+                        preview = false, -- default: "main"
+                        preset = "select", -- default: "ivy"
+                    },
+                },
+            },
             win = {
                 -- input window
                 input = {
@@ -64,6 +72,7 @@ return {
 
         -- before: <mark, sign, fold, git>, line_number
         -- after: <mark, sign> <line_number> <fold, git>
+        -- TODO: disable marks since I'm annoyed by y and z ones after I undo J or Y?
         opts.statuscolumn = { folds = { open = true } } -- default: open = false
 
         -- dashboard at UIEnter
@@ -125,9 +134,9 @@ return {
             -- stylua: ignore
             { "<leader>ff", function() require("snacks").picker.files({ hidden = true }) end, desc = "Files with preview" },
 
-            -- TODO: maybe grep with opts better
-            { "<C-f>", Util.pick("lines"), desc = "Fzf Buffer" },
+            -- find string
             -- stylua: ignore start
+            { "<C-f>", function() require("snacks").picker.lines() end, desc = "Fzf Buffer" },
             { "<leader>fs", function() require("snacks").picker.grep() end, desc = "String in Files" },
             { "<leader>fw", function() require("snacks").picker.grep_word() end, desc = "Visual selection or <cword>", mode = { "n", "x" } },
             -- stylua: ignore end
