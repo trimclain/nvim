@@ -78,8 +78,11 @@ return {
 
         -- before: <mark, sign, fold, git>, line_number
         -- after: <mark, sign> <line_number> <fold, git>
-        -- TODO: disable marks since I'm annoyed by y and z ones after I undo J or Y?
-        opts.statuscolumn = { folds = { open = true } } -- default: open = false
+        opts.statuscolumn = {
+            left = { "sign" }, -- default: { "mark", "sign" }
+            right = { "fold", "git" },
+            folds = { open = true }, -- default: { open = false }
+        }
 
         -- dashboard at UIEnter
         opts.dashboard = {
