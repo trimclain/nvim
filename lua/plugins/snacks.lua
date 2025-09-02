@@ -89,6 +89,22 @@ return {
             folds = { open = true }, -- default: { open = false }
         }
 
+        -- zen mode
+        opts.zen = {
+            toggles = {
+                dim = false,
+                -- diagnostics = false,
+                -- inlay_hints = false,
+            },
+            show = {
+                -- statusline = true, -- can only be shown when using the global statusline
+            },
+            win = {
+                backdrop = { transparent = false, blend = 40 }, -- default: { transparent = true, blend = 40 }
+                -- keys = { q = false },
+            },
+        }
+
         -- dashboard at UIEnter
         opts.dashboard = {
             enabled = true,
@@ -219,8 +235,8 @@ return {
 
             -- Other
             { "<leader>q", function() require("snacks").bufdelete({ buf = 0, force = false }) end, desc = "Delete Buffer" },
-            -- TODO: switch from zen-mode
-            --   { "<leader>z",  function() require("snacks").zen() end, desc = "Toggle Zen Mode" },
+
+            { "<leader>z",  function() require("snacks").zen() end, desc = "Toggle Zen Mode" },
             --   { "<leader>Z",  function() require("snacks").zen.zoom() end, desc = "Toggle Zoom" },
             -- TODO: in case I figure out animations in notifier and can switch to it
             --   { "<leader>n",  function() require("snacks").notifier.show_history() end, desc = "Notification History" },
