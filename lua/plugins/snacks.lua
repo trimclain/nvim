@@ -31,7 +31,7 @@ return {
                         preset = "select",
                     },
                 },
-                -- TODO: Wait for folke to return and create a PR
+                -- TODO: Make spell suggestions like fzf-lua. Wait for folke to return and create a PR.
                 -- The following creates what I want, but it's impossible to replicate this without hacks
                 -- require("snacks").win.new({
                 --     relative = "cursor",
@@ -221,7 +221,6 @@ return {
             { "<leader>fr", function() require("snacks").picker.recent() end, desc = "Recent Files" },
             { "<leader>fl", function() require("snacks").picker.resume() end, desc = "Resume Last Search" },
             { "<leader>fb", function() require("snacks").picker.buffers() end, desc = "Buffers" },
-            -- SOMEDAY: make this smaller and under cursor like fzf-lua
             { "z=", function() require("snacks").picker.spelling() end, desc = "Spelling suggestions" }, -- rebind from which-key
 
             -- Used Rare

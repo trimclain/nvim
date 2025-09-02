@@ -23,9 +23,6 @@ if _G.ON_INFERIOR_OS and (vim.g.neovide or vim.fn.has("gui_running") == 1) then
     mode = "minimal"
 end
 
--- Dependency check
-local use_fzf = vim.fn.executable("fzf") == 1 and false
-
 -- Important settings for easy modification
 CONFIG = {
     opts = {
@@ -62,9 +59,8 @@ CONFIG = {
         enable_copilot = false,
     },
     plugins = {
-        fzf_lua = use_fzf,
-        telescope = false, -- sadly somewhat abandoned, use as fallback on systems without fzf
-        snacks_picker = not use_fzf,
+        snacks_picker = true,
+        telescope = false, -- sadly somewhat abandoned
 
         neoscroll = not _G.ON_INFERIOR_OS,
         smear_cursor = _G.ON_INFERIOR_OS, -- found out about kitty's cursor trail
@@ -86,19 +82,13 @@ CONFIG = {
 -- -- Check for neovim dependencies:
 -- -- gcc: nvim-treesitter, telescope-fzf-native
 -- -- make: telescope-fzf-native
--- -- ripgrep: telescope, grug-far, todo-comments, fzf-lua, snacks.nvim
+-- -- ripgrep: telescope, grug-far, todo-comments, snacks.nvim
 -- -- node: mason, nvim-lspconfig
--- -- fzf: fzf-lua
--- -- fd: fzf-lua
--- -- bat: fzf-lua
 -- local dependencies = {
 --     "gcc",
 --     "make",
 --     "rg",
 --     "node",
---     "fzf",
---     "fd",
---     "bat",
 -- }
 -- for _, dep in ipairs(dependencies) do
 --     if vim.fn.executable(dep) == 0 then

@@ -165,7 +165,6 @@ return {
         event = { "BufReadPre", "BufNewFile" },
         dependencies = {
             -- TODO: remove deprecated
-            "fzf-lua", -- used by some keymaps
             "snacks.nvim", -- used by some keymaps
             "blink.cmp", -- for capabilities
             "mason.nvim",
@@ -260,16 +259,6 @@ return {
                     -- - "gO" is mapped in Normal mode to |vim.lsp.buf.document_symbol()|
                     -- - CTRL-S is mapped in Insert mode to |vim.lsp.buf.signature_help()|
                     require("which-key").add({ "gr", group = "get-from-lsp" })
-
-                    if CONFIG.plugins.fzf_lua then
-                        if client and client:supports_method(methods.textDocument_definition) then
-                            map("gd", "<cmd>FzfLua lsp_definitions<cr>", "Go to Definitions")
-                        end
-                        map("grr", "<cmd>FzfLua lsp_references<cr>", "References")
-                        map("gri", "<cmd>FzfLua lsp_implementations<cr>", "Implementations")
-                        map("grt", "<cmd>FzfLua lsp_type_definitions<cr>", "Type Definitions")
-                        map("gO", "<cmd>FzfLua lsp_document_symbols<cr>", "Document Symbols")
-                    end
 
                     -- stylua: ignore
                     if CONFIG.plugins.snacks_picker then
