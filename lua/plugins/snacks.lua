@@ -172,10 +172,6 @@ return {
         return opts
     end,
     keys = function()
-        if not CONFIG.plugins.snacks_picker then
-            return {}
-        end
-
         -- stylua: ignore
         return {
             -- find files

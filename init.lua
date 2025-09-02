@@ -59,8 +59,6 @@ CONFIG = {
         enable_copilot = false,
     },
     plugins = {
-        snacks_picker = true,
-
         neoscroll = not _G.ON_INFERIOR_OS,
         smear_cursor = _G.ON_INFERIOR_OS, -- found out about kitty's cursor trail
 

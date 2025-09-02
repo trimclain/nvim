@@ -164,7 +164,6 @@ return {
         cond = CONFIG.lsp.enable_completion,
         event = { "BufReadPre", "BufNewFile" },
         dependencies = {
-            -- TODO: remove deprecated
             "snacks.nvim", -- used by some keymaps
             "blink.cmp", -- for capabilities
             "mason.nvim",
@@ -260,16 +259,15 @@ return {
                     -- - CTRL-S is mapped in Insert mode to |vim.lsp.buf.signature_help()|
                     require("which-key").add({ "gr", group = "get-from-lsp" })
 
-                    -- stylua: ignore
-                    if CONFIG.plugins.snacks_picker then
-                        if client and client:supports_method(methods.textDocument_definition) then
-                            map("gd", function() require("snacks").picker.lsp_definitions() end, "Go to Definitions")
-                        end
-                        map("grr", function() require("snacks").picker.lsp_references() end, "References")
-                        map("gri", function() require("snacks").picker.lsp_implementations() end, "Implementations")
-                        map("grt", function() require("snacks").picker.lsp_type_definitions() end, "Type Definitions")
-                        map("gO", function() require("snacks").picker.lsp_symbols() end, "Document Symbols")
+                    -- stylua: ignore start
+                    if client and client:supports_method(methods.textDocument_definition) then
+                        map("gd", function() require("snacks").picker.lsp_definitions() end, "Go to Definitions")
                     end
+                    map("grr", function() require("snacks").picker.lsp_references() end, "References")
+                    map("gri", function() require("snacks").picker.lsp_implementations() end, "Implementations")
+                    map("grt", function() require("snacks").picker.lsp_type_definitions() end, "Type Definitions")
+                    map("gO", function() require("snacks").picker.lsp_symbols() end, "Document Symbols")
+                    -- stylua: ignore end
 
                     if require("core.util").has_plugin("tiny-code-action.nvim") then
                         vim.keymap.set({ "n", "x" }, "gra", function()
