@@ -101,7 +101,7 @@ return {
                     { icon = Icons.ui.Files, key = "r", desc = "Recent Files", action = "<leader>fr" },
                     { icon = Icons.ui.List, key = "s", desc = "Find Text", action = "<leader>fs" },
                     { icon = Icons.ui.BoxChecked, key = "t", desc = "Find Todo", action = "<leader>ft" },
-                    { icon = Icons.ui.Gear, key = "c", desc = "Config", action = Util.config_files },
+                    { icon = Icons.ui.Gear, key = "c", desc = "Config", action = "<leader>fn" },
                     { icon = Icons.ui.Lazy, key = "L", desc = "Lazy", action = ":Lazy", enabled = package.loaded.lazy ~= nil },
                     { icon = Icons.ui.SignOut, key = "q", desc = "Quit", action = ":qa" },
                 },
@@ -131,7 +131,7 @@ return {
         --     table.insert(
         --         opts.dashboard.preset.keys,
         --         2,
-        --         { icon = Icons.ui.GitFolder, key = "p", desc = "Open Project", action = Util.open_project }
+        --         { icon = Icons.ui.GitFolder, key = "p", desc = "Open Project", action = "<leader>fp" }
         --     )
         -- end
 
@@ -167,13 +167,18 @@ return {
                 ),
                 desc = "Dotfiles",
             },
+            -- find my neovim config (since it's separate from dotfiles)
+            {
+                "<leader>fn",
+                Util.pick("find_files", { cwd = vim.fn.stdpath("config"), title = "Neovim Config" }),
+                desc = "Neovim Config",
+            },
 
-            -- TODO:
-            -- -- find my projects
-            -- { "<leader>fp", Util.open_project, desc = "Open [P]roject" },
+            -- find my projects
+            { "<leader>fp", Util.open_project, desc = "Open [P]roject" },
 
             -- Plugins
-            { "<leader>fp", function() require("snacks").picker.lazy() end, desc = "Plugin Spec" },
+            { "<leader>fP", function() require("snacks").picker.lazy() end, desc = "Plugin Spec" },
             { "<leader>pe", Util.pick("files", { cwd = vim.fn.stdpath("data") .. "/lazy" }), desc = "Edit Plugins" },
 
             -- Used Often

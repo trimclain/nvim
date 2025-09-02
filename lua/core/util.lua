@@ -117,36 +117,6 @@ end
 -- Fuzzy Finder
 -------------------------------------------------------------------------------
 
--- Use "git_files" if in a git repo, default to "files"
----@param params table? accepts: theme, cwd, title
-function M.fzf_files(params)
-    params = params or {}
-    local opts = {
-        cwd = params.cwd,
-        winopts = {},
-    }
-    if params.theme == "default" then
-        opts = vim.tbl_extend("force", opts, {
-            previewer = true,
-            winopts = {
-                height = 0.85,
-                width = 0.80,
-            },
-        })
-    end
-    if params.title then
-        opts.winopts = vim.tbl_extend("error", opts.winopts, { title = params.title })
-    end
-
-    return function()
-        if M.in_git_worktree(params.cwd) then
-            require("fzf-lua").git_files(opts)
-        else
-            require("fzf-lua").files(opts)
-        end
-    end
-end
-
 -- Return a function that calls snacks.picker
 ---@param source string picker source
 ---@param params? PickerOptions picker opts
@@ -169,15 +139,6 @@ function M.pick(source, params)
 
     return function()
         require("snacks.picker")[source](opts)
-    end
-end
-
-function M.config_files()
-    local cwd = vim.fn.stdpath("config")
-    if CONFIG.plugins.fzf_lua then
-        M.fzf_files({ cwd = cwd, title = " Neovim Config " })()
-    else
-        M.pick("find_files", { cwd = cwd, title = "Neovim Config" })()
     end
 end
 
