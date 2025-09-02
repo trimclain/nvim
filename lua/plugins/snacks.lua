@@ -15,6 +15,11 @@ return {
             ui_select = true,
             sources = {
                 lines = {
+                    matcher = {
+                        fuzzy = false, -- default: true
+                        smartcase = true,
+                        ignorecase = true,
+                    },
                     layout = {
                         preview = false, -- default: "main"
                         preset = "select", -- default: "ivy"
