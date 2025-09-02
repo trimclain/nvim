@@ -240,33 +240,10 @@ return {
             --   { "<leader>Z",  function() require("snacks").zen.zoom() end, desc = "Toggle Zoom" },
             -- TODO: in case I figure out animations in notifier and can switch to it
             --   { "<leader>n",  function() require("snacks").notifier.show_history() end, desc = "Notification History" },
-            -- TODO: ?
-            --   { "<leader>cR", function() require("snacks").rename.rename_file() end, desc = "Rename File" },
-            --   { "<leader>gB", function() require("snacks").gitbrowse() end, desc = "Git Browse", mode = { "n", "v" } },
-            --   { "<leader>gg", function() require("snacks").lazygit() end, desc = "Lazygit" },
             --   { "<leader>un", function() require("snacks").notifier.hide() end, desc = "Dismiss All Notifications" },
-            --   { "<c-/>",      function() require("snacks").terminal() end, desc = "Toggle Terminal" },
-            --   { "<c-_>",      function() require("snacks").terminal() end, desc = "which_key_ignore" },
+            -- TODO: is this worse to switch to from illuminate
             --   { "]]",         function() require("snacks").words.jump(vim.v.count1) end, desc = "Next Reference", mode = { "n", "t" } },
             --   { "[[",         function() require("snacks").words.jump(-vim.v.count1) end, desc = "Prev Reference", mode = { "n", "t" } },
-            --   {
-            --     "<leader>N",
-            --     desc = "Neovim News",
-            --     function()
-            --       require("snacks").win({
-            --         file = vim.api.nvim_get_runtime_file("doc/news.txt", false)[1],
-            --         width = 0.6,
-            --         height = 0.6,
-            --         wo = {
-            --           spell = false,
-            --           wrap = false,
-            --           signcolumn = "yes",
-            --           statuscolumn = " ",
-            --           conceallevel = 3,
-            --         },
-            --       })
-            --     end,
-            --   }
         }
     end,
     -- init = function()
