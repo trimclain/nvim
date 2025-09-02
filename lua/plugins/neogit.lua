@@ -14,7 +14,6 @@ return {
         keys = {
             { "<leader>gs", "<cmd>Neogit<cr>", desc = "status" },
         },
-        -- TODO: https://superuser.com/questions/887712/how-do-i-change-the-hilighted-length-of-git-commit-messages-in-vim
         config = function()
             local Icons = require("core.icons").ui
             local neogit = require("neogit")
@@ -56,6 +55,10 @@ return {
                     neogit.close()
                 end,
             })
+
+            -- Allow more characters in the git commit message
+            -- Docs: https://superuser.com/questions/887712/how-do-i-change-the-hilighted-length-of-git-commit-messages-in-vim
+            vim.g.gitcommit_summary_length = 80 -- default: 50
         end,
     },
 }
