@@ -31,6 +31,24 @@ return {
                         preset = "select",
                     },
                 },
+                -- TODO: Wait for folke to return and create a PR
+                -- The following creates what I want, but it's impossible to replicate this without hacks
+                -- require("snacks").win.new({
+                --     relative = "cursor",
+                --     row = 1,
+                --     col = 0,
+                --     height = 0.40,
+                --     width = 0.30,
+                -- })
+                -- spelling = {
+                --     layout = {
+                --         relative = "cursor",
+                --         row = 1,
+                --         col = 0,
+                --         height = 0.40,
+                --         width = 0.30,
+                --     },
+                -- },
             },
             win = {
                 -- input window
