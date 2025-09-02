@@ -60,7 +60,6 @@ CONFIG = {
     },
     plugins = {
         snacks_picker = true,
-        telescope = false, -- sadly somewhat abandoned
 
         neoscroll = not _G.ON_INFERIOR_OS,
         smear_cursor = _G.ON_INFERIOR_OS, -- found out about kitty's cursor trail
@@ -80,13 +79,11 @@ CONFIG = {
 }
 
 -- -- Check for neovim dependencies:
--- -- gcc: nvim-treesitter, telescope-fzf-native
--- -- make: telescope-fzf-native
--- -- ripgrep: telescope, grug-far, todo-comments, snacks.nvim
+-- -- gcc: nvim-treesitter
+-- -- ripgrep: snacks.nvim, grug-far, todo-comments
 -- -- node: mason, nvim-lspconfig
 -- local dependencies = {
 --     "gcc",
---     "make",
 --     "rg",
 --     "node",
 -- }

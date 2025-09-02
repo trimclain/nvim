@@ -3,10 +3,7 @@ return {
     "brianhuster/live-preview.nvim",
     -- dev = true,
     enabled = not _G.ON_INFERIOR_OS,
-    dependencies = {
-        "telescope.nvim",
-        "snacks.nvim",
-    },
+    dependencies = { "snacks.nvim" },
     ft = { "markdown", "html", "svg" },
     cmd = "LivePreview",
     keys = {

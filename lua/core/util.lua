@@ -35,7 +35,6 @@ function M.get_disabled_filetypes(type)
         "NeogitCommitMessage",
         "NeogitStatus",
         "notify",
-        "TelescopePrompt",
         "toggleterm",
         "Trouble",
         "undotree",

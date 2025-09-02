@@ -27,7 +27,6 @@ return {
                 ----
                 gitsigns = true,
                 nvimtree = false,
-                telescope = true,
                 notify = true,
                 mini = false,
                 ----
@@ -117,32 +116,6 @@ return {
             --- @usage 'main'|'moon'|'dawn'
             dark_variant = "moon",
             disable_italics = not CONFIG.ui.italic_comments,
-
-            -- Change specific vim highlight groups
-            -- https://github.com/rose-pine/neovim/wiki/Recipes
-            -- https://rosepinetheme.com/palette
-            highlight_groups = {
-                -- make telescope.nvim transparent
-                TelescopeBorder = { fg = "highlight_high", bg = "none" },
-                TelescopeNormal = { bg = "none" },
-                TelescopePromptNormal = { bg = "base" },
-                TelescopeResultsNormal = { fg = "subtle", bg = "none" },
-                TelescopeSelection = { fg = "text", bg = "base" },
-                TelescopeSelectionCaret = { fg = "rose", bg = "rose" },
-                -- -- borderless telescope.nvim
-                -- TelescopeBorder = { fg = "overlay", bg = "overlay" },
-                -- TelescopeNormal = { fg = "subtle", bg = "overlay" },
-                -- TelescopeSelection = { fg = "text", bg = "highlight_med" },
-                -- TelescopeSelectionCaret = { fg = "love", bg = "highlight_med" },
-                -- TelescopeMultiSelection = { fg = "text", bg = "highlight_high" },
-
-                -- TelescopeTitle = { fg = "base", bg = "love" },
-                -- TelescopePromptTitle = { fg = "base", bg = "pine" },
-                -- TelescopePreviewTitle = { fg = "base", bg = "iris" },
-
-                -- TelescopePromptNormal = { fg = "text", bg = "surface" },
-                -- TelescopePromptBorder = { fg = "surface", bg = "surface" },
-            },
         },
         config = function(_, opts)
             require("rose-pine").setup(opts)
@@ -189,7 +162,6 @@ return {
             -- plugins = {
             --     lsp = true,
             --     treesitter = true,
-            --     telescope = true,
             --     nvimtree = false,
             --     context = true,
             --     dbui = false,
@@ -351,7 +323,6 @@ return {
                     neogit = true,
                     neotree = true,
                     notify = true,
-                    telescope = true,
                     treesitter_context = true,
                     whichkey = true,
                 },

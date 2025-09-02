@@ -54,7 +54,6 @@ return {
     --     "leoluz/nvim-dap-go",
 
     --     "theHamsta/nvim-dap-virtual-text",
-    --     "nvim-telescope/telescope-dap.nvim",
     --     "mfussenegger/nvim-dap-python",
     -- },
     -- keys = {
