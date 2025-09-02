@@ -39,7 +39,6 @@ return {
             end
         end
 
-
         return {
             -- find files
             { "<C-p>", telescopic_johnson("files"), desc = "Find Files (root dir)" },
@@ -84,7 +83,61 @@ return {
             },
 
             -- find my projects
-            { "<leader>fp", require("core.util").open_project, desc = "Open [P]roject" },
+            {
+                "<leader>fp",
+                function()
+                    local projectlist = vim.env.PROJECTLIST
+                    if not M.file_exists(projectlist) then
+                        vim.notify("Project List not found", vim.log.levels.ERROR, { title = "Project Manager" })
+                        return
+                    end
+
+                    local function notify(msg, title)
+                        vim.notify(msg, vim.log.levels.INFO, { title = title })
+                    end
+
+                    local pickers = require("telescope.pickers")
+                    local sorters = require("telescope.sorters")
+                    local finders = require("telescope.finders")
+                    local actions = require("telescope.actions")
+                    local action_state = require("telescope.actions.state")
+
+                    ---@diagnostic disable-next-line: missing-parameter
+                    pickers
+                        .new({
+                            results_title = "My Projects",
+                            finder = finders.new_oneshot_job({ "cat", projectlist }, {}),
+                            sorter = sorters.get_fuzzy_file(),
+                            attach_mappings = function(_, map)
+                                -- Define custom action when an item is selected
+                                map("i", "<CR>", function(prompt_bufnr)
+                                    -- Get the selected entry
+                                    local selection = action_state.get_selected_entry()[1]
+
+                                    -- selection has the form <repo>,<owner>
+                                    selection = vim.split(selection, ",")[1]
+
+                                    -- Close the picker
+                                    actions.close(prompt_bufnr)
+
+                                    if not M.dir_exists(selection) then
+                                        notify("Project " .. selection .. " not installed", "Project Manager")
+                                        return
+                                    end
+                                    -- notify("Opened " .. selection, "Project Manager")
+                                    vim.cmd.cd(selection)
+
+                                    -- Open files in telescope
+                                    require("telescope.builtin").find_files()
+                                    -- require("neo-tree.command").execute({ toggle = true, dir = selection })
+                                end)
+                                return true
+                            end,
+                        })
+                        :find()
+                end,
+                desc = "Open [P]roject",
+            },
 
             -- edit packages
             {
@@ -118,7 +171,6 @@ return {
 
             -- rebind from which-key
             { "z=", "<cmd>Telescope spell_suggest<cr>", desc = "Spelling suggestions" },
-
         }
     end,
     opts = function()

@@ -5,72 +5,145 @@ return {
     cond = CONFIG.plugins.fzf_lua,
     cmd = "FzfLua",
     dependencies = { "nvim-web-devicons" },
-    keys = {
-        -- find files
-        -- NOTE: hidden problem in dotfiles needs to be fixed if I'm using this
-        { "<C-p>", require("core.util").fzf_files(), desc = "Find Files (root dir)" },
-        { "<leader>ff", require("core.util").fzf_files({ theme = "default" }), desc = "Find Files with preview" },
-
-        -- find string
-        { "<C-f>", "<cmd>FzfLua lgrep_curbuf<cr>", desc = "Fzf Buffer" },
-        { "<leader>fs", "<cmd>FzfLua live_grep<cr>", desc = "String in Files" },
-        { "<leader>fw", "<cmd>FzfLua grep_cword<cr>", desc = "Find word under cursor" },
-        { "<leader>fW", "<cmd>FzfLua grep_cWORD<cr>", desc = "Find WORD under cursor" },
-
-        {
-            "<leader>fd",
-            function()
-                require("fzf-lua").git_files({
-                    -- Yup, why would $HOME on windows be $HOME and not $HOMEPATH or $USERPROFILE
-                    cwd = _G.ON_INFERIOR_OS and vim.fs.joinpath(vim.env.HOMEPATH, "dotfiles")
-                        or vim.fs.joinpath(vim.env.HOME, ".dotfiles"),
-                    winopts = { title = " Dotfiles " },
+    keys = function()
+        -- Use "git_files" if in a git repo, default to "files"
+        ---@param params table? accepts: theme, cwd, title
+        local function fzf_files(params)
+            params = params or {}
+            local opts = {
+                cwd = params.cwd,
+                winopts = {},
+            }
+            if params.theme == "default" then
+                opts = vim.tbl_extend("force", opts, {
+                    previewer = true,
+                    winopts = {
+                        height = 0.85,
+                        width = 0.80,
+                    },
                 })
-            end,
-            desc = "Dotfiles",
-        },
+            end
+            if params.title then
+                opts.winopts = vim.tbl_extend("error", opts.winopts, { title = params.title })
+            end
 
-        -- find my projects
-        { "<leader>fp", require("core.util").open_project, desc = "Open [P]roject" },
+            return function()
+                if require("core.util").in_git_worktree(params.cwd) then
+                    require("fzf-lua").git_files(opts)
+                else
+                    require("fzf-lua").files(opts)
+                end
+            end
+        end
 
-        -- edit packages
-        {
-            "<leader>pe",
-            function()
-                require("fzf-lua").files({
-                    cwd = vim.fs.joinpath(vim.fn.stdpath("data"), "lazy"),
-                    winopts = { title = " Installed Plugins " },
-                })
-            end,
-            desc = "Edit Plugins",
-        },
+        return {
+            -- find files
+            -- NOTE: hidden problem in dotfiles needs to be fixed if I'm using this
+            { "<C-p>", fzf_files(), desc = "Find Files (root dir)" },
+            { "<leader>ff", fzf_files({ theme = "default" }), desc = "Find Files with preview" },
 
-        { "<leader>fh", "<cmd>FzfLua helptags<cr>", desc = "Help" },
-        { "<leader>fk", "<cmd>FzfLua keymaps<cr>", desc = "Keymaps" },
-        { "<leader>fr", "<cmd>FzfLua oldfiles<cr>", desc = "Recent Files" },
-        { "<leader>fD", "<cmd>FzfLua diagnostics_workspace<cr>", desc = "Diagnostics" },
-        { "<leader>:", "<cmd>FzfLua command_history<cr>", desc = "Command History" },
-        { "<leader>fC", "<cmd>FzfLua commands<cr>", desc = "Commands" },
-        { "<leader>fM", "<cmd>FzfLua manpages<cr>", desc = "Man Pages" },
-        { "<leader>fH", "<cmd>FzfLua highlights<cr>", desc = "Highlight Groups" },
-        -- TODO: worse than telescope, doesn't remember exact line position can I fix it?
-        -- NOTE: impossible to fix -- maybe mini.pick fixes this
-        { "<leader>fl", "<cmd>FzfLua resume<cr>", desc = "Resume Last Search" },
-        { "<leader>fR", "<cmd>FzfLua registers<cr>", desc = "Registers" },
-        { "<leader>fa", "<cmd>FzfLua autocmds<cr>", desc = "Auto Commands" },
-        -- TODO: this needs work: start it normal, show current too, allow to close
-        -- NOTE: can't do this fully similar, maybe mini.pick will have a solution
-        { "<leader>fb", "<cmd>FzfLua buffers<cr>", desc = "Buffers" },
-        { "<leader>fq", "<cmd>FzfLua quickfix<cr>", desc = "Quickfix Items" },
-        { "<leader>fc", "<cmd>FzfLua colorschemes<cr>", desc = "Colorscheme w/ preview" },
+            -- find string
+            { "<C-f>", "<cmd>FzfLua lgrep_curbuf<cr>", desc = "Fzf Buffer" },
+            { "<leader>fs", "<cmd>FzfLua live_grep<cr>", desc = "String in Files" },
+            { "<leader>fw", "<cmd>FzfLua grep_cword<cr>", desc = "Find word under cursor" },
+            { "<leader>fW", "<cmd>FzfLua grep_cWORD<cr>", desc = "Find WORD under cursor" },
 
-        -- git
-        { "<leader>gb", "<cmd>FzfLua git_branches<cr>", desc = "branches" },
-        { "<leader>gl", "<cmd>FzfLua git_commits<CR>", desc = "commits" },
+            {
+                "<leader>fd",
+                function()
+                    require("fzf-lua").git_files({
+                        -- Yup, why would $HOME on windows be $HOME and not $HOMEPATH or $USERPROFILE
+                        cwd = _G.ON_INFERIOR_OS and vim.fs.joinpath(vim.env.HOMEPATH, "dotfiles")
+                            or vim.fs.joinpath(vim.env.HOME, ".dotfiles"),
+                        winopts = { title = " Dotfiles " },
+                    })
+                end,
+                desc = "Dotfiles",
+            },
 
-        -- rebind from which-key
-        { "z=", "<cmd>FzfLua spell_suggest<cr>", desc = "Spelling suggestions" },
-    },
+            -- find my neovim config (since it's separate from dotfiles)
+            {
+                "<leader>fn",
+                fzf_files({ cwd = vim.fn.stdpath("config"), title = " Neovim Config " }),
+                desc = "Neovim Config",
+            },
+            -- find my projects
+            {
+                "<leader>fp",
+                function()
+                    local projectlist = vim.env.PROJECTLIST
+                    if not M.file_exists(projectlist) then
+                        vim.notify("Project List not found", vim.log.levels.ERROR, { title = "Project Manager" })
+                        return
+                    end
+
+                    local notify = function(msg, title)
+                        vim.notify(msg, vim.log.levels.INFO, { title = title })
+                    end
+
+                    local opts = {}
+                    opts.winopts = { title = " My Projects " }
+                    opts.actions = {
+                        ["default"] = function(selected)
+                            -- selected has the form <repo>,<owner>
+                            local selection = vim.split(selected[1], ",")[1]
+
+                            if not M.dir_exists(selection) then
+                                notify("Project " .. selection .. " not installed", "Project Manager")
+                                return
+                            end
+                            notify("Opened " .. selection, "Project Manager")
+                            vim.cmd.cd(selection)
+
+                            require("fzf-lua").files()
+                            -- require("neo-tree.command").execute({ toggle = true, dir = selection })
+                        end,
+                    }
+
+                    require("fzf-lua").fzf_exec("cat " .. projectlist, opts)
+                end,
+                desc = "Open [P]roject",
+            },
+
+            -- edit packages
+            {
+                "<leader>pe",
+                function()
+                    require("fzf-lua").files({
+                        cwd = vim.fs.joinpath(vim.fn.stdpath("data"), "lazy"),
+                        winopts = { title = " Installed Plugins " },
+                    })
+                end,
+                desc = "Edit Plugins",
+            },
+
+            { "<leader>fh", "<cmd>FzfLua helptags<cr>", desc = "Help" },
+            { "<leader>fk", "<cmd>FzfLua keymaps<cr>", desc = "Keymaps" },
+            { "<leader>fr", "<cmd>FzfLua oldfiles<cr>", desc = "Recent Files" },
+            { "<leader>fD", "<cmd>FzfLua diagnostics_workspace<cr>", desc = "Diagnostics" },
+            { "<leader>:", "<cmd>FzfLua command_history<cr>", desc = "Command History" },
+            { "<leader>fC", "<cmd>FzfLua commands<cr>", desc = "Commands" },
+            { "<leader>fM", "<cmd>FzfLua manpages<cr>", desc = "Man Pages" },
+            { "<leader>fH", "<cmd>FzfLua highlights<cr>", desc = "Highlight Groups" },
+            -- TODO: worse than telescope, doesn't remember exact line position can I fix it?
+            -- NOTE: impossible to fix -- maybe mini.pick fixes this
+            { "<leader>fl", "<cmd>FzfLua resume<cr>", desc = "Resume Last Search" },
+            { "<leader>fR", "<cmd>FzfLua registers<cr>", desc = "Registers" },
+            { "<leader>fa", "<cmd>FzfLua autocmds<cr>", desc = "Auto Commands" },
+            -- TODO: this needs work: start it normal, show current too, allow to close
+            -- NOTE: can't do this fully similar, maybe mini.pick will have a solution
+            { "<leader>fb", "<cmd>FzfLua buffers<cr>", desc = "Buffers" },
+            { "<leader>fq", "<cmd>FzfLua quickfix<cr>", desc = "Quickfix Items" },
+            { "<leader>fc", "<cmd>FzfLua colorschemes<cr>", desc = "Colorscheme w/ preview" },
+
+            -- git
+            { "<leader>gb", "<cmd>FzfLua git_branches<cr>", desc = "branches" },
+            { "<leader>gl", "<cmd>FzfLua git_commits<CR>", desc = "commits" },
+
+            -- rebind from which-key
+            { "z=", "<cmd>FzfLua spell_suggest<cr>", desc = "Spelling suggestions" },
+        }
+    end,
     opts = function()
         local actions = require("fzf-lua.actions")
 
