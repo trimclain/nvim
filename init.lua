@@ -78,12 +78,14 @@ CONFIG = {
 
 -- -- Check for neovim dependencies:
 -- -- gcc: nvim-treesitter
--- -- ripgrep: snacks.nvim, grug-far, todo-comments
+-- -- ripgrep: snacks.picker, grug-far, todo-comments
 -- -- node: mason, nvim-lspconfig
+-- -- imagemagick: snacks.image
 -- local dependencies = {
 --     "gcc",
 --     "rg",
 --     "node",
+--     "magick",
 -- }
 -- for _, dep in ipairs(dependencies) do
 --     if vim.fn.executable(dep) == 0 then

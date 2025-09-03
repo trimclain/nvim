@@ -100,6 +100,11 @@ return {
             folds = { open = true }, -- default: { open = false }
         }
 
+        -- configure image support
+        if not ON_INFERIOR_OS then
+            opts.image = { doc = { enabled = false } }
+        end
+
         -- zen mode
         opts.zen = {
             toggles = {
