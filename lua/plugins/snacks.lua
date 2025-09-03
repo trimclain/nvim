@@ -20,16 +20,9 @@ return {
                         smartcase = true,
                         ignorecase = true,
                     },
-                    layout = {
-                        preview = false, -- default: "main"
-                        preset = "select", -- default: "ivy"
-                    },
                 },
                 buffers = {
                     focus = "list", -- default: "input"
-                    layout = {
-                        preset = "select",
-                    },
                 },
                 -- TODO: Make spell suggestions like fzf-lua. Wait for folke to return and create a PR.
                 -- The following creates what I want, but it's impossible to replicate this without hacks
@@ -179,7 +172,7 @@ return {
             { "<leader>ff", function() require("snacks").picker.files({ hidden = true }) end, desc = "Files with preview" },
 
             -- find string
-            { "<C-f>", function() require("snacks").picker.lines() end, desc = "Fzf Buffer" },
+            { "<C-f>", Util.pick("lines"), desc = "Fzf Buffer" },
             { "<leader>fs", function() require("snacks").picker.grep() end, desc = "String in Files" },
             { "<leader>fw", function() require("snacks").picker.grep_word() end, desc = "Visual selection or <cword>", mode = { "n", "x" } },
 
@@ -216,7 +209,7 @@ return {
             { "<leader>fk", function() require("snacks").picker.keymaps() end, desc = "Keymaps" },
             { "<leader>fr", function() require("snacks").picker.recent() end, desc = "Recent Files" },
             { "<leader>fl", function() require("snacks").picker.resume() end, desc = "Resume Last Search" },
-            { "<leader>fb", function() require("snacks").picker.buffers() end, desc = "Buffers" },
+            { "<leader>fb", Util.pick("buffers"), desc = "Buffers" },
             { "z=", function() require("snacks").picker.spelling() end, desc = "Spelling suggestions" }, -- rebind from which-key
 
             -- Used Rare

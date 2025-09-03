@@ -128,10 +128,33 @@ function M.pick(source, params)
     local opts = {
         cwd = params.cwd,
         title = params.title,
-        layout = {
-            preset = params.preview and "default" or "select", -- Others: "telescope", "vscode" ("select" moved to top)
-        },
     }
+
+    if params.preview then
+        opts.layout = { preset = "default" }
+    else
+        opts.layout = {
+            --preset = "select", -- Others: "telescope", "vscode" ("select" moved to top)
+            -- Below is preset = "select" with my modifications
+            -- Docs: https://github.com/folke/snacks.nvim/blob/main/docs/picker.md#select-1
+            preview = false,
+            layout = {
+                backdrop = false,
+                width = 0.5,
+                min_width = 80,
+                height = 0.4,
+                min_height = 11, -- default: 3
+                box = "vertical",
+                border = "rounded",
+                title = "{title}",
+                title_pos = "center",
+                { win = "input", height = 1, border = "bottom" },
+                { win = "list", border = "none" },
+                { win = "preview", title = "{preview}", height = 0.4, border = "top" },
+            },
+        }
+    end
+
     if source == "find_files" then
         source = M.in_git_worktree(params.cwd) and "git_files" or "files"
     end
