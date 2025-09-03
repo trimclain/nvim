@@ -18,13 +18,13 @@ local mode = "default"
 
 _G.ON_INFERIOR_OS = not not jit.os:find("Windows")
 
-if _G.ON_INFERIOR_OS and (vim.g.neovide or vim.fn.has("gui_running") == 1) then
+if ON_INFERIOR_OS and (vim.g.neovide or vim.fn.has("gui_running") == 1) then
     -- I want neovide to start fast, until I fix 15 minute startup time on garbage os
     mode = "minimal"
 end
 
 -- Important settings for easy modification
-CONFIG = {
+_G.CONFIG = {
     opts = {
         tabwidth = 4,
         colorcolumn = true,
@@ -55,12 +55,12 @@ CONFIG = {
         enable_completion = mode == "default", -- LSP, autocomplete, snippets, language servers and tools
         format_on_save = false,
         virtual_text = false,
-        show_signature_help = not _G.ON_INFERIOR_OS,
+        show_signature_help = not ON_INFERIOR_OS,
         enable_copilot = false,
     },
     plugins = {
-        neoscroll = not _G.ON_INFERIOR_OS,
-        smear_cursor = _G.ON_INFERIOR_OS, -- found out about kitty's cursor trail
+        neoscroll = not ON_INFERIOR_OS,
+        smear_cursor = ON_INFERIOR_OS, -- found out about kitty's cursor trail
 
         autopairs = mode == "default",
         bufferline = false, -- to use harpoon more

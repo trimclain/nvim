@@ -11,7 +11,7 @@ return {
             "ribru17/blink-cmp-spell",
             {
                 "erooke/blink-cmp-latex",
-                enabled = not _G.ON_INFERIOR_OS,
+                enabled = not ON_INFERIOR_OS,
             },
             {
                 "giuxtaposition/blink-cmp-copilot", -- NOTE: this might be not setup properly. Didn't work last time.

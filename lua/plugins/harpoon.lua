@@ -3,7 +3,7 @@ return {
     {
         "ThePrimeagen/harpoon",
         branch = "harpoon2",
-        enabled = not _G.ON_INFERIOR_OS,
+        enabled = not ON_INFERIOR_OS,
         dependencies = "plenary.nvim",
         -- dir = "~/projects/open-source/nvim-plugins/harpoon",
         -- stylua: ignore

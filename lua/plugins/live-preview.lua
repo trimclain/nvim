@@ -2,7 +2,7 @@
 return {
     "brianhuster/live-preview.nvim",
     -- dev = true,
-    enabled = not _G.ON_INFERIOR_OS,
+    enabled = not ON_INFERIOR_OS,
     dependencies = { "snacks.nvim" },
     ft = { "markdown", "html", "svg" },
     cmd = "LivePreview",

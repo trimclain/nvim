@@ -2,7 +2,7 @@
 return {
     {
         "ThePrimeagen/refactoring.nvim",
-        enabled = not _G.ON_INFERIOR_OS,
+        enabled = not ON_INFERIOR_OS,
         dependencies = {
             "plenary.nvim",
             "nvim-treesitter",
