@@ -1,6 +1,7 @@
 return {
     -- preview colors in neovim
     {
+        -- Alternative: https://github.com/brenoprata10/nvim-highlight-colors
         "catgoose/nvim-colorizer.lua",
         event = "VeryLazy",
         -- keys = {

@@ -24,7 +24,7 @@ return {
                 buffers = {
                     focus = "list", -- default: "input"
                 },
-                -- TODO: Make spell suggestions like fzf-lua. Wait for folke to return and create a PR.
+                -- TODO: (await) Make spell suggestions like fzf-lua. Wait for folke to return and create a PR.
                 -- The following creates what I want, but it's impossible to replicate this without hacks
                 -- require("snacks").win.new({
                 --     relative = "cursor",
@@ -140,7 +140,7 @@ return {
             },
             -- "doom" example (default)
             sections = {
-                -- TODO: header padding 2 moves the header too high up on smaller displays. Can I fix it or make it dynamic?
+                -- TODO: (await) header padding 2 moves the header too high up on smaller displays. Wait for folke return and create a PR.
                 { section = "header", padding = 2 }, -- default: padding = 2
                 { section = "keys", gap = 1, padding = 1 },
                 { section = "startup" },

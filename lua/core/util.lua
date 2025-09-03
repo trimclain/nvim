@@ -104,7 +104,7 @@ function M.in_git_worktree(cwd)
     return vim.system({ "git", "-C", cwd, "rev-parse", "--is-inside-work-tree" }):wait().stderr == ""
 end
 
--- TODO: AstroNvim notify this one too
+-- TODO: https://github.com/AstroNvim/AstroNvim/blob/2bb2fa9a01311ae7f9bfebf7b3ae996bcc4717be/lua/astronvim/notify.lua#L39
 --- Use vim.notify to send INFO notifications
 ---@param msg string
 ---@param title string
