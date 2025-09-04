@@ -1,7 +1,7 @@
 -- Icons used everywhere in the config
 -- More: https://www.nerdfonts.com/cheat-sheet
 
-M = {}
+local M = {}
 
 M.diagnostics = { -- referenced
     -- BoldError = "",
