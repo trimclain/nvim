@@ -3,12 +3,11 @@ return {
     {
         "NeogitOrg/neogit",
         -- dir = "~/projects/open-source/nvim-plugins/neogit",
-        -- https://github.com/NeogitOrg/neogit/tree/68a3e90e9d1ed9e362317817851d0f34b19e426b?tab=readme-ov-file#configuration
-        commit = "68a3e90", -- pin to the version I like more
         cond = CONFIG.git.enabled,
         dependencies = {
             "plenary.nvim",
             "diffview.nvim",
+            "snacks.nvim",
         },
         cmd = "Neogit",
         keys = {
@@ -18,8 +17,10 @@ return {
             local Icons = require("core.icons").ui
             local neogit = require("neogit")
             neogit.setup({
-                disable_commit_confirmation = true, -- config relevant for pinned commit
                 disable_insert_on_commit = true, -- "auto", "true" or "false"
+                -- -- Neogit refreshes its internal state after specific events, which can be expensive depending on the repository size.
+                -- -- Disabling `auto_refresh` will make it so you have to manually refresh the status after you open it.
+                -- auto_refresh = true,
                 -- Change the default way of opening neogit
                 kind = "tab", -- "tab", "split", "split_above", "vsplit", "floating"
                 -- The time after which an output console is shown for slow running commands
@@ -27,20 +28,22 @@ return {
                 -- Automatically show console if a command takes more than console_timeout milliseconds
                 --auto_show_console = true,
                 -- override/add mappings
-                -- commit_editor = {
-                commit_popup = { -- config relevant for pinned commit
-                    kind = "split", -- default: "auto"
+                commit_editor = {
+                    kind = "split", -- default: "tab"
                 },
                 signs = {
                     -- { CLOSED, OPENED }
                     section = { Icons.ArrowClosed, Icons.ArrowOpen }, -- default: { ">", "v" },
                     item = { Icons.ArrowClosedSmall, Icons.ArrowOpenSmall }, -- default: { ">", "v" },
-                    -- hunk = { "", "" },
+                    -- default: hunk = { "", "" },
                     hunk = { "", "" },
                 },
                 mappings = {
-                    -- popup = {
-                    status = { -- config relevant for pinned commit
+                    commit_editor_I = {
+                        ["<c-c><c-c>"] = false,
+                        ["<c-c><c-k>"] = false,
+                    },
+                    popup = {
                         ["P"] = "PullPopup",
                         ["p"] = "PushPopup",
                     },
