@@ -181,6 +181,7 @@ return {
 
     {
         "AstroNvim/astrotheme",
+        dev = true,
         -- dir = "~/projects/open-source/nvim-plugins/astrotheme",
         lazy = false,
         priority = 1000,
