@@ -227,6 +227,44 @@ return {
     },
 
     {
+        "vague2k/vague.nvim",
+        lazy = false,
+        priority = 1000,
+        cond = CONFIG.ui.colorscheme == "vague",
+        opts = {
+            transparent = CONFIG.ui.transparent_background,
+            bold = true,
+            italic = true,
+            style = {
+                boolean = "bold",
+                number = "none",
+                float = "none",
+                error = "bold",
+                comments = CONFIG.ui.italic_comments, -- default: "italic"
+                conditionals = "none",
+                functions = "none",
+                headings = "bold",
+                operators = "none",
+                strings = "none", -- default: "italic"
+                variables = "none",
+                keywords = "none",
+                keyword_return = "none", -- default: "italic"
+                keywords_loop = "none",
+                keywords_label = "none",
+                keywords_exception = "none",
+                builtin_constants = "bold",
+                builtin_functions = "none",
+                builtin_types = "bold",
+                builtin_variables = "none",
+            },
+        },
+        config = function(_, opts)
+            require("vague").setup(opts)
+            vim.cmd.colorscheme("vague")
+        end,
+    },
+
+    {
         "LunarVim/darkplus.nvim",
         lazy = false,
         priority = 1000,
