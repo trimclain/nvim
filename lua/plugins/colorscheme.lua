@@ -181,8 +181,7 @@ return {
 
     {
         "AstroNvim/astrotheme",
-        dev = true,
-        -- dir = "~/projects/open-source/nvim-plugins/astrotheme",
+        -- dev = true,
         lazy = false,
         priority = 1000,
         cond = CONFIG.ui.colorscheme == "astrotheme",
