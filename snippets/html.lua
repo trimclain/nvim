@@ -4,7 +4,7 @@ return {
     s(
         {
             trig = "!",
-            dscr = "HTML - Defines a template for a html5 document",
+            desc = "HTML - Defines a template for a html5 document",
         },
         fmt(
             [[
@@ -32,7 +32,7 @@ return {
     s(
         {
             trig = "html5",
-            dscr = "HTML - Defines a template for a html5 document with css",
+            desc = "HTML - Defines a template for a html5 document with css",
         },
         fmt(
             [[
