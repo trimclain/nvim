@@ -32,9 +32,9 @@ require("lazy").setup("plugins", {
         path = function(plugin)
             local local_plugin_dir
             if plugin.name == "builder.nvim" then
-                local_plugin_dir = os.getenv("PERSONAL_PROJECTS")
+                local_plugin_dir = vim.env.PERSONAL_PROJECTS
             else
-                local_plugin_dir = os.getenv("LOCAL_PLUGINS")
+                local_plugin_dir = vim.env.LOCAL_PLUGINS
             end
             local_plugin_dir = local_plugin_dir or "~/projects" -- fallback to lazy.nvim default
             return vim.fs.joinpath(local_plugin_dir, plugin.name)
