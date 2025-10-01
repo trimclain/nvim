@@ -126,7 +126,7 @@ end
 function M.pick(source, params)
     params = params or {}
     local opts = {
-        cwd = params.cwd,
+        cwd = params.cwd or vim.uv.cwd(),
         title = params.title,
     }
 
