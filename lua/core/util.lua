@@ -1,12 +1,6 @@
 local M = {}
 
---- Print the given object and return it
----@param obj table | string | number
----@return table | string | number obj
-function _G.P(obj)
-    print(vim.inspect(obj))
-    return obj
-end
+_G.P = vim.print
 
 --- Return the list of filetypes where the plugins should be disabled
 ---@param type string | nil
