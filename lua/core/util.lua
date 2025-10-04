@@ -120,9 +120,11 @@ end
 function M.pick(source, params)
     params = params or {}
     local opts = {
-        cwd = params.cwd or vim.uv.cwd(),
         title = params.title,
     }
+    if params.cwd then
+        opts.cwd = params.cwd
+    end
 
     if params.preview then
         opts.layout = { preset = "default" }
