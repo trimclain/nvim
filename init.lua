@@ -98,7 +98,7 @@ end
 local seconds = vim.fn.reltimefloat(vim.fn.reltime(start_time))
 vim.defer_fn(function()
     local milliseconds = seconds * 1000
-    if milliseconds >= 1 then
+    if milliseconds >= 1 and not ON_INFERIOR_OS then
         vim.notify(
             "Dependency Check took: " .. milliseconds .. "ms",
             vim.log.levels.INFO,
