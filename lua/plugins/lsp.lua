@@ -5,7 +5,6 @@
 -- Mason Server List: https://mason-registry.dev/registry/list
 local servers = {
     gopls = {
-        name = "gopls",
         cond = vim.fn.executable("go") == 1,
         settings = {
             gopls = {
@@ -57,7 +56,7 @@ local servers = {
         cond = not ON_INFERIOR_OS and vim.fn.executable("node") == 1, -- requires node to work
         filetypes = { "bash", "sh", "zsh" },
     },
-    marksman = { name = "marksman" }, -- markdown
+    marksman = {}, -- markdown
     dockerls = { name = "dockerfile-language-server", cond = not ON_INFERIOR_OS },
 
     html = { name = "html-lsp" },
@@ -71,7 +70,7 @@ local servers = {
     lemminx = { name = "lemminx", cond = not ON_INFERIOR_OS }, -- xml language server
 
     -- yamlls = { name = "yaml-language-server" },
-    -- texlab = { name = "texlab" }, -- latex
+    -- texlab = {}, -- latex
     -- julials = { name = "julia-lsp" },
     -- ansiblels = { name = "ansible-language-server" },
     vimls = { name = "vim-language-server" },
