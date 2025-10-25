@@ -183,8 +183,10 @@ return {
             },
         },
         config = function(_, opts)
+            local Util = require("core.util")
+
             -- setup lazydev
-            if require("core.util").has_plugin("lazydev") then
+            if Util.has_plugin("lazydev") then
                 table.insert(opts.sources.default, 1, "lazydev")
                 opts.sources.providers.lazydev = {
                     name = "LazyDev",
@@ -194,30 +196,26 @@ return {
             end
 
             -- setup latex
-            if require("core.util").has_plugin("blink-cmp-latex") then
+            if Util.has_plugin("blink-cmp-latex") then
                 table.insert(opts.sources.default, "latex")
                 opts.sources.providers.latex = {
                     name = "Latex",
                     module = "blink-cmp-latex",
                     opts = {
-                        -- set to true to insert the latex command instead of the symbol
-                        insert_command = false,
-                        -- insert_command = function(ctx)
-                        --     local ft = vim.api.nvim_get_option_value("filetype", {
-                        --         scope = "local",
-                        --         buf = ctx.bufnr,
-                        --     })
-                        --     if ft == "tex" then
-                        --         return true
-                        --     end
-                        --     return false
-                        -- end
+                        -- whether insert the latex command instead of the symbol
+                        insert_command = function(ctx)
+                            local ft = vim.api.nvim_get_option_value("filetype", {
+                                scope = "local",
+                                buf = ctx.bufnr,
+                            })
+                            return ft == "tex"
+                        end,
                     },
                 }
             end
 
             -- setup copilot cmp source
-            if require("core.util").has_plugin("copilot") then
+            if Util.has_plugin("copilot") then
                 table.insert(opts.sources.default, 1, "copilot")
                 opts.sources.providers.copilot = {
                     name = "copilot",
