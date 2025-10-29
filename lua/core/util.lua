@@ -192,6 +192,52 @@ function M.open_project()
 end
 
 -------------------------------------------------------------------------------
+-- Previewer
+-------------------------------------------------------------------------------
+M.preview_active = false
+local previewers = {
+    typst = { start = "TypstPreview", stop = "TypstPreviewStop" },
+    markdown = { start = "LivePreview start", stop = "LivePreview close" },
+    html = { start = "LivePreview start", stop = "LivePreview close" },
+    svg = { start = "LivePreview start", stop = "LivePreview close" },
+    -- stylua: ignore start
+    tex = { start = function() vim.ui.open(vim.fn.expand("%:r") .. ".pdf") end, stop = "" },
+    plaintex = { start = function() vim.ui.open(vim.fn.expand("%:r") .. ".pdf") end, stop = "" },
+    -- stylua: ignore end
+}
+local function preview_action(action)
+    if not vim.tbl_contains(vim.tbl_keys(previewers), vim.bo.filetype) then
+        notify("No preview available for " .. vim.bo.filetype, "Preview Manager")
+        return
+    end
+    local cmd = previewers[vim.bo.filetype][action]
+    if type(cmd) == "function" then
+        cmd()
+    elseif type(cmd) == "string" then
+        vim.cmd(previewers[vim.bo.filetype][action])
+    end
+    M.preview_active = action == "start"
+end
+
+function M.preview_start()
+    preview_action("start")
+    notify("Starting Preview...", "Preview Manager")
+end
+
+function M.preview_stop()
+    preview_action("stop")
+    notify("Stopping Preview...", "Preview Manager")
+end
+
+function M.preview_toggle()
+    if M.preview_active then
+        M.preview_stop()
+    else
+        M.preview_start()
+    end
+end
+
+-------------------------------------------------------------------------------
 -- OPTION CHANGE
 -------------------------------------------------------------------------------
 

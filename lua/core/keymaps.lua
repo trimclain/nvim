@@ -109,6 +109,7 @@ keymap("n", "<C-t>", "<cmd>silent !tmux neww pctl open<CR>")
 keymap("n", "gx", Util.open_url, add_desc("Open URL under cursor"))
 keymap("n", "gX", Util.open_github_url, add_desc("Open Github URL under cursor"))
 keymap("n", "<leader>mx", Util.toggle_executable, add_desc("Make Current File E[x]ecutable"))
+keymap("n", "<leader>mp", Util.preview_toggle, add_desc("Toggle [P]review for Current File"))
 
 -- Toggles
 keymap("n", "<leader>ow", function() Util.toggle_option("wrap") end, add_desc("Toggle Current Buffer Line [W]rap"))

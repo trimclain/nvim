@@ -5,11 +5,8 @@ return {
     enabled = not ON_INFERIOR_OS,
     dependencies = { "snacks.nvim" },
     ft = { "markdown", "html", "svg" },
+    -- TODO: can I make LivePreview close to also close the browser window like iamcco/markdown-preview.nvim
     cmd = "LivePreview",
-    keys = {
-        -- TODO: make this toggle
-        { "<leader>mp", "<cmd>LivePreview start<cr>", desc = "Open Markdown/HTML Preview (Live Server)" },
-    },
     opts = {
         -- port = 5500,
         -- browser = "default",
