@@ -71,6 +71,7 @@ local servers = {
 
     -- yamlls = { name = "yaml-language-server" },
     -- texlab = {}, -- latex
+    tinymist = { cond = vim.fn.executable("typst") == 1 }, -- typst
     -- julials = { name = "julia-lsp" },
     -- ansiblels = { name = "ansible-language-server" },
     vimls = { name = "vim-language-server" },
@@ -145,7 +146,8 @@ local formatters = {
     prettierd = {},
     stylua = {},
     shfmt = { cond = not ON_INFERIOR_OS }, -- "beautysh",
-    gofumpt = { cond = vim.fn.executable("go") == 1 },
+    typstyle  = { cond = servers.tinymist.cond },
+    gofumpt = { cond = servers.gopls.cond },
 }
 
 local linters = {
