@@ -29,6 +29,7 @@ return {
                 sh = "sh %",
                 tex = "tectonic --chatter=minimal %",
                 typescript = "ts-node %",
+                typst = "typst compile %",
                 zsh = "zsh %",
             },
         },
