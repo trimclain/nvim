@@ -148,6 +148,12 @@ if CONFIG.ui.cursorline then
 end
 
 -- Fix a bug with kitty and cmdheight on kitty(vim) resize
+-- Apparently this exists also on ghostty.
+-- Steps to reproduce:
+-- 1. Open a typst file (also works with markdown)
+-- 2. Open a preview with my config (important to open a browser in a new window, forcing WM to resize both)
+-- 3. Either already, or after closing the browser, opening/closing any other new window in the same workspace
+--    will lead to the bug.
 vim.api.nvim_create_autocmd({ "VimResized", "WinResized" }, {
     callback = function(event)
         local old_cmdheight = vim.o.cmdheight
