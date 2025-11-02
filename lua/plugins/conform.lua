@@ -90,16 +90,15 @@ return {
             vim.o.formatexpr = "v:lua.require'conform'.formatexpr()"
 
             if CONFIG.lsp.format_on_save then
-                vim.api.nvim_create_user_command("FormatDisable", function()
-                    vim.b.disable_autoformat = true
+                vim.api.nvim_create_user_command("FormatToggle", function()
+                    vim.b.disable_autoformat = not vim.b.disable_autoformat
+                    vim.notify(
+                        string.format("%s formatting...", vim.b.disable_autoformat and "Enabling" or "Disabling"),
+                        vim.log.levels.INFO
+                    )
                 end, {
-                    desc = "Disable autoformat-on-save for current buffer",
+                    desc = "Toggle autoformat-on-save for current buffer",
                     bang = true,
-                })
-                vim.api.nvim_create_user_command("FormatEnable", function()
-                    vim.b.disable_autoformat = false
-                end, {
-                    desc = "Re-enable autoformat-on-save for current buffer",
                 })
             end
         end,
