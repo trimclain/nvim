@@ -1,5 +1,5 @@
 local function augroup(name)
-    return vim.api.nvim_create_augroup("trimclain_" .. name, { clear = true })
+    return vim.api.nvim_create_augroup("trimclain/" .. name, { clear = true })
 end
 
 -- Check if we need to reload the file when it changed
@@ -51,6 +51,33 @@ vim.api.nvim_create_autocmd("BufReadPost", {
     end,
     desc = "Return to last known cursor position",
     group = augroup("restore_cursor_position"),
+})
+
+-- Toggle relative line number in insert mode
+local line_numbers_group = augroup("toggle_relative_line_numbers")
+vim.api.nvim_create_autocmd({ "BufEnter", "FocusGained", "InsertLeave", "CmdlineLeave", "WinEnter" }, {
+    group = line_numbers_group,
+    desc = "Toggle relative line numbers on",
+    callback = function()
+        if vim.wo.nu and not vim.startswith(vim.api.nvim_get_mode().mode, "i") then
+            vim.wo.relativenumber = true
+        end
+    end,
+})
+vim.api.nvim_create_autocmd({ "BufLeave", "FocusLost", "InsertEnter", "CmdlineEnter", "WinLeave" }, {
+    group = line_numbers_group,
+    desc = "Toggle relative line numbers off",
+    callback = function(args)
+        if vim.wo.nu then
+            vim.wo.relativenumber = false
+        end
+        -- Redraw here to avoid having to first write something for the line numbers to update.
+        if args.event == "CmdlineEnter" then
+            if not vim.tbl_contains({ "@", "-" }, vim.v.event.cmdtype) then
+                vim.cmd.redraw()
+            end
+        end
+    end,
 })
 
 -- Trim whitespaces on save
