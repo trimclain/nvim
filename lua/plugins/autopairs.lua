@@ -93,7 +93,12 @@ return {
                 })
             end
 
-            -- A rule for arrow key on javascript
+            -- Add the rule for Typst math mode
+            npairs.add_rules({
+                Rule("$", "$", { "typst", "tex" }):with_move(cond.not_before_regex("%$")),
+            })
+
+            -- A rule for arrow functions in javascript
             Rule("%(.*%)%s*%=>$", " {  }", { "typescript", "typescriptreact", "javascript", "javascriptreact" })
                 :use_regex(true)
                 :set_end_pair_length(2)
