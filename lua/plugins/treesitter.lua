@@ -53,6 +53,7 @@ return {
 
                 -- "julia",
                 -- "latex", -- needs tree-sitter CLI installed
+                -- "typst"
 
                 "markdown",
                 "markdown_inline",
