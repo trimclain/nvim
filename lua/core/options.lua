@@ -1,5 +1,4 @@
 local options = {
-    clipboard = "unnamedplus", -- allow neovim to access the system clipboard
     colorcolumn = CONFIG.opts.colorcolumn and "+0" or "", -- vertical column of same width as textwidth
     completeopt = { "menu", "menuone", "noselect" }, -- list of options for insert mode completion (for nvim-cmp)
     conceallevel = 0, -- so that `` is visible in markdown files
@@ -50,6 +49,12 @@ local options = {
 for k, v in pairs(options) do
     vim.opt[k] = v
 end
+
+-- Schedule the setting after `UiEnter` because it can increase startup-time
+vim.schedule(function()
+    -- sync clipboard between OS and Neovim.
+    vim.o.clipboard = "unnamedplus"
+end)
 
 -----------------------------------------------------------------------------------------------------------------------
 -- Settings for Neovide or GUI nvim
