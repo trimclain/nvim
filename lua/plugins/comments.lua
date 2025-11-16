@@ -24,6 +24,7 @@ return {
 
             local comment_ft = require("Comment.ft")
             comment_ft.set("rasi", { "//%s", "/*%s*/" }) -- rofi config
+            comment_ft.set("lf", { "#%s" }) -- lf config
             -- comment_ft.set("lua", { "--%s", "--[[%s]]" })
             -- comment_ft.set("markdown", { "[//]:%s", "<!--%s-->" })
         end,
