@@ -180,7 +180,7 @@ return {
 
             -- find string
             { "<C-f>", Util.pick("lines"), desc = "Fzf Buffer" },
-            { "<leader>fs", function() require("snacks").picker.grep() end, desc = "String in Files" },
+            { "<leader>fs", function() require("snacks").picker.grep({ hidden = true }) end, desc = "String in Files" },
             { "<leader>fw", function() require("snacks").picker.grep_word() end, desc = "Visual selection or <cword>", mode = { "n", "x" } },
 
             -- find my dotfiles
