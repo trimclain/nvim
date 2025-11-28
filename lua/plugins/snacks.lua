@@ -94,11 +94,13 @@ return {
 
         -- before: <mark, sign, fold, git>, line_number
         -- after: <mark, sign> <line_number> <fold, git>
-        opts.statuscolumn = {
-            left = { "sign" }, -- default: { "mark", "sign" }
-            right = { "fold", "git" },
-            folds = { open = true }, -- default: { open = false }
-        }
+        -- TODO: disabled this in neogit to avoid duplicate signs
+        -- This probably requires a PR for vim.b.disable_statuscolumn support
+        -- opts.statuscolumn = {
+        --     left = { "sign" }, -- default: { "mark", "sign" }
+        --     right = { "fold", "git" },
+        --     folds = { open = true }, -- default: { open = false }
+        -- }
 
         -- configure image support
         if not ON_INFERIOR_OS then
