@@ -72,6 +72,7 @@ local servers = {
     -- yamlls = { name = "yaml-language-server" },
     -- texlab = {}, -- latex
     tinymist = { cond = vim.fn.executable("typst") == 1 }, -- typst
+    hyprls = { cond = vim.fn.executable("hyprctl") == 1 }, -- hyprland config files
     -- julials = { name = "julia-lsp" },
     -- ansiblels = { name = "ansible-language-server" },
     vimls = { name = "vim-language-server" },
