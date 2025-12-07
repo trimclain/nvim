@@ -78,6 +78,7 @@ local servers = {
     vimls = { name = "vim-language-server" },
     lua_ls = {
         name = "lua-language-server",
+        version = "3.15.0", -- 3.16.0 is broken
         -- cmd = {...}, -- Override the default command used to start the server
         -- filetypes = { ...}, -- Override the default list of associated filetypes for the server
         -- capabilities = {}, -- Override fields in capabilities. Can be used to disable certain LSP features.
@@ -344,6 +345,7 @@ return {
 
             local function ensure_tool_installed(tool)
                 local cond = ensure_installed[tool].cond
+                local version = ensure_installed[tool].version
                 if cond == false then
                     return
                 end
@@ -382,7 +384,7 @@ return {
 
                     if not p:is_installed() then
                         if not p:is_installing() then
-                            p:install()
+                            p:install({ version = version })
                         end
                     end
                 end)
