@@ -78,7 +78,7 @@ local servers = {
     vimls = { name = "vim-language-server" },
     lua_ls = {
         name = "lua-language-server",
-        version = "3.15.0", -- 3.16.0 is broken
+        -- version = "3.15.0",
         -- cmd = {...}, -- Override the default command used to start the server
         -- filetypes = { ...}, -- Override the default list of associated filetypes for the server
         -- capabilities = {}, -- Override fields in capabilities. Can be used to disable certain LSP features.
