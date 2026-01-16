@@ -76,36 +76,36 @@ _G.CONFIG = {
     },
 }
 
--- -- Check for neovim dependencies:
--- -- gcc: nvim-treesitter
--- -- ripgrep: snacks.picker, grug-far, todo-comments
--- -- node: mason, nvim-lspconfig
--- -- imagemagick: snacks.image
-local start_time = vim.fn.reltime()
-local dependencies = {
-    "gcc",
-    "rg",
-    "node",
-    "magick",
-}
-for _, dep in ipairs(dependencies) do
-    if vim.fn.executable(dep) == 0 then
-        vim.defer_fn(function()
-            vim.notify("Missing dependency: " .. dep, vim.log.levels.WARN, { title = "My Neovim Dependencies" })
-        end, 500)
-    end
-end
-local seconds = vim.fn.reltimefloat(vim.fn.reltime(start_time))
-vim.defer_fn(function()
-    local milliseconds = seconds * 1000
-    if milliseconds >= 1 and not ON_INFERIOR_OS then
-        vim.notify(
-            "Dependency Check took: " .. milliseconds .. "ms",
-            vim.log.levels.INFO,
-            { title = "Performance Debugger" }
-        )
-    end
-end, 700)
+-- -- -- Check for neovim dependencies:
+-- -- -- gcc: nvim-treesitter
+-- -- -- ripgrep: snacks.picker, grug-far, todo-comments
+-- -- -- node: mason, nvim-lspconfig
+-- -- -- imagemagick: snacks.image
+-- local start_time = vim.fn.reltime()
+-- local dependencies = {
+--     "gcc",
+--     "rg",
+--     "node",
+--     "magick",
+-- }
+-- for _, dep in ipairs(dependencies) do
+--     if vim.fn.executable(dep) == 0 then
+--         vim.defer_fn(function()
+--             vim.notify("Missing dependency: " .. dep, vim.log.levels.WARN, { title = "My Neovim Dependencies" })
+--         end, 500)
+--     end
+-- end
+-- local seconds = vim.fn.reltimefloat(vim.fn.reltime(start_time))
+-- vim.defer_fn(function()
+--     local milliseconds = seconds * 1000
+--     if milliseconds >= 1 and not ON_INFERIOR_OS then
+--         vim.notify(
+--             "Dependency Check took: " .. milliseconds .. "ms",
+--             vim.log.levels.INFO,
+--             { title = "Performance Debugger" }
+--         )
+--     end
+-- end, 700)
 
 require("core.options")
 require("core.autocmd")
