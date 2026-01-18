@@ -57,6 +57,7 @@ local servers = {
         filetypes = { "bash", "sh", "zsh" },
     },
     marksman = {}, -- markdown
+    -- harper-ls = {}, -- grammar checker for devs
     dockerls = { name = "dockerfile-language-server", cond = not ON_INFERIOR_OS },
 
     html = { name = "html-lsp" },
