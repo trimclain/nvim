@@ -2,7 +2,7 @@
 return {
     {
         "lewis6991/gitsigns.nvim",
-        -- version = "*", -- v2.0.0 has the problem with not updating after stage/commit
+        version = "v1.0.2", -- v2.0.0 has the problem of not immediately updating after stage/commit
         cond = CONFIG.git.enabled,
         event = { "BufReadPre", "BufNewFile" },
         opts = function()
