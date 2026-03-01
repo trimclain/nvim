@@ -10,22 +10,19 @@ return {
         config = function()
             require("colorizer").setup({
                 lazy_load = true,
-                user_default_options = {
-                    AARRGGBB = true, -- 0xAARRGGBB hex codes
-                    css = true, -- Enable all CSS features: rgb_fn, hsl_fn, names, RGB, RRGGBB, RRGGBBAA
-                    ccs_fn = true,
-                    -- Available modes for `mode`: foreground, background,  virtualtext
-                    mode = "background", -- set the display mode
-                    -- Tailwind colors:  boolean|"normal"|"lsp"|"both".  True sets to "normal"
-                    tailwind = "normal", -- Enable tailwind colors
-                    tailwind_opts = { -- Options for highlighting tailwind names
-                        -- When using tailwind = "both", update tailwind names from LSP results.
-                        -- See: https://github.com/catgoose/nvim-colorizer.lua?tab=readme-ov-file#tailwind
-                        update_names = false,
+                options = {
+                    parsers = {
+                        css = true, -- Preset: enables names, hex (all), rgb, hsl, oklch
+                        names = { enable = false }, -- disable names despite css preset
+                        tailwind = {
+                            enable = true,
+                            update_names = false, -- Update tailwind_names color mapping from LSP results
+                        },
+                        xterm = { enable = true },
                     },
-                    -- parsers can contain values used in |user_default_options|
-                    sass = { enable = false, parsers = { "css" } }, -- Enable sass colors
-                    virtualtext = "■",
+                    display = {
+                        mode = "background", -- opts: "background", "foreground", "virtualtext"
+                    },
                     -- update color values even if buffer is not focused
                     always_update = false,
                 },
