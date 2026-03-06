@@ -44,7 +44,7 @@ keymap("n", "[b", "<cmd>bprevious<cr>", add_desc("Prev Buffer"))
 keymap("n", "]b", "<cmd>bnext<cr>", add_desc("Next Buffer"))
 
 --
--- Tab navigation.
+-- Tab navigation
 keymap("n", "<leader>Q", "<cmd>tabclose<cr>", add_desc("Quit Tab Page"))
 keymap("n", "<leader>tc", "<cmd>tab split<cr>", add_desc("Create Tab Page"))
 keymap("n", "<leader>to", "<cmd>tabonly<cr>", add_desc("Close other Tab Pages"))
@@ -52,11 +52,16 @@ keymap("n", "<S-h>", "<cmd>tabprevious<cr>", add_desc("Next Tab Page"))
 keymap("n", "<S-l>", "<cmd>tabnext<cr>", add_desc("Prev Tab Page"))
 
 --
+-- Neovim Diffs
+keymap("n", "<leader>D", "<cmd>diffthis<cr>", { desc = "Diff current window" })
+keymap("n", "<leader>do", "<cmd>diffoff<cr>", { desc = "Switch off diff mode" })
+
+--
 -- Resizing: Use Ctrl + arrows to resize buffers
-keymap("n", "<C-Up>", ":resize -5<cr>", opts)
-keymap("n", "<C-Down>", ":resize +5<cr>", opts)
-keymap("n", "<C-Left>", ":vertical resize -5<cr>", opts)
-keymap("n", "<C-Right>", ":vertical resize +5<cr>", opts)
+keymap("n", "<C-Up>", "<cmd>resize -5<cr>", opts)
+keymap("n", "<C-Down>", "<cmd>resize +5<cr>", opts)
+keymap("n", "<C-Left>", "<cmd>vertical resize -5<cr>", opts)
+keymap("n", "<C-Right>", "<cmd>vertical resize +5<cr>", opts)
 
 --
 -- Execute lua/vim code
