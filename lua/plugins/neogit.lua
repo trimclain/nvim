@@ -18,19 +18,14 @@ return {
             local neogit = require("neogit")
             neogit.setup({
                 disable_insert_on_commit = true, -- "auto", "true" or "false"
-                -- -- Neogit refreshes its internal state after specific events, which can be expensive depending on the repository size.
-                -- -- Disabling `auto_refresh` will make it so you have to manually refresh the status after you open it.
-                -- auto_refresh = true,
-                -- Change the default way of opening neogit
-                kind = "tab", -- "tab", "split", "split_above", "vsplit", "floating"
+                -- Neogit refreshes its internal state after specific events, which can be expensive depending on the repository size.
+                -- Disabling `auto_refresh` will make it so you have to manually refresh the status after you open it.
+                --auto_refresh = true,
                 -- The time after which an output console is shown for slow running commands
                 --console_timeout = 2000,
                 -- Automatically show console if a command takes more than console_timeout milliseconds
                 --auto_show_console = true,
                 -- override/add mappings
-                commit_editor = {
-                    kind = "split", -- default: "tab"
-                },
                 signs = {
                     -- { CLOSED, OPENED }
                     section = { Icons.ArrowClosed, Icons.ArrowOpen }, -- default: { ">", "v" },
