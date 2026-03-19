@@ -172,10 +172,10 @@ function M.open_project()
         local selection = vim.split(choice, ",")[1]
 
         if not M.dir_exists(selection) then
-            notify("Project " .. selection .. " not installed", "Project Manager")
+            require("core.util.notify").notify("Project " .. selection .. " not installed", "Project Manager")
             return
         end
-        -- notify("Opened " .. selection, "Project Manager")
+        -- require("core.util.notify").notify("Opened " .. selection, "Project Manager")
         -- vim.cmd.cd(selection)
 
         M.pick("find_files", { cwd = selection })()
@@ -201,7 +201,7 @@ local previewers = {
 }
 local function preview_action(action)
     if not vim.tbl_contains(vim.tbl_keys(previewers), vim.bo.filetype) then
-        notify("No preview available for " .. vim.bo.filetype, "Preview Manager")
+        require("core.util.notify").notify("No preview available for " .. vim.bo.filetype, "Preview Manager")
         return
     end
     local cmd = previewers[vim.bo.filetype][action]
@@ -215,12 +215,12 @@ end
 
 function M.preview_start()
     preview_action("start")
-    notify("Starting Preview...", "Preview Manager")
+    require("core.util.notify").notify("Starting Preview...", "Preview Manager")
 end
 
 function M.preview_stop()
     preview_action("stop")
-    notify("Stopping Preview...", "Preview Manager")
+    require("core.util.notify").notify("Stopping Preview...", "Preview Manager")
 end
 
 function M.preview_toggle()
@@ -262,7 +262,7 @@ function M.toggle_option(option)
     local value = get_option(option)
     local status = value and " disabled" or " enabled"
     set_option(option, not value)
-    notify(capitalize(option) .. status, "Option Toggler")
+    require("core.util.notify").notify(capitalize(option) .. status, "Option Toggler")
 end
 
 --- Change current tabstop, softtabstop and shiftwidth values between 2 and 4
@@ -271,7 +271,7 @@ function M.toggle_shiftwidth()
     value = value == 4 and 2 or 4
     set_option("tabstop", value) -- insert 2 or 4 spaces for \t
     set_option("shiftwidth", value) -- the number of spaces inserted for each indentation level
-    notify("Tab Size is set to " .. tostring(value) .. " spaces", "Tab Size Toggler")
+    require("core.util.notify").notify("Tab Size is set to " .. tostring(value) .. " spaces", "Tab Size Toggler")
 end
 
 --- Toggle conceallevel value between 0 and 2
@@ -279,7 +279,7 @@ function M.toggle_conceallevel()
     local value = get_option("conceallevel")
     value = value == 2 and 0 or 2
     set_option("conceallevel", value)
-    notify("Conceallevel is set to " .. tostring(value), "Conceallevel Toggler")
+    require("core.util.notify").notify("Conceallevel is set to " .. tostring(value), "Conceallevel Toggler")
 end
 
 local diagnostics_active = true
@@ -288,10 +288,10 @@ function M.toggle_diagnostics()
     diagnostics_active = not diagnostics_active
     if diagnostics_active then
         vim.diagnostic.show()
-        notify("Diagnostics enabled", "Diagnostics Toggler")
+        require("core.util.notify").notify("Diagnostics enabled", "Diagnostics Toggler")
     else
         vim.diagnostic.hide()
-        notify("Diagnostics disabled", "Diagnostics Toggler")
+        require("core.util.notify").notify("Diagnostics disabled", "Diagnostics Toggler")
     end
 end
 
@@ -440,10 +440,10 @@ function M.toggle_executable()
     vim.cmd.update()
     if vim.fn.executable(file) == 0 then
         vim.system({ "chmod", "+x", file }):wait()
-        notify("This file is now executable", "Executer")
+        require("core.util.notify").notify("This file is now executable", "Executer")
     else
         vim.system({ "chmod", "-x", file }):wait()
-        notify("This file is now not executable", "Executer")
+        require("core.util.notify").notify("This file is now not executable", "Executer")
     end
 end
 
@@ -454,10 +454,10 @@ function M.open_url()
         "\\v\\c%(%(h?ttps?|ftp|file|ssh|git)://|[a-z]+[@][a-z]+[.][a-z]+:)%([&:#*@~%_\\-=?!+;/0-9a-z]+%(%([.;/?]|[.][.]+)[&:#*@~%_\\-=?!+/0-9a-z]+|:\\d+|,%(%(%(h?ttps?|ftp|file|ssh|git)://|[a-z]+[@][a-z]+[.][a-z]+:)@![0-9a-z]+))*|\\([&:#*@~%_\\-=?!+;/.0-9a-z]*\\)|\\[[&:#*@~%_\\-=?!+;/.0-9a-z]*\\]|\\{%([&:#*@~%_\\-=?!+;/.0-9a-z]*|\\{[&:#*@~%_\\-=?!+;/.0-9a-z]*})\\})+"
     local url = vim.fn.matchstr(vim.fn.getline("."), url_matcher)
     if url ~= "" then
-        notify("Opened " .. url, "URL Handler")
+        require("core.util.notify").notify("Opened " .. url, "URL Handler")
         vim.ui.open(url)
     else
-        notify("No URL found", "URL Handler")
+        require("core.util.notify").notify("No URL found", "URL Handler")
     end
 end
 
@@ -466,10 +466,10 @@ function M.open_github_url()
     local url = vim.fn.expand("<cfile>")
     if url ~= "" then
         url = "https://github.com/" .. url
-        notify("Opened " .. url, "Github URL Handler")
+        require("core.util.notify").notify("Opened " .. url, "Github URL Handler")
         vim.ui.open(url)
     else
-        notify("No Github URL found", "Github URL Handler")
+        require("core.util.notify").notify("No Github URL found", "Github URL Handler")
     end
 end
 -------------------------------------------------------------------------------

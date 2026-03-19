@@ -7,7 +7,7 @@ local M = {}
 ---@param msg string Content of the notification to show to the user
 ---@param title string Title of the notification window
 ---@param level number? One of the values from vim.log.levels, default: vim.log.levels.INFO
-local function notify(msg, title, level)
+function M.notify(msg, title, level)
     level = level or vim.log.levels.INFO
     vim.notify(msg, level, { title = title })
 end
@@ -20,7 +20,7 @@ end
 function M.defer_notify(msg, title, level, timeout)
     timeout = timeout or 500
     vim.defer_fn(function()
-        notify(msg, title, level)
+        M.notify(msg, title, level)
     end, timeout)
 end
 
