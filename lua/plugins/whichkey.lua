@@ -43,7 +43,6 @@ return {
                     { "<leader>d", group = "document" },
                     { "<leader>f", group = "find" },
                     { "<leader>g", group = "git" },
-                    { "<leader>gd", group = "diffview" },
                     { "<leader>h", group = "git hunks" },
                     { "<leader>m", group = "make" },
                     { "<leader>n", group = "neorg/neotest" },
