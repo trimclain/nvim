@@ -80,7 +80,7 @@ return {
         cond = CONFIG.ui.colorscheme == "tokyonight",
         opts = {
             style = "storm", -- The theme comes in three styles, `storm`, `moon`, a darker variant `night` and `day`
-            transparent = false, -- Enable this to disable setting the background color
+            transparent = CONFIG.ui.transparent_background, -- Enable this to disable setting the background color
             styles = {
                 -- Style to be applied to different syntax groups
                 -- Value is any valid attr-list value for `:help nvim_set_hl`
@@ -379,7 +379,7 @@ return {
         cond = CONFIG.ui.colorscheme == "onedark",
         opts = {
             style = "darker", --"dark", "darker", "cool", "deep", "warm", "warmer" and "light"
-            transparent = false, -- Show/hide background
+            transparent = CONFIG.ui.transparent_background, -- Show/hide background
 
             -- Change code style ---
             -- Options are italic, bold, underline, none
