@@ -52,13 +52,15 @@ function M.file_exists(name)
     if not name then
         return false
     end
-    return vim.fn.filereadable(name) == 1
+    local stat = vim.uv.fs_stat(name)
+    return stat and stat.type == "file"
 end
 
 --- Check if a directory exists
 ---@param name string path to the directory
 function M.dir_exists(name)
-    return vim.fn.isdirectory(name) == 1
+    local stat = vim.uv.fs_stat(name)
+    return stat and stat.type == "directory"
 end
 
 --- Check if a plugin is installed and enabled
@@ -98,12 +100,30 @@ function M.in_git_worktree(cwd)
     return vim.system({ "git", "-C", cwd, "rev-parse", "--is-inside-work-tree" }):wait().stderr == ""
 end
 
--- TODO: https://github.com/AstroNvim/AstroNvim/blob/2bb2fa9a01311ae7f9bfebf7b3ae996bcc4717be/lua/astronvim/notify.lua#L39
---- Use vim.notify to send INFO notifications
----@param msg string
----@param title string
-local function notify(msg, title)
-    vim.notify(msg, vim.log.levels.INFO, { title = title })
+-------------------------------------------------------------------------------
+-- Send Notifications
+-------------------------------------------------------------------------------
+
+--- Send a notification
+---@param msg string Content of the notification to show to the user
+---@param title string Title of the notification window
+---@param level number? One of the values from vim.log.levels, default: vim.log.levels.INFO
+local function notify(msg, title, level)
+    level = level or vim.log.levels.INFO
+    vim.notify(msg, level, { title = title })
+end
+
+--- Defer sending a notification
+---@param msg string Content of the notification to show to the user
+---@param title string Title of the notification window
+---@param level number? One of the values from vim.log.levels, default: vim.log.levels.INFO
+---@param timeout number? Number of milliseconds to wait, default: 500
+function M.defer_notify(msg, title, level, timeout)
+    timeout = timeout or 500
+    vim.defer_fn(function()
+        notify(msg, title, level)
+    end, timeout)
+end
 end
 
 -------------------------------------------------------------------------------
