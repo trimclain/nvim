@@ -176,7 +176,7 @@ return {
         return {
             -- find files
             { "<C-p>", Util.pick("find_files"), desc = "Find Files" },
-            { "<leader>ff", function() require("snacks").picker.files({ hidden = true }) end, desc = "Files with preview" },
+            { "<leader>ff", function() require("snacks").picker.files({ hidden = true, ignored = true }) end, desc = "Files with preview" },
 
             -- find string
             { "<C-f>", Util.pick("lines"), desc = "Fzf Buffer" },
