@@ -103,6 +103,9 @@ keymap("n", "<leader>r.", ":%s/\\<<c-r><c-w>\\>/", add_desc("Replace Word Vim St
 keymap("n", "<leader>Y", 'gg"+yG', add_desc("Yank Whole File"))
 keymap("n", "<leader>w", "<cmd>update<cr>", add_desc("Update File"))
 
+-- cd to the parent directory of current file
+keymap("n", "<leader>C", "<cmd>cd %:p:h<cr>", add_desc("Change CWD to current file"))
+
 -- Store relative line number jumps in the jumplist if they exceed a threshold.
 keymap("n", "k", '(v:count > 5 ? "m\'" . v:count : "") . "k"', { expr = true })
 keymap("n", "j", '(v:count > 5 ? "m\'" . v:count : "") . "j"', { expr = true })
