@@ -24,6 +24,7 @@ local mode = "default"
 
 _G.ON_INFERIOR_OS = not not jit.os:find("Windows")
 
+---@diagnostic disable-next-line: undefined-field
 if ON_INFERIOR_OS and (vim.g.neovide or vim.fn.has("gui_running") == 1) then
     -- I want neovide to start fast, until I fix 15 minute startup time on garbage os
     mode = "minimal"
@@ -81,6 +82,14 @@ _G.CONFIG = {
         treesj = mode == "default",
     },
 }
+
+-- local Timer = require("core.util.timer")
+-- Timer.start("Sourcing Local Config")
+local local_config = vim.fs.joinpath(vim.fn.stdpath("config"), "local.lua")
+if require("core.util").file_exists(local_config) then
+    dofile(local_config)
+end
+-- Timer.stop()
 
 require("core.options")
 require("core.autocmd")
