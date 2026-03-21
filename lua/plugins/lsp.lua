@@ -57,6 +57,7 @@ local servers = {
         filetypes = { "bash", "sh", "zsh" },
     },
     marksman = {}, -- markdown
+    -- markdown_oxide = { name = "markdown-oxide" }, -- markdown
     -- harper-ls = {}, -- grammar checker for devs
     dockerls = { name = "dockerfile-language-server", cond = not ON_INFERIOR_OS },
 
@@ -66,7 +67,7 @@ local servers = {
     tailwindcss = { name = "tailwindcss-language-server", cond = not ON_INFERIOR_OS },
     ts_ls = { name = "typescript-language-server", not ON_INFERIOR_OS }, -- Extended: https://github.com/pmizio/typescript-tools.nvim
     vue_ls = { name = "vue-language-server", cond = not ON_INFERIOR_OS }, -- vue-language-server
-    graphql = { name = "graphql-language-service-cli", cond = not ON_INFERIOR_OS },
+    -- graphql = { name = "graphql-language-service-cli", cond = not ON_INFERIOR_OS },
     jsonls = { name = "json-lsp" },
     lemminx = { name = "lemminx", cond = not ON_INFERIOR_OS }, -- xml language server
 
