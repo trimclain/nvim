@@ -77,9 +77,13 @@ return {
             },
             highlight = {
                 enable = true,
-                -- disable slow treesitter highlight for large files
                 disable = function(lang, buf)
-                    -- return lang == "cpp" and vim.api.nvim_buf_line_count(bufnr) > 50000
+                    -- disable highlights in tmux due to some errors in the parser
+                    if lang == "tmux" then
+                        return true
+                    end
+                    -- disable slow treesitter highlight for large files
+                    --return lang == "cpp" and vim.api.nvim_buf_line_count(bufnr) > 50000
                     local max_filesize = 100 * 1024 -- 100 KB
                     local ok, stats = pcall(vim.uv.fs_stat, vim.api.nvim_buf_get_name(buf))
                     if ok and stats and stats.size > max_filesize then
