@@ -27,7 +27,9 @@ vim.api.nvim_create_autocmd("TextYankPost", {
     group = augroup("highlight_on_yank"),
 })
 
-vim.api.nvim_create_autocmd({ "CmdWinEnter" }, {
+-- Reason: I used to fatfinger q: isntead of :q, so I got annoyed,
+-- and since I don't ever use command-line window yet, I instaquit.
+vim.api.nvim_create_autocmd({ "CmdwinEnter" }, {
     command = "quit",
     desc = "Autoclose command-line window",
     group = augroup("autoclose_commandline_window"),
