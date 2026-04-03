@@ -100,6 +100,8 @@ keymap("i", "<C-r>", "<C-r>+", opts) -- paste from clipboard in insert mode
 keymap("c", "<C-r>", "<C-r>+", opts) -- paste from clipboard in command mode
 keymap("n", "M", "<cmd>Man<cr>", opts) -- open manual entry for word under cursor
 keymap("n", "<leader>r.", ":%s/\\<<c-r><c-w>\\>/", add_desc("Replace Word Vim Style"))
+-- stylua: ignore
+keymap("n", "<leader>y", function() vim.fn.setreg("+", vim.fn.histget(":", -1)) end, add_desc("Yank last command"))
 keymap("n", "<leader>Y", 'gg"+yG', add_desc("Yank Whole File"))
 keymap("n", "<leader>w", "<cmd>update<cr>", add_desc("Update File"))
 
