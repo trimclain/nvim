@@ -7,6 +7,7 @@ return {
         opts = {
             -- Event to trigger linters
             events = { "BufWritePost", "BufReadPost", "InsertLeave" },
+            -- Linter List: https://github.com/mfussenegger/nvim-lint?tab=readme-ov-file#available-linters
             linters_by_ft = {
                 -- markdown = { "markdownlint" }, -- { "vale" }
                 -- dockerfile = { "hadolint" },

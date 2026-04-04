@@ -142,6 +142,7 @@ local servers = {
             },
         },
     },
+    omnisharp = { cond = vim.fn.executable("dotnet") == 1 },
 }
 
 local formatters = {
@@ -152,6 +153,7 @@ local formatters = {
     shfmt = { cond = not ON_INFERIOR_OS }, -- "beautysh",
     typstyle = { cond = servers.tinymist.cond },
     gofumpt = { cond = servers.gopls.cond },
+    csharpier = { cond = servers.omnisharp.cond },
 }
 
 local linters = {

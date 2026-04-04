@@ -47,6 +47,7 @@ return {
                 go = { "gofumpt" },
                 python = { "usort", "autopep8" }, -- ruff
                 typst = { "typstyle" },
+                cs = { "csharpier" },
 
                 javascript = { "prettierd", "prettier", stop_after_first = true },
                 javascriptreact = { "prettierd", "prettier", stop_after_first = true },
