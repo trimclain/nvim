@@ -150,7 +150,7 @@ local formatters = {
     prettierd = {},
     stylua = {},
     shfmt = { cond = not ON_INFERIOR_OS }, -- "beautysh",
-    typstyle  = { cond = servers.tinymist.cond },
+    typstyle = { cond = servers.tinymist.cond },
     gofumpt = { cond = servers.gopls.cond },
 }
 
@@ -209,18 +209,6 @@ return {
                     local client = vim.lsp.get_client_by_id(event.data.client_id)
                     local methods = vim.lsp.protocol.Methods
 
-                    -- adjust the border for LSP floating windows
-                    vim.lsp.handlers[methods.textDocument_hover] = vim.lsp.with(vim.lsp.handlers.hover, {
-                        border = CONFIG.ui.border,
-                        -- Disable the 'No information available' notification in .tsx with hover on tailwind class
-                        -- https://github.com/neovim/neovim/blob/25d3b92d071c77aec40f3e78d27537220fc68d70/runtime/lua/vim/lsp/handlers.lua#L360
-                        silent = true,
-                    })
-                    vim.lsp.handlers[methods.textDocument_signatureHelp] =
-                        vim.lsp.with(vim.lsp.handlers.signature_help, {
-                            border = CONFIG.ui.border,
-                        })
-
                     -- configure diagnostics
                     local icons = require("core.icons")
                     vim.diagnostic.config({
@@ -274,6 +262,12 @@ return {
                     map("gO", function() require("snacks").picker.lsp_symbols() end, "Document Symbols")
                     -- stylua: ignore end
 
+                    -- map("K", function()
+                    --     -- Disable the 'No information available' notification in .tsx with hover on tailwind class
+                    --     -- https://github.com/neovim/neovim/blob/25d3b92d071c77aec40f3e78d27537220fc68d70/runtime/lua/vim/lsp/handlers.lua#L360
+                    --     vim.lsp.buf.hover({ silent = true })
+                    -- end, "Hover")
+
                     if require("core.util").has_plugin("tiny-code-action.nvim") then
                         vim.keymap.set({ "n", "x" }, "gra", function()
                             ---@diagnostic disable-next-line: missing-parameter
@@ -291,11 +285,13 @@ return {
                     map("gD", vim.lsp.buf.declaration, "Go to Declaration")
 
                     -- Diagnostic keymaps
-                    local function diagnostic_goto(next, severity)
-                        local go = next and vim.diagnostic.goto_next or vim.diagnostic.goto_prev
-                        severity = severity and vim.diagnostic.severity[severity] or nil
+                    local diagnostic_goto = function(next, severity)
                         return function()
-                            go({ severity = severity })
+                            vim.diagnostic.jump({
+                                count = (next and 1 or -1) * vim.v.count1,
+                                severity = severity and vim.diagnostic.severity[severity] or nil,
+                                float = true,
+                            })
                         end
                     end
 
