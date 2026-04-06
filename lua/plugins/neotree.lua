@@ -75,6 +75,8 @@ return {
                         local node = state.tree:get_node()
                         vim.fn.setreg("+", node.name)
                     end,
+                    -- Same as in my picker (additional to default mapping "s")
+                    ["<C-v>"] = "open_vsplit",
                 },
             },
             default_component_configs = {
