@@ -342,6 +342,11 @@ return {
             -- Alternative: "WhoIsSethDaniel/mason-tool-installer.nvim"
             ---------------------------------------------------------------------------------------
             local ensure_installed = vim.tbl_extend("error", servers, formatters, linters)
+            -- need mason path added to PATH: vim.fs.joinpath(vim.fn.stdpath("data"), "mason")
+            -- if vim.fn.executable("tree-sitter") == 0 then
+            --     table.insert(ensure_installed, "tree-sitter-cli")
+            -- end
+
 
             local function ensure_tool_installed(tool)
                 local cond = ensure_installed[tool].cond
