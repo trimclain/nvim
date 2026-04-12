@@ -63,7 +63,6 @@ require("lazy").setup("plugins", {
                 "netrwPlugin", -- builtin file explorer
                 "rplugin", -- remote plugin support
                 "tarPlugin", -- read *.tar files in vim
-                "tohtml", -- convert current window to html
                 "tutor", -- vim tutor
                 "zipPlugin", -- read *.zip files in vim
             },
