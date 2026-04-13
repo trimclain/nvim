@@ -130,6 +130,7 @@ return {
                 end
             end
 
+            -- Auto-install and enable parsers
             local available_parsers = require("nvim-treesitter").get_available()
             vim.api.nvim_create_autocmd("FileType", {
                 callback = function(args)
@@ -156,6 +157,14 @@ return {
                     end
                 end,
             })
+
+            -- Reimplement missing commands
+            vim.api.nvim_create_user_command("TSBufDisable", function()
+                vim.treesitter.stop()
+            end, { desc = "Disable Treesitter for current buffer" })
+            vim.api.nvim_create_user_command("TSBufEnable", function()
+                vim.treesitter.start()
+            end, { desc = "Enable Treesitter for current buffer" })
         end,
     },
 }
