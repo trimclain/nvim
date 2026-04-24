@@ -244,6 +244,7 @@ return {
                 -- -- Load the wezterm types when the `wezterm` module is required
                 -- -- Needs `justinsgithub/wezterm-types` to be installed
                 --{ path = "wezterm-types", mods = { "wezterm" } },
+                { path = "/usr/share/awesome/lib", words = { "awesome" } },
             },
         },
     },

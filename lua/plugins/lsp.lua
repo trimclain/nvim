@@ -95,7 +95,21 @@ local servers = {
                 },
 
                 diagnostics = {
-                    globals = { "describe", "it", "before_each", "after_each", "vim" },
+                    globals = {
+                        "vim",
+                        -- plenary test
+                        "describe",
+                        "it",
+                        "before_each",
+                        "after_each",
+                        -- awesomewm
+                        "awesome",
+                        "client",
+                        "root",
+                        "screen",
+                        "tag",
+                        "mouse",
+                    },
                     -- ignore Lua_LS's noisy `missing-fields` warnings
                     -- disable = { 'missing-fields' },
                 },
@@ -106,6 +120,7 @@ local servers = {
                 },
                 workspace = {
                     checkThirdParty = false,
+                    -- INFO: I add all libraries in lazydev config in ./blink.lua
                 },
             },
         },
@@ -346,7 +361,6 @@ return {
             -- if vim.fn.executable("tree-sitter") == 0 then
             --     table.insert(ensure_installed, "tree-sitter-cli")
             -- end
-
 
             local function ensure_tool_installed(tool)
                 local cond = ensure_installed[tool].cond
