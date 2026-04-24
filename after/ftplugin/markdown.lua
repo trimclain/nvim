@@ -3,6 +3,9 @@ vim.opt_local.textwidth = 120
 
 -- buffer set to true means the keymap is set only in the buffer this was sourced in
 local opts = { noremap = true, silent = true, buffer = true }
+local add_desc = function(desc)
+    return vim.tbl_extend("error", opts, { desc = desc })
+end
 
 vim.b.todo_list_bufnr = vim.fn.bufnr()
 vim.b.is_todo_list = false
@@ -19,7 +22,7 @@ local toggle_inserting_checkboxes = function()
         vim.notify("Disabled TODO List")
     end
 end
-vim.keymap.set("n", "<leader>td", toggle_inserting_checkboxes, opts)
+vim.keymap.set("n", "<leader>td", toggle_inserting_checkboxes, add_desc("Toggle inserting checkboxes on Enter"))
 
 ---Detects if a string starts with whitespaces and returns the length of them.
 ---@param str string The string to check.
@@ -59,6 +62,6 @@ local toggle_checkbox = function()
 
     vim.api.nvim_set_current_line(string.rep(" ", leading_whitespace_length) .. trimmed_line)
 end
-vim.keymap.set("n", "<C-s>", toggle_checkbox, opts)
+vim.keymap.set("n", "<C-s>", toggle_checkbox, add_desc("Toggle a checkbox"))
 
 vim.keymap.set("i", "--", "—", opts)
