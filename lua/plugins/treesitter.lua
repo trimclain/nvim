@@ -96,10 +96,10 @@ return {
 
             ---@diagnostic disable-next-line: unused-local
             local function disable_indent(language)
-                -- -- sadly broken right now
-                -- if language == "julia" then
-                --     return true
-                -- end
+                -- sadly broken right now
+                if language == "python" then
+                    return true
+                end
             end
 
             ---@param buf integer
