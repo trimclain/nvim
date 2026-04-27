@@ -186,38 +186,11 @@ return {
         cond = CONFIG.lsp.enable_completion,
         event = { "BufReadPre", "BufNewFile" },
         dependencies = {
-            "snacks.nvim", -- used by some keymaps
-            "blink.cmp", -- for capabilities
-            "mason.nvim",
-            {
-                "smjonas/inc-rename.nvim",
-                opts = { preview_empty_name = false },
-                config = function(_, opts)
-                    require("inc_rename").setup(opts)
-                end,
-            },
-            {
-                "rachartier/tiny-code-action.nvim",
-                dependencies = { "plenary.nvim" },
-                event = "LspAttach",
-                opts = {
-                    picker = {
-                        "buffer",
-                        opts = {
-                            auto_preview = true,
-                            hotkeys = true,
-                            -- Use numeric labels.
-                            hotkeys_mode = function(titles)
-                                return vim.iter(ipairs(titles))
-                                    :map(function(i)
-                                        return tostring(i)
-                                    end)
-                                    :totable()
-                            end,
-                        },
-                    },
-                },
-            },
+            "mason.nvim", -- need to be here otherwise it's never loaded
+            -- "blink.cmp", -- for capabilities
+            -- "snacks.nvim", -- used by some keymaps
+            "inc-rename.nvim", -- needs to be here for the :IncRename command to be defined
+            -- "tiny-code-action.nvim",
         },
         config = function()
             vim.api.nvim_create_autocmd("LspAttach", {
@@ -331,6 +304,36 @@ return {
                 end,
             })
         end,
+    },
+
+    {
+        "smjonas/inc-rename.nvim",
+        opts = { preview_empty_name = false },
+        main = "inc_rename",
+    },
+
+    {
+        "rachartier/tiny-code-action.nvim",
+        lazy = true,
+        -- dependencies = { "plenary.nvim" },
+        event = "LspAttach",
+        opts = {
+            picker = {
+                "buffer",
+                opts = {
+                    auto_preview = true,
+                    hotkeys = true,
+                    -- Use numeric labels.
+                    hotkeys_mode = function(titles)
+                        return vim.iter(ipairs(titles))
+                            :map(function(i)
+                                return tostring(i)
+                            end)
+                            :totable()
+                    end,
+                },
+            },
+        },
     },
 
     -- cmdline tools and lsp servers

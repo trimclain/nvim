@@ -3,7 +3,7 @@ return {
     {
         "danymat/neogen",
         enabled = not ON_INFERIOR_OS,
-        dependencies = "nvim-treesitter",
+        -- dependencies = "nvim-treesitter",
         keys = {
             {
                 "<leader>dg",

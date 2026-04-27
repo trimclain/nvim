@@ -2,7 +2,7 @@
 return {
     {
         "akinsho/bufferline.nvim",
-        dependencies = "nvim-web-devicons",
+        -- dependencies = "nvim-web-devicons",
         event = { "BufNewFile", "BufReadPre" },
         cond = CONFIG.plugins.bufferline,
         -- keys = {

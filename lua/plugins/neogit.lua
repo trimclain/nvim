@@ -3,11 +3,11 @@ return {
     "NeogitOrg/neogit",
     -- dir = "~/projects/open-source/nvim-plugins/neogit",
     cond = CONFIG.git.enabled,
-    dependencies = {
-        "plenary.nvim",
-        "codediff.nvim",
-        "snacks.nvim",
-    },
+    -- dependencies = {
+    --     "plenary.nvim",
+    --     "codediff.nvim",
+    --     "snacks.nvim",
+    -- },
     cmd = "Neogit",
     keys = {
         { "<leader>gs", "<cmd>Neogit<cr>", desc = "Status" },

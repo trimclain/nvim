@@ -4,10 +4,10 @@ return {
         "andrewferrier/debugprint.nvim",
         version = "*", -- use the stable version
         lazy = false, -- make line highlighting work before debugprint is first used
-        dependencies = {
-            -- "echasnovski/mini.hipatterns", -- Optional: Needed for line highlighting ('fine-grained' hipatterns plugin)
-            "snacks.nvim", -- Optional: for `:Debugprint search`
-        },
+        -- dependencies = {
+        --     -- "echasnovski/mini.hipatterns", -- Optional: Needed for line highlighting ('fine-grained' hipatterns plugin)
+        --     "snacks.nvim", -- Optional: for `:Debugprint search`
+        -- },
         opts = function()
             local counter = 0
             return {

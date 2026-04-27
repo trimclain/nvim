@@ -3,10 +3,10 @@ return {
     {
         "ThePrimeagen/refactoring.nvim",
         enabled = not ON_INFERIOR_OS,
-        dependencies = {
-            "plenary.nvim",
-            "nvim-treesitter",
-        },
+        -- dependencies = {
+        --     "plenary.nvim",
+        --     "nvim-treesitter",
+        -- },
         -- stylua: ignore
         keys = {
             { "<leader>rb", function() require("refactoring").refactor("Extract Block") end, desc = "Extract Block (Refactor)" },

@@ -3,11 +3,11 @@ return {
     "nvim-neo-tree/neo-tree.nvim",
     cmd = "Neotree",
     branch = "v3.x",
-    dependencies = {
-        "plenary.nvim",
-        "nvim-web-devicons",
-        "nui.nvim",
-    },
+    -- dependencies = {
+    --     "plenary.nvim",
+    --     "nvim-web-devicons",
+    --     "nui.nvim",
+    -- },
     keys = {
         {
             "<leader>e",

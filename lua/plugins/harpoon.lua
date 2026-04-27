@@ -4,7 +4,7 @@ return {
         "ThePrimeagen/harpoon",
         branch = "harpoon2",
         enabled = not ON_INFERIOR_OS,
-        dependencies = "plenary.nvim",
+        -- dependencies = "plenary.nvim",
         -- dir = "~/projects/open-source/nvim-plugins/harpoon",
         -- stylua: ignore
         keys = {

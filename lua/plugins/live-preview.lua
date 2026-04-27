@@ -3,7 +3,7 @@ return {
     "brianhuster/live-preview.nvim",
     -- dev = true,
     enabled = not ON_INFERIOR_OS,
-    dependencies = { "snacks.nvim" },
+    -- dependencies = { "snacks.nvim" },
     ft = { "markdown", "html", "svg" },
     -- TODO: can I make LivePreview close to also close the browser window like iamcco/markdown-preview.nvim
     cmd = "LivePreview",

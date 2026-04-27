@@ -76,10 +76,10 @@ return {
     -- render markdown in neovim
     {
         "MeanderingProgrammer/render-markdown.nvim",
-        dependencies = {
-            "nvim-treesitter",
-            "nvim-web-devicons",
-        },
+        -- dependencies = {
+        --     "nvim-treesitter",
+        --     "nvim-web-devicons",
+        -- },
         cmd = "RenderMarkdown",
         ft = { "markdown" },
         opts = {

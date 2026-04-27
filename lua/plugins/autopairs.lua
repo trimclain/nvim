@@ -109,7 +109,7 @@ return {
     {
         "windwp/nvim-ts-autotag",
         cond = CONFIG.plugins.autopairs,
-        dependencies = "nvim-treesitter",
+        -- dependencies = "nvim-treesitter",
         event = "InsertEnter",
         config = true,
     },

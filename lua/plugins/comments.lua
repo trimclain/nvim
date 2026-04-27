@@ -3,18 +3,6 @@ return {
     {
         "numToStr/Comment.nvim",
         event = "VeryLazy",
-        dependencies = {
-            {
-                "JoosepAlviste/nvim-ts-context-commentstring",
-                dependencies = "nvim-treesitter",
-                config = function()
-                    vim.g.skip_ts_context_commentstring_module = true
-                    require("ts_context_commentstring").setup({
-                        enable_autocmd = false,
-                    })
-                end,
-            },
-        },
         config = function()
             ---@diagnostic disable-next-line: missing-fields
             require("Comment").setup({
@@ -27,6 +15,18 @@ return {
             comment_ft.set("lf", { "#%s" }) -- lf config
             -- comment_ft.set("lua", { "--%s", "--[[%s]]" })
             -- comment_ft.set("markdown", { "[//]:%s", "<!--%s-->" })
+        end,
+    },
+
+    {
+        "JoosepAlviste/nvim-ts-context-commentstring",
+        lazy = true,
+        -- dependencies = "nvim-treesitter",
+        config = function()
+            vim.g.skip_ts_context_commentstring_module = true
+            require("ts_context_commentstring").setup({
+                enable_autocmd = false,
+            })
         end,
     },
 }

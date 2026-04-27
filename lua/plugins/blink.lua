@@ -5,8 +5,6 @@ return {
         version = "1.*", -- use a release tag to download pre-built binaries
         event = "VeryLazy", -- '/' and ':' autocomplete won't always work on InsertEnter
         dependencies = {
-            -- FIX: only in NeogitCommitMessage, whenever I try to autocomplete inside a snippet,
-            -- no matter with which keybind, I get kicked out of the snippet.
             "LuaSnip",
             "ribru17/blink-cmp-spell",
             {

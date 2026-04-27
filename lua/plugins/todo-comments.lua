@@ -3,10 +3,10 @@ return {
     {
         "folke/todo-comments.nvim",
         cond = CONFIG.plugins.todo_comments,
-        dependencies = {
-            "plenary.nvim", -- used if ripgrep not found
-            "snacks.nvim",
-        },
+        -- dependencies = {
+        --     "plenary.nvim", -- used if ripgrep not found
+        --     "snacks.nvim",
+        -- },
         cmd = { "TodoQuickFix" },
         -- stylua: ignore
         keys = {
