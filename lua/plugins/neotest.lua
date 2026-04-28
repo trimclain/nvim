@@ -7,6 +7,7 @@ return {
             "plenary.nvim",
             "nvim-treesitter",
             "antoinemadec/FixCursorHold.nvim",
+            "nvim-neotest/nvim-nio",
             "nvim-neotest/neotest-plenary",
         },
         -- stylua: ignore
