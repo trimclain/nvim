@@ -93,16 +93,16 @@ return {
                 git_status = {
                     symbols = {
                         -- Change type
-                        added = Icons.git.Add, -- default: "✚",
-                        deleted = Icons.git.Remove, -- default: "✖",
-                        modified = Icons.git.Mod, -- default: "",
-                        renamed = Icons.git.Rename, -- default: "󰁕",
+                        added = Icons.git.Added, -- default: "✚",
+                        deleted = Icons.git.Removed, -- default: "✖",
+                        modified = Icons.git.Modified, -- default: "",
+                        renamed = Icons.git.Renamed, -- default: "󰁕",
                         -- Status type
                         untracked = Icons.status.Question, -- default: "",
-                        ignored = Icons.git.Ignore, -- default: "",
+                        ignored = Icons.git.Ignored, -- default: "",
                         unstaged = Icons.status.BoxUnchecked, -- default: "󰄱",
                         staged = Icons.status.BoxChecked, -- default: "",
-                        conflict = Icons.git.Merge, -- default: "",
+                        conflict = Icons.git.Merged, -- default: "",
                     },
                 },
             },

@@ -4,7 +4,7 @@
 local M = {}
 
 M.actions = {
-    BoldClose = "",
+    CloseThick = "",
     Cancel = "󰜺", -- ""; referenced
     Check = "", -- ""; referenced
     Close = "",
@@ -20,17 +20,17 @@ M.actions = {
 }
 
 M.diagnostics = {
-    BoldError = "",
-    Error = "", -- referenced
-    BoldWarn = "", -- referenced
-    Warn = "", -- referenced
-    BoldInfo = "",
-    Info = "", -- referenced
-    BoldQuestion = "",
-    BoldHint = "",
-    Hint = "󰌶", -- ""; referenced
     Debug = "",
+    Error = "", -- referenced
+    ErrorThick = "",
+    Hint = "󰌶", -- ""; referenced
+    HintThick = "",
+    Info = "", -- referenced
+    InfoThick = "",
+    QuestionThick = "",
     Trace = "✎",
+    Warn = "", -- referenced
+    WarnThick = "", -- referenced
 }
 
 M.files = {
@@ -44,20 +44,46 @@ M.files = {
     GitFolder = "", -- referenced
     NewFile = "", -- ""; referenced
     Note = "",
-    NoteBook = "",
+    Notebook = "",
     Project = "", -- ""
 }
 
 M.git = {
-    Add = "", -- ""; referenced
-    Mod = "", -- ""; referenced
-    Remove = "", -- ""; referenced
-    Ignore = "", -- "", "◌"; referenced
-    Rename = "", -- referenced
+    Added = "", -- ""; referenced
+    Modified = "", -- ""; referenced
+    Removed = "", -- ""; referenced
+    Ignored = "", -- "", "◌"; referenced
+    Renamed = "", -- referenced
+    Merged = "", -- ""; -- referenced
     Diff = "", -- ""
-    Merge = "", -- ""; -- referenced
     Branch = "", -- "", "" "", "󰘬" -- referenced
     Repo = "",
+}
+
+M.keyboard = {
+    C = "󰘴",
+    M = "󰘵",
+    D = "󰘳",
+    S = "󰘶",
+    CR = "󰌑",
+    Esc = "󱊷",
+    ScrollWheelDown = "󱕐",
+    ScrollWheelUp = "󱕑",
+    BS = "󰁮",
+    Space = "󱁐",
+    Tab = "󰌒", -- referenced
+    F1 = "󱊫",
+    F2 = "󱊬",
+    F3 = "󱊭",
+    F4 = "󱊮",
+    F5 = "󱊯",
+    F6 = "󱊰",
+    F7 = "󱊱",
+    F8 = "󱊲",
+    F9 = "󱊳",
+    F10 = "󱊴",
+    F11 = "󱊵",
+    F12 = "󱊶",
 }
 
 --- LSP symbol kinds
@@ -92,17 +118,17 @@ M.kinds = { -- referenced
 M.layout = {
     BigCircle = "", -- name: nf-cod-circle_large_filled
     BigUnfilledCircle = "", -- name: nf-cod-circle_large
-    BoldDividerLeft = "",
-    BoldDividerRight = "",
-    BoldLineLeft = "▎", -- referenced
     Circle = "●", -- referenced
     DashedLine = "┊", -- referenced
     DividerLeft = "",
+    DividerLeftThick = "",
     DividerRight = "",
+    DividerRightThick = "",
     Dot = "",
     Ellipsis = "",
     LineCorner = "└", -- referenced
     LineLeft = "▏", -- referenced
+    LineLeftThick = "▎", -- referenced
     LineMiddle = "│", -- referenced
     MidCircle = "", -- name: nf-fa-circle
     MidDottedCircle = "", -- name: nf-fa-circle_dot
@@ -129,12 +155,12 @@ M.nav = {
     ArrowCircleUp = "",
     ArrowClosed = "", -- ""; referenced
     ArrowClosedSmall = "", -- referenced
+    ArrowDownThick = "",
+    ArrowLeftThick = "",
     ArrowOpen = "", -- ""; referenced
     ArrowOpenSmall = "", -- referenced
-    BoldArrowDown = "",
-    BoldArrowLeft = "",
-    BoldArrowRight = "", -- "󰁕"
-    BoldArrowUp = "",
+    ArrowRightThick = "", -- "󰁕"
+    ArrowUpThick = "",
     ChevronDown = "",
     ChevronRight = "",
     ChevronShortDown = "",
@@ -143,7 +169,6 @@ M.nav = {
     ChevronShortUp = "",
     DoubleChevronRight = "»",
     Forward = "",
-    Tab = "󰌒", -- referenced
     TriangleShortArrowDown = "",
     TriangleShortArrowLeft = "",
     TriangleShortArrowRight = "",
@@ -151,7 +176,7 @@ M.nav = {
 }
 
 M.status = {
-    BookMark = "", -- ""
+    Bookmark = "", -- ""
     BoxChecked = "󰄵", -- "", "󰱒"; referenced
     BoxUnchecked = "󰄱", -- referenced
     Bug = "", -- ""; referenced
@@ -196,6 +221,7 @@ M.types = {
 
 M.unicode = {
     Add = "✚",
+    ArrowRightThick = "➜",
     BallotX = "✗", -- referenced
     Check = "✓", -- referenced
     GappedCircleArrowClockwise = "⟳",

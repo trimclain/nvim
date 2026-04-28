@@ -192,7 +192,7 @@ return {
             -- Show the size of tabs
             local spaces = {
                 function()
-                    return Icons.nav.Tab .. " " .. vim.api.nvim_get_option_value("shiftwidth", { buf = 0 })
+                    return Icons.keyboard.Tab .. " " .. vim.api.nvim_get_option_value("shiftwidth", { buf = 0 })
                 end,
                 cond = hide_in_width,
             }
@@ -245,9 +245,9 @@ return {
                             "diff",
                             -- colored = CONFIG.ui.colorscheme ~= "primer-dark",
                             symbols = {
-                                added = Icons.git.Add .. " ",
-                                modified = Icons.git.Mod .. " ",
-                                removed = Icons.git.Remove .. " ",
+                                added = Icons.git.Added .. " ",
+                                modified = Icons.git.Modified .. " ",
+                                removed = Icons.git.Removed .. " ",
                             },
                             cond = hide_in_width,
                         },

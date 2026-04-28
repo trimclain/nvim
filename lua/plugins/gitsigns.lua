@@ -6,7 +6,7 @@ return {
         cond = CONFIG.git.enabled,
         event = { "BufReadPre", "BufNewFile" },
         opts = function()
-            local bold_line_left = require("core.icons").layout.BoldLineLeft
+            local bold_line_left = require("core.icons").layout.LineLeftThick
             local dashed_line = require("core.icons").layout.DashedLine
 
             return {

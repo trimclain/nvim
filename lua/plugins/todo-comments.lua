@@ -33,7 +33,7 @@ return {
                     TODO = { icon = Icons.actions.Check, color = "info" },
                     HACK = { icon = Icons.status.Fire, color = "warning" },
                     WARN = {
-                        icon = Icons.diagnostics.BoldWarn,
+                        icon = Icons.diagnostics.WarnThick,
                         color = "warning",
                         alt = { "WARNING", "XXX" },
                     },
