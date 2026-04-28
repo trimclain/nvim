@@ -15,6 +15,7 @@
 
 -- Dependencies:
 -- gcc: nvim-treesitter
+-- tree-sitter-cli: nvim-treesitter
 -- ripgrep: snacks.picker, grug-far, todo-comments
 -- node: mason, nvim-lspconfig
 -- imagemagick: snacks.image
@@ -24,7 +25,6 @@ local mode = "default"
 
 _G.ON_INFERIOR_OS = not not jit.os:find("Windows")
 
----@diagnostic disable-next-line: undefined-field
 if ON_INFERIOR_OS and (vim.g.neovide or vim.fn.has("gui_running") == 1) then
     -- I want neovide to start fast, until I fix 15 minute startup time on garbage os
     mode = "minimal"
