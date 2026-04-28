@@ -99,7 +99,7 @@ return {
             local formatters = {
                 function()
                     local formatters = formatters_list()
-                    local icon = Icons.ui.Paragraph .. " "
+                    local icon = Icons.tools.Paragraph .. " "
                     local label = icon .. "Style:"
                     if formatters == "" then
                         -- return icon .. "∅"
@@ -129,7 +129,7 @@ return {
                         vim.notify("WOOOW! Unknown status: " .. status, vim.log.levels.INFO, { title = "Copilot News" })
                     end
 
-                    return Icons.kinds.Copilot .. " " -- .. (status or "")
+                    return Icons.misc.Copilot .. " " -- .. (status or "")
                 end,
                 cond = function()
                     local ok, clients = pcall(vim.lsp.get_clients, { name = "copilot", bufnr = 0 })
@@ -192,7 +192,7 @@ return {
             -- Show the size of tabs
             local spaces = {
                 function()
-                    return Icons.ui.Tab .. " " .. vim.api.nvim_get_option_value("shiftwidth", { buf = 0 })
+                    return Icons.nav.Tab .. " " .. vim.api.nvim_get_option_value("shiftwidth", { buf = 0 })
                 end,
                 cond = hide_in_width,
             }
@@ -201,7 +201,7 @@ return {
             local autoformat = function()
                 if CONFIG.lsp.format_on_save then
                     -- ""
-                    return Icons.ui.DoubleCheck .. " "
+                    return Icons.actions.DoubleCheck .. " "
                 end
                 -- "", ""
                 return ""
@@ -240,7 +240,7 @@ return {
                 sections = {
                     lualine_a = { mode },
                     lualine_b = {
-                        "branch",
+                        { "branch", icon = Icons.git.Branch }, -- default: ""
                         {
                             "diff",
                             -- colored = CONFIG.ui.colorscheme ~= "primer-dark",
@@ -279,10 +279,10 @@ return {
                             -- spaces to leave in the window for other components
                             shorting_target = math.floor(vim.go.columns * 0.8), -- (default: 40)
                             symbols = {
-                                modified = Icons.ui.Circle, -- default: "[+]"
-                                readonly = Icons.ui.Lock, -- default: "[-]"
+                                modified = Icons.layout.Circle, -- default: "[+]"
+                                readonly = Icons.status.Lock, -- default: "[-]"
                                 unnamed = "", -- default: "[No Name]"
-                                newfile = " " .. Icons.ui.NewFile, -- default: "[New]"
+                                newfile = " " .. Icons.files.NewFile, -- default: "[New]"
                             },
                             cond = function()
                                 return hide_in_width(100) and disable_for_ui_filetypes()

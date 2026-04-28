@@ -13,7 +13,7 @@ return {
         { "<leader>gs", "<cmd>Neogit<cr>", desc = "Status" },
     },
     config = function()
-        local Icons = require("core.icons").ui
+        local Icons = require("core.icons")
         local neogit = require("neogit")
         neogit.setup({
             disable_insert_on_commit = true, -- "auto", "true" or "false"
@@ -28,8 +28,8 @@ return {
             diff_viewer = "codediff",
             signs = {
                 -- { CLOSED, OPENED }
-                section = { Icons.ArrowClosed, Icons.ArrowOpen }, -- default: { ">", "v" },
-                item = { Icons.ArrowClosedSmall, Icons.ArrowOpenSmall }, -- default: { ">", "v" },
+                section = { Icons.nav.ArrowClosed, Icons.nav.ArrowOpen }, -- default: { ">", "v" },
+                item = { Icons.nav.ArrowClosedSmall, Icons.nav.ArrowOpenSmall }, -- default: { ">", "v" },
                 -- default: hunk = { "", "" },
                 hunk = { "", "" },
             },

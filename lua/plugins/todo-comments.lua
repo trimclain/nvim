@@ -25,21 +25,21 @@ return {
                 -- keywords recognized as todo comments
                 keywords = {
                     FIX = {
-                        icon = Icons.ui.Bug, -- icon used for the sign, and in search results
+                        icon = Icons.status.Bug, -- icon used for the sign, and in search results
                         color = "error", -- can be a hex color, or a named color (see below)
                         alt = { "FIXME", "BUG", "FIXIT", "ISSUE" }, -- a set of other keywords that all map to this FIX keywords
                         -- signs = false, -- configure signs for some keywords individually
                     },
-                    TODO = { icon = Icons.ui.Check, color = "info" },
-                    HACK = { icon = Icons.ui.Fire, color = "warning" },
+                    TODO = { icon = Icons.actions.Check, color = "info" },
+                    HACK = { icon = Icons.status.Fire, color = "warning" },
                     WARN = {
                         icon = Icons.diagnostics.BoldWarn,
                         color = "warning",
                         alt = { "WARNING", "XXX" },
                     },
-                    PERF = { icon = Icons.ui.Clock, alt = { "OPTIM", "PERFORMANCE", "OPTIMIZE" } },
-                    NOTE = { icon = Icons.ui.Message, color = "hint", alt = { "INFO", "IDEA" } },
-                    TEST = { icon = Icons.ui.Speedometer, color = "test", alt = { "TESTING", "PASSED", "FAILED" } },
+                    PERF = { icon = Icons.status.Clock, alt = { "OPTIM", "PERFORMANCE", "OPTIMIZE" } },
+                    NOTE = { icon = Icons.status.Message, color = "hint", alt = { "INFO", "IDEA" } },
+                    TEST = { icon = Icons.status.Speedometer, color = "test", alt = { "TESTING", "PASSED", "FAILED" } },
                 },
                 search = {
                     command = "rg",

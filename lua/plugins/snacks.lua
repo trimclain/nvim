@@ -130,14 +130,14 @@ return {
             preset = {
                 -- stylua: ignore
                 keys = {
-                    { icon = Icons.ui.Search, key = "f", desc = "Find File", action = "<leader>ff" },
+                    { icon = Icons.actions.Search, key = "f", desc = "Find File", action = "<leader>ff" },
                     -- { icon = Icons.kinds.File, key = "n", desc = "New File", action = ":ene | startinsert" },
-                    { icon = Icons.ui.Files, key = "r", desc = "Recent Files", action = "<leader>fr" },
-                    { icon = Icons.ui.List, key = "s", desc = "Find Text", action = "<leader>fs" },
-                    { icon = Icons.ui.BoxChecked, key = "t", desc = "Find Todo", action = "<leader>ft" },
-                    { icon = Icons.ui.Gear, key = "c", desc = "Config", action = "<leader>fn" },
-                    { icon = Icons.ui.Lazy, key = "L", desc = "Lazy", action = ":Lazy", enabled = package.loaded.lazy ~= nil },
-                    { icon = Icons.ui.SignOut, key = "q", desc = "Quit", action = ":qa" },
+                    { icon = Icons.files.Files, key = "r", desc = "Recent Files", action = "<leader>fr" },
+                    { icon = Icons.tools.List, key = "s", desc = "Find Text", action = "<leader>fs" },
+                    { icon = Icons.status.BoxChecked, key = "t", desc = "Find Todo", action = "<leader>ft" },
+                    { icon = Icons.tools.Gear, key = "c", desc = "Config", action = "<leader>fn" },
+                    { icon = Icons.status.Lazy, key = "L", desc = "Lazy", action = ":Lazy", enabled = package.loaded.lazy ~= nil },
+                    { icon = Icons.actions.SignOut, key = "q", desc = "Quit", action = ":qa" },
                 },
             },
             -- "doom" example (default)
@@ -165,7 +165,7 @@ return {
         --     table.insert(
         --         opts.dashboard.preset.keys,
         --         2,
-        --         { icon = Icons.ui.GitFolder, key = "p", desc = "Open Project", action = "<leader>fp" }
+        --         { icon = Icons.files.GitFolder, key = "p", desc = "Open Project", action = "<leader>fp" }
         --     )
         -- end
 

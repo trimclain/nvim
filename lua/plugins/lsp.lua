@@ -200,7 +200,7 @@ return {
                     local methods = vim.lsp.protocol.Methods
 
                     -- configure diagnostics
-                    local icons = require("core.icons")
+                    local Icons = require("core.icons")
                     vim.diagnostic.config({
                         severity_sort = true,
                         underline = { severity = vim.diagnostic.severity.ERROR },
@@ -211,10 +211,10 @@ return {
                         update_in_insert = false,
                         signs = {
                             text = {
-                                [vim.diagnostic.severity.ERROR] = icons.diagnostics.Error,
-                                [vim.diagnostic.severity.WARN] = icons.diagnostics.Warn,
-                                [vim.diagnostic.severity.INFO] = icons.diagnostics.Info,
-                                [vim.diagnostic.severity.HINT] = icons.diagnostics.Hint,
+                                [vim.diagnostic.severity.ERROR] = Icons.diagnostics.Error,
+                                [vim.diagnostic.severity.WARN] = Icons.diagnostics.Warn,
+                                [vim.diagnostic.severity.INFO] = Icons.diagnostics.Info,
+                                [vim.diagnostic.severity.HINT] = Icons.diagnostics.Hint,
                             },
                         },
                     })
@@ -343,13 +343,13 @@ return {
         cmd = "Mason",
         keys = { { "<leader>M", "<cmd>Mason<cr>", desc = "[M]ason" } },
         config = function()
-            local icons = require("core.icons")
+            local Icons = require("core.icons")
             require("mason").setup({
                 ui = {
                     icons = {
-                        package_installed = icons.ui.UnicodeCheck,
-                        package_uninstalled = icons.ui.UnicodeBallotX,
-                        package_pending = icons.ui.UnicodeClockwiseOpenCircleArrow,
+                        package_installed = Icons.unicode.Check,
+                        package_uninstalled = Icons.unicode.BallotX,
+                        package_pending = Icons.unicode.OpenCircleArrowClockwise,
                     },
                     border = CONFIG.ui.border,
                 },

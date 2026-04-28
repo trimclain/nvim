@@ -90,7 +90,7 @@ return {
             vim.api.nvim_set_hl(0, "RenderMarkdownRecurring", { link = "Special" })
             vim.api.nvim_set_hl(0, "RenderMarkdownUrgent", { link = "DiagnosticError" })
 
-            local icons = require("core.icons")
+            local Icons = require("core.icons")
             return {
                 render_modes = true, -- default: { "n", "c", "t" }
                 code = {
@@ -107,13 +107,13 @@ return {
                 -- Docs: https://github.com/MeanderingProgrammer/render-markdown.nvim/wiki/Checkboxes
                 checkbox = {
                     unchecked = {
-                        icon = icons.ui.BoxUnchecked .. " ",
+                        icon = Icons.status.BoxUnchecked .. " ",
                         highlight = "RenderMarkdownUnchecked",
                         scope_highlight = nil,
                     },
                     -- default: "󰱒 "
                     checked = {
-                        icon = icons.ui.BoxChecked .. " ",
+                        icon = Icons.status.BoxChecked .. " ",
                         highlight = "RenderMarkdownChecked",
                         scope_highlight = nil,
                     },
@@ -121,37 +121,37 @@ return {
                         -- default: "󰥔 "
                         todo = {
                             raw = "[-]",
-                            rendered = icons.ui.Clock .. " ",
+                            rendered = Icons.status.Clock .. " ",
                             highlight = "RenderMarkdownTodo",
                             scope_highlight = nil,
                         },
                         uncertain = {
                             raw = "[?]",
-                            rendered = icons.ui.Question .. " ",
+                            rendered = Icons.status.Question .. " ",
                             highlight = "RenderMarkdownUncertain",
                             scope_highlight = nil,
                         },
                         on_hold = {
                             raw = "[=]",
-                            rendered = icons.ui.Pause .. " ",
+                            rendered = Icons.actions.Pause .. " ",
                             highlight = "RenderMarkdownOnHold",
                             scope_highlight = nil,
                         },
                         cancelled = {
                             raw = "[_]",
-                            rendered = icons.ui.Cancel .. " ",
+                            rendered = Icons.actions.Cancel .. " ",
                             highlight = "RenderMarkdownCancelled",
                             scope_highlight = nil,
                         },
                         recurring = {
                             raw = "[+]",
-                            rendered = icons.ui.UnicodeAnticlockwiseOpenCircleArrow .. " ",
+                            rendered = Icons.unicode.OpenCircleArrowAnticlockwise .. " ",
                             highlight = "RenderMarkdownRecurring",
                             scope_highlight = nil,
                         },
                         urgent = {
                             raw = "[!]",
-                            rendered = icons.diagnostics.Warn .. " ",
+                            rendered = Icons.diagnostics.Warn .. " ",
                             highlight = "RenderMarkdownUrgent",
                             scope_highlight = nil,
                         },

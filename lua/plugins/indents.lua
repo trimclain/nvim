@@ -9,8 +9,8 @@ return {
             local Icons = require("core.icons")
             return {
                 indent = {
-                    char = Icons.ui.LineLeft, -- default: "│"
-                    tab_char = Icons.ui.LineLeft, -- default: "│"
+                    char = Icons.layout.LineLeft, -- default: "│"
+                    tab_char = Icons.layout.LineLeft, -- default: "│"
                 },
                 scope = { enabled = false },
                 exclude = {
@@ -35,7 +35,7 @@ return {
         end,
         config = function()
             local opts = {
-                symbol = require("core.icons").ui.LineLeft, -- default: "│",
+                symbol = require("core.icons").layout.LineLeft, -- default: "│",
                 options = { try_as_border = true },
             }
 

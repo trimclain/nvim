@@ -28,7 +28,7 @@ return {
         end
     end,
     opts = function()
-        local Icons = require("core.icons").ui
+        local Icons = require("core.icons")
 
         return {
             filesystem = {
@@ -81,10 +81,29 @@ return {
             },
             default_component_configs = {
                 indent = {
+                    with_markers = true,
+                    indent_marker = Icons.layout.LineMiddle, -- default: "│",
+                    last_indent_marker = Icons.layout.LineCorner, -- default: "└",
+                    indent_size = 2,
                     with_expanders = true, -- if nil and file nesting is enabled, will enable expanders
-                    expander_collapsed = Icons.ArrowClosedSmall,
-                    expander_expanded = Icons.ArrowOpenSmall,
+                    expander_collapsed = Icons.nav.ArrowClosedSmall,
+                    expander_expanded = Icons.nav.ArrowOpenSmall,
                     expander_highlight = "NeoTreeExpander",
+                },
+                git_status = {
+                    symbols = {
+                        -- Change type
+                        added = Icons.git.Add, -- default: "✚",
+                        deleted = Icons.git.Remove, -- default: "✖",
+                        modified = Icons.git.Mod, -- default: "",
+                        renamed = Icons.git.Rename, -- default: "󰁕",
+                        -- Status type
+                        untracked = Icons.status.Question, -- default: "",
+                        ignored = Icons.git.Ignore, -- default: "",
+                        unstaged = Icons.status.BoxUnchecked, -- default: "󰄱",
+                        staged = Icons.status.BoxChecked, -- default: "",
+                        conflict = Icons.git.Merge, -- default: "",
+                    },
                 },
             },
         }

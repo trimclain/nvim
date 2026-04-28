@@ -113,7 +113,7 @@ vim.opt.listchars = {
     -- lead = "⋅", -- "␣", "", "_"
 }
 
-local icons = require("core.icons").ui
+local icons = require("core.icons").nav
 -- fillchars (`:h 'fillchars'`)
 vim.opt.fillchars = {
     eob = " ", -- empty lines at the end of a buffer
