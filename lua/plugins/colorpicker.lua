@@ -26,7 +26,11 @@ return {
                     -- update color values even if buffer is not focused
                     always_update = false,
                 },
-                filetypes = { "*" },
+                filetypes = {
+                    "*",
+                    -- exclude lazy.nvim buffers
+                    "!lazy",
+                },
                 -- all the sub-options of filetypes apply to buftypes
                 buftypes = {
                     "*",
