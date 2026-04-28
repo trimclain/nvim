@@ -82,19 +82,82 @@ return {
         -- },
         cmd = "RenderMarkdown",
         ft = { "markdown" },
-        opts = {
-            render_modes = true, -- default: { "n", "c", "t" }
-            code = {
-                sign = false,
-                width = "block", -- default: "full"
-                right_pad = 1, -- default: 0
-                border = "thin", -- default: "hide"
-            },
-            heading = {
-                sign = false,
-                -- use basic icons from neorg
-                icons = { "◉ ", "◎ ", "○ ", "✺ ", "▶ ", "⤷ " }, -- default: { "󰲡 ", "󰲣 ", "󰲥 ", "󰲧 ", "󰲩 ", "󰲫 " },
-            },
-        },
+        opts = function()
+            -- Define highlights for custom checkbox types
+            vim.api.nvim_set_hl(0, "RenderMarkdownUncertain", { link = "DiagnosticWarn" })
+            vim.api.nvim_set_hl(0, "RenderMarkdownOnHold", { link = "Conditional" })
+            vim.api.nvim_set_hl(0, "RenderMarkdownCancelled", { link = "Comment" })
+            vim.api.nvim_set_hl(0, "RenderMarkdownRecurring", { link = "Special" })
+            vim.api.nvim_set_hl(0, "RenderMarkdownUrgent", { link = "DiagnosticError" })
+
+            local icons = require("core.icons")
+            return {
+                render_modes = true, -- default: { "n", "c", "t" }
+                code = {
+                    sign = false,
+                    width = "block", -- default: "full"
+                    right_pad = 1, -- default: 0
+                    border = "thin", -- default: "hide"
+                },
+                heading = {
+                    sign = false,
+                    -- use basic icons from neorg
+                    icons = { "◉ ", "◎ ", "○ ", "✺ ", "▶ ", "⤷ " }, -- default: { "󰲡 ", "󰲣 ", "󰲥 ", "󰲧 ", "󰲩 ", "󰲫 " },
+                },
+                -- Docs: https://github.com/MeanderingProgrammer/render-markdown.nvim/wiki/Checkboxes
+                checkbox = {
+                    unchecked = {
+                        icon = icons.ui.BoxUnchecked .. " ",
+                        highlight = "RenderMarkdownUnchecked",
+                        scope_highlight = nil,
+                    },
+                    -- default: "󰱒 "
+                    checked = {
+                        icon = icons.ui.BoxChecked .. " ",
+                        highlight = "RenderMarkdownChecked",
+                        scope_highlight = nil,
+                    },
+                    custom = {
+                        -- default: "󰥔 "
+                        todo = {
+                            raw = "[-]",
+                            rendered = icons.ui.Clock .. " ",
+                            highlight = "RenderMarkdownTodo",
+                            scope_highlight = nil,
+                        },
+                        uncertain = {
+                            raw = "[?]",
+                            rendered = icons.ui.Question .. " ",
+                            highlight = "RenderMarkdownUncertain",
+                            scope_highlight = nil,
+                        },
+                        on_hold = {
+                            raw = "[=]",
+                            rendered = icons.ui.Pause .. " ",
+                            highlight = "RenderMarkdownOnHold",
+                            scope_highlight = nil,
+                        },
+                        cancelled = {
+                            raw = "[_]",
+                            rendered = icons.ui.Cancel .. " ",
+                            highlight = "RenderMarkdownCancelled",
+                            scope_highlight = nil,
+                        },
+                        recurring = {
+                            raw = "[+]",
+                            rendered = icons.ui.UnicodeAnticlockwiseOpenCircleArrow .. " ",
+                            highlight = "RenderMarkdownRecurring",
+                            scope_highlight = nil,
+                        },
+                        urgent = {
+                            raw = "[!]",
+                            rendered = icons.diagnostics.Warn .. " ",
+                            highlight = "RenderMarkdownUrgent",
+                            scope_highlight = nil,
+                        },
+                    },
+                },
+            }
+        end,
     },
 }

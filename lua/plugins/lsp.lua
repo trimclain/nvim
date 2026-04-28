@@ -349,7 +349,7 @@ return {
                     icons = {
                         package_installed = icons.ui.UnicodeCheck,
                         package_uninstalled = icons.ui.UnicodeBallotX,
-                        package_pending = icons.ui.UnicodeCircleArrow,
+                        package_pending = icons.ui.UnicodeClockwiseOpenCircleArrow,
                     },
                     border = CONFIG.ui.border,
                 },
