@@ -12,10 +12,10 @@ return {
                 enabled = not ON_INFERIOR_OS,
             },
             {
-                "giuxtaposition/blink-cmp-copilot", -- NOTE: this might be not setup properly. Didn't work last time.
+                "giuxtaposition/blink-cmp-copilot", -- WARN: this is not setup properly.
                 enabled = CONFIG.lsp.enable_copilot and vim.fn.executable("node") == 1,
                 cond = vim.g.neovide == nil,
-                dependencies = "copilot.lua",
+                dependencies = "zbirenbaum/copilot.lua",
             },
         },
         -- Docs: https://cmp.saghen.dev/configuration/general.html
@@ -184,7 +184,7 @@ return {
             local Util = require("core.util")
 
             -- setup lazydev
-            if Util.has_plugin("lazydev") then
+            if Util.has_plugin("lazydev.nvim") then
                 table.insert(opts.sources.default, 1, "lazydev")
                 opts.sources.providers.lazydev = {
                     name = "LazyDev",
@@ -213,7 +213,7 @@ return {
             end
 
             -- setup copilot cmp source
-            if Util.has_plugin("copilot") then
+            if Util.has_plugin("blink-cmp-copilot") then
                 table.insert(opts.sources.default, 1, "copilot")
                 opts.sources.providers.copilot = {
                     name = "copilot",
