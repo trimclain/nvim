@@ -34,8 +34,8 @@ return {
                         delete_debug_prints = "",
                     },
                     insert = {
-                        plain = "<C-G>p",
-                        variable = "<C-G>v",
+                        plain = false, -- default: "<C-G>p",
+                        variable = false, -- default: "<C-G>v",
                     },
                     visual = {
                         variable_below = "g?v",
