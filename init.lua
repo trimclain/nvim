@@ -64,6 +64,7 @@ _G.CONFIG = {
         virtual_text = false,
         show_signature_help = not ON_INFERIOR_OS,
         enable_copilot = false,
+        enable_windsurf = not ON_INFERIOR_OS,
     },
     plugins = {
         neoscroll = not ON_INFERIOR_OS,

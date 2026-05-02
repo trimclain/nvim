@@ -137,6 +137,7 @@ M.layout = {
 }
 
 M.misc = {
+    Codeium = "", -- "󰘦",  -- referenced
     Copilot = "", -- referenced
     Misc = "",
     Robot = "",
@@ -148,7 +149,6 @@ M.misc = {
     Vim = "", -- referenced
     Watch = "",
     Watches = "󰂥",
-    Windsurf = "󰘦",  -- referenced
 }
 
 M.nav = {

@@ -17,6 +17,12 @@ return {
                 cond = vim.g.neovide == nil,
                 dependencies = "zbirenbaum/copilot.lua",
             },
+            {
+                "saghen/blink.compat", -- required for windsurf.nvim to be added as a source
+                cond = CONFIG.lsp.enable_windsurf,
+                version = "2.*",
+                opts = {},
+            },
         },
         -- Docs: https://cmp.saghen.dev/configuration/general.html
         opts = {
@@ -73,12 +79,23 @@ return {
                                         Path = "[path]",
                                         Snippets = "[snip]",
                                         cmdline = "[cmd]",
-                                        copilot = "[copilot]",
+                                        Copilot = "[copilot]",
+                                        Codeium = "[codeium]",
                                         Latex = "[symb]",
                                         LazyDev = "[dev]",
                                         Spell = "[spell]",
                                     }
                                     return custom_source_names[ctx.source_name]
+                                end,
+                            },
+                            kind_icon = {
+                                text = function(ctx)
+                                    local icon = ctx.kind_icon
+                                    -- this is the only way I know to replace the default Codeium icon
+                                    if ctx.source_name == "Codeium" then
+                                        icon = require("core.icons").misc.Codeium
+                                    end
+                                    return icon .. ctx.icon_gap
                                 end,
                             },
                         },
@@ -216,13 +233,23 @@ return {
             if Util.has_plugin("blink-cmp-copilot") then
                 table.insert(opts.sources.default, 1, "copilot")
                 opts.sources.providers.copilot = {
-                    name = "copilot",
+                    name = "Copilot",
                     module = "blink-cmp-copilot",
                     score_offset = 101, -- show at a higher priority than lsp
                     async = true,
                 }
             end
 
+            -- setup windsurf cmp source
+            if Util.has_plugin("windsurf.nvim") then
+                table.insert(opts.sources.default, 1, "codeium")
+                opts.sources.providers.codeium = {
+                    name = "Codeium",
+                    module = "codeium.blink",
+                    score_offset = 101, -- show at a higher priority than lsp
+                    async = true,
+                }
+            end
             require("blink.cmp").setup(opts)
         end,
     },
@@ -254,5 +281,16 @@ return {
         opts = {
             integrations = { blink_cmp = true },
         },
+    },
+
+    -- AI autocomplete
+    {
+        "Exafunction/windsurf.nvim",
+        cond = CONFIG.lsp.enable_windsurf,
+        cmd = "Codeium",
+        event = "InsertEnter",
+        build = ":Codeium Auth",
+        main = "codeium",
+        opts = { enable_cmp_source = true },
     },
 }
