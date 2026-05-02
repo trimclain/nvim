@@ -96,7 +96,7 @@ M.kinds = { -- referenced
     Variable = "󰀫", -- ""; 6
     Class = "", -- 7
     Interface = "", -- ""; 8
-    Module = "", -- 9
+    Module = "", -- ""; 9
     Property = "", -- ""; 10
     Unit = "", -- ""; 11
     Value = "󰎠", -- ""; 12
@@ -141,11 +141,14 @@ M.misc = {
     Misc = "",
     Robot = "",
     Squirrel = "", -- ""
+    Supermaven = "",
+    TabNine = "󰏚",
     Tag = "", -- ""
     Tree = "",
     Vim = "", -- referenced
     Watch = "",
     Watches = "󰂥",
+    Windsurf = "󰘦",  -- referenced
 }
 
 M.nav = {
@@ -209,14 +212,14 @@ M.tools = {
 
 M.types = {
     Array = "",
-    Boolean = "",
+    Boolean = "", -- "󰨙 "
     Key = "",
     Namespace = "",
     Null = "󰟢", -- ""
-    Number = "",
+    Number = "", -- "󰎠"
     Object = "",
     Package = "", -- ""
-    String = "", -- ""
+    String = "", -- "", ""
 }
 
 M.unicode = {
