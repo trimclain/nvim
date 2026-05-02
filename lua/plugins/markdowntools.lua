@@ -80,6 +80,7 @@ return {
         --     "nvim-treesitter",
         --     "nvim-web-devicons",
         -- },
+        cond = CONFIG.plugins.treesitter,
         cmd = "RenderMarkdown",
         ft = { "markdown" },
         opts = function()

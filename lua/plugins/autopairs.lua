@@ -108,7 +108,7 @@ return {
     -- close tags using treesitter
     {
         "windwp/nvim-ts-autotag",
-        cond = CONFIG.plugins.autopairs,
+        cond = CONFIG.plugins.autopairs and CONFIG.plugins.treesitter,
         -- dependencies = "nvim-treesitter",
         event = "InsertEnter",
         config = true,

@@ -3,7 +3,8 @@ return {
     {
         "nvim-treesitter/nvim-treesitter",
         lazy = false,
-        enabled = vim.fn.executable("tree-sitter") == 1, -- NOTE: in worst case can be installed using Mason
+        -- NOTE: in worst case tree-sitter-cli can be installed using Mason
+        enabled = CONFIG.plugins.treesitter and vim.fn.executable("tree-sitter") == 1,
         branch = "main",
         commit = vim.fn.has("nvim-0.12") == 0 and "7caec274fd19c12b55902a5b795100d21531391f" or nil,
         build = ":TSUpdate",

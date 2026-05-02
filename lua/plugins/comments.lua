@@ -2,6 +2,8 @@
 return {
     {
         "numToStr/Comment.nvim",
+        -- NOTE: nvim-treesitter is not officially a dependency, but I've had my issues without it
+        cond =  CONFIG.plugins.treesitter,
         event = "VeryLazy",
         config = function()
             ---@diagnostic disable-next-line: missing-fields

@@ -80,6 +80,7 @@ _G.CONFIG = {
         spinner_type = "dots_pulse", -- spinners: dots_pulse, moon, meter, zip, pipe, dots, arc
         todo_comments = mode == "default",
         treesj = mode == "default",
+        treesitter = not ON_INFERIOR_OS,
     },
 }
 

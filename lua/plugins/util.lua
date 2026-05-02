@@ -84,13 +84,6 @@ return {
     -- makes some plugins dot-repeatable like flash.nvim
     ---{ "tpope/vim-repeat", event = "VeryLazy" },
 
-    -- I use snippets instead, but in case I want here's the link
-    -- wisely add "end" in Ruby, Vimscript, Lua, etc
-    -- {
-    --     "RRethy/nvim-treesitter-endwise",
-    --     dependencies = { "nvim-treesitter" },
-    -- },
-
     -- I might find a use for this one later
     -- tab out from parentheses, quotes, and similar contexts
     -- {
