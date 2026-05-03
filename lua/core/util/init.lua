@@ -13,7 +13,7 @@ function M.get_disabled_filetypes(type)
         "neotest-output", -- nvim-neotest/neotest
         "neotest-summary", -- nvim-neotest/neotest
         "qf", -- nvim quickfix list
-        "spectre_panel", -- nvim-pack/nvim-spectre
+        "grug-far", -- MagicDuck/grug-far.nvim
         "startuptime", -- dstein64/vim-startuptime
     }
 
