@@ -1,6 +1,6 @@
 local Util = require("core.util")
 
-local opts = { noremap = true, silent = true }
+local opts = { remap = false, silent = true }
 local keymap = vim.keymap.set
 
 --- Extend opts by adding a description, so the keymap appears in which-key
@@ -81,6 +81,26 @@ keymap("n", "N", "Nzzzv", opts) -- and backwards
 --     keymap("n", "<C-d>", "<C-d>zz", opts) -- and down
 -- end
 
+-- toggle the fold under the cursor for all filetypes except 2
+vim.api.nvim_create_autocmd("FileType", {
+    pattern = "*",
+    callback = function(event)
+        local ft = vim.bo[event.buf].filetype
+        local excluded = { "NeogitStatus", "UndotreeDiff" }
+        if vim.tbl_contains(excluded, ft) then
+            return
+        end
+
+        keymap("n", "<Tab>", function()
+            if vim.fn.foldlevel(".") > 0 then
+                vim.cmd.normal({ "za", bang = true })
+            end
+        end, { buffer = event.buf, silent = true })
+    end,
+    group = vim.api.nvim_create_augroup("trimclain/toggle_fold", { clear = true }),
+    desc = "Toggle fold under the cursor",
+})
+
 keymap("n", "J", "mzJ`z<cmd>delm z<cr>", opts) -- keep it centered when joining lines
 keymap("i", ",", ",<c-g>u", opts) -- set a break point for undo after ,
 keymap("i", ".", ".<c-g>u", opts) -- after .
@@ -96,8 +116,7 @@ keymap("x", "y", "myy`y<cmd>delm y<cr>", opts) -- maintain the cursor position
 keymap("x", "Y", "myy`y<cmd>delm y<cr>", opts) -- when yanking a visual selection
 keymap("x", "p", "P", opts) -- when replacing a higlighted text, don't yank it
 -- keymap("n", "<leader>d", '"_d', add_desc("Delete to blackhole"))
-keymap("i", "<C-r>", "<C-r>+", opts) -- paste from clipboard in insert mode
-keymap("c", "<C-r>", "<C-r>+", opts) -- paste from clipboard in command mode
+keymap({ "i", "c", "s" }, "<C-r>", "<C-r>+", opts) -- paste from clipboard in insert, command and select modes
 keymap("n", "M", "<cmd>Man<cr>", opts) -- open manual entry for word under cursor
 keymap("n", "<leader>r.", ":%s/\\<<c-r><c-w>\\>/", add_desc("Replace Word Vim Style"))
 -- stylua: ignore
@@ -115,13 +134,13 @@ keymap("n", "j", '(v:count > 5 ? "m\'" . v:count : "") . "j"', { expr = true })
 -- Open tmux-sessionizer
 keymap("n", "<C-t>", "<cmd>silent !tmux neww pctl open<CR>")
 
--- stylua: ignore start
 keymap("n", "gx", Util.open_url, add_desc("Open URL under cursor"))
 keymap("n", "gX", Util.open_github_url, add_desc("Open Github URL under cursor"))
 keymap("n", "<leader>mx", Util.toggle_executable, add_desc("Make Current File E[x]ecutable"))
 keymap("n", "<leader>mp", Util.preview_toggle, add_desc("Toggle [P]review for Current File"))
 
 -- Toggles
+-- stylua: ignore start
 keymap("n", "<leader>ow", function() Util.toggle_option("wrap") end, add_desc("Toggle Current Buffer Line [W]rap"))
 keymap("n", "<leader>on", function() Util.toggle_option("number") end, add_desc("Toggle Current Buffer Line [N]umbers"))
 keymap("n", "<leader>or", function() Util.toggle_option("relativenumber") end, add_desc("Toggle Current Buffer [R]elative Numbers"))
