@@ -110,6 +110,7 @@ local all_snippets = {
             end
 
             return {
+                string.format(vim.bo.commentstring, "ANSI Colors"),
                 "RESET" .. eq .. '"\\033[0m"',
                 "RED" .. eq .. '"\\033[31m"',
                 "GREEN" .. eq .. '"\\033[32m"',
