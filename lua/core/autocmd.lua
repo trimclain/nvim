@@ -68,9 +68,9 @@ vim.api.nvim_create_autocmd({ "BufEnter", "FocusGained", "InsertLeave", "Cmdline
 })
 vim.api.nvim_create_autocmd({ "BufLeave", "FocusLost", "InsertEnter", "CmdlineEnter", "WinLeave" }, {
     group = line_numbers_group,
-    desc = "Toggle relative line numbers off",
+    desc = "Toggle relative line numbers",
     callback = function(args)
-        if vim.wo.nu then
+        if vim.wo.number then
             vim.wo.relativenumber = false
         end
         -- Redraw here to avoid having to first write something for the line numbers to update.
@@ -82,20 +82,22 @@ vim.api.nvim_create_autocmd({ "BufLeave", "FocusLost", "InsertEnter", "CmdlineEn
     end,
 })
 
--- Trim whitespaces on save
+-- Trim whitespace on save
+vim.api.nvim_create_user_command("TrimWhitespace", function()
+    -- local view = vim.fn.winsaveview()
+    vim.cmd([[%s/\s\+$//e]])
+    -- vim.fn.winrestview(view)
+end, {})
 vim.api.nvim_create_autocmd("BufWritePre", {
     callback = function()
         if
             (vim.b.editorconfig and not vim.b.editorconfig.trim_trailing_whitespace) -- vim.b.editorconfig can be nil
             and vim.bo.filetype ~= "markdown"
         then
-            -- To restore the cursor position if I want to someday
-            -- let l:save = winsaveview()
-            vim.cmd("%s/\\s\\+$//e")
-            -- call winrestview(l:save)
+            vim.cmd("TrimWhitespace")
         end
     end,
-    desc = "Delete useless whitespaces when saving the file",
+    desc = "Delete useless whitespace when saving the file",
     group = augroup("trim_whitespace_on_save"),
 })
 
