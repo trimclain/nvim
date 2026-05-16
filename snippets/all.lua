@@ -100,6 +100,28 @@ local all_snippets = {
             return snip.env.UUID
         end, {})
     ),
+
+    s(
+        { trig = "colors", desc = "define ANSI colors" },
+        f(function()
+            local eq = "="
+            if vim.bo.filetype == "python" then
+                eq = " = "
+            end
+
+            return {
+                "RESET" .. eq .. '"\\033[0m"',
+                "RED" .. eq .. '"\\033[31m"',
+                "GREEN" .. eq .. '"\\033[32m"',
+                "YELLOW" .. eq .. '"\\033[33m"',
+                "BLUE" .. eq .. '"\\033[34m"',
+                "MAGENTA" .. eq .. '"\\033[35m"',
+                "CYAN" .. eq .. '"\\033[36m"',
+                "BOLD" .. eq .. '"\\033[1m"',
+                "ITALIC" .. eq .. '"\\033[3m"',
+            }
+        end, {})
+    ),
 }
 
 return all_snippets
