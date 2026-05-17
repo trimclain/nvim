@@ -82,24 +82,25 @@ keymap("n", "N", "Nzzzv", opts) -- and backwards
 -- end
 
 -- toggle the fold under the cursor for all filetypes except 2
-vim.api.nvim_create_autocmd("FileType", {
-    pattern = "*",
-    callback = function(event)
-        local ft = vim.bo[event.buf].filetype
-        local excluded = { "NeogitStatus", "UndotreeDiff" }
-        if vim.tbl_contains(excluded, ft) then
-            return
-        end
+-- PROBLEM: <Tab> is the same as <C-i> so I lose the <C-i> default mapping
+-- vim.api.nvim_create_autocmd("FileType", {
+--     pattern = "*",
+--     callback = function(event)
+--         local ft = vim.bo[event.buf].filetype
+--         local excluded = { "NeogitStatus", "UndotreeDiff" }
+--         if vim.tbl_contains(excluded, ft) then
+--             return
+--         end
 
-        keymap("n", "<Tab>", function()
-            if vim.fn.foldlevel(".") > 0 then
-                vim.cmd.normal({ "za", bang = true })
-            end
-        end, { buffer = event.buf, silent = true })
-    end,
-    group = vim.api.nvim_create_augroup("trimclain/toggle_fold", { clear = true }),
-    desc = "Toggle fold under the cursor",
-})
+--         keymap("n", "<Tab>", function()
+--             if vim.fn.foldlevel(".") > 0 then
+--                 vim.cmd.normal({ "za", bang = true })
+--             end
+--         end, { buffer = event.buf, silent = true })
+--     end,
+--     group = vim.api.nvim_create_augroup("trimclain/toggle_fold", { clear = true }),
+--     desc = "Toggle fold under the cursor",
+-- })
 
 keymap("n", "J", "mzJ`z<cmd>delm z<cr>", opts) -- keep it centered when joining lines
 keymap("i", ",", ",<c-g>u", opts) -- set a break point for undo after ,
