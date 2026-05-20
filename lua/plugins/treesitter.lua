@@ -166,6 +166,73 @@ return {
             vim.api.nvim_create_user_command("TSBufEnable", function()
                 vim.treesitter.start()
             end, { desc = "Enable Treesitter for current buffer" })
+
+            local function parser_info()
+                local icons = require("core.icons").actions
+                local lines = {}
+
+                -- Get longest parser name to determine the width of the column
+                -- stylua: ignore
+                local max_len = math.max(0, unpack(vim.tbl_map(function(p) return #p end, available_parsers)))
+
+                -- Display each parser with installation status
+                for _, parser in ipairs(available_parsers) do
+                    local is_installed = #vim.api.nvim_get_runtime_file("parser/" .. parser .. ".so", false) > 0
+                    -- local installed_status = require("core.icons").actions.Check .. " installed"
+                    -- local uninstalled_status = require("core.icons").actions.Close .. " not installed"
+                    local icon = is_installed and icons.Check or icons.Close
+                    local text = is_installed and " installed" or " not installed"
+                    local padding = string.rep(" ", max_len - #parser + 1)
+                    table.insert(lines, parser .. padding .. icon .. text)
+                end
+
+                -- Create a buffer with the content
+                local buf = vim.api.nvim_create_buf(false, true)
+                vim.api.nvim_buf_set_lines(buf, 0, -1, false, lines)
+
+                -- Add highlights using extmarks
+                local ns_id = vim.api.nvim_create_namespace("parser_status")
+                for i, parser in ipairs(available_parsers) do
+                    local is_installed = #vim.api.nvim_get_runtime_file("parser/" .. parser .. ".so", false) > 0
+
+                    -- Highlight parser name
+                    vim.api.nvim_buf_set_extmark(buf, ns_id, i - 1, 0, {
+                        end_col = #parser,
+                        hl_group = "Identifier",
+                    })
+
+                    -- Highlight status icon
+                    local status_col = max_len + 1
+                    vim.api.nvim_buf_set_extmark(buf, ns_id, i - 1, status_col, {
+                        end_col = status_col + 1,
+                        hl_group = is_installed and "DiagnosticInfo" or "DiagnosticError",
+                    })
+                end
+
+                -- Open floating window
+                local width = max_len + 20
+                local height = math.min(#lines, 30)
+                local win = vim.api.nvim_open_win(buf, true, {
+                    relative = "editor",
+                    width = width,
+                    height = height,
+                    col = math.floor((vim.o.columns - width) / 2),
+                    row = math.floor((vim.o.lines - height) / 2),
+                    style = "minimal",
+                    title = " TSInstallInfo ",
+                    title_pos = "center",
+                })
+
+                -- Set buffer options
+                vim.bo[buf].modifiable = false
+                vim.bo[buf].bufhidden = "wipe"
+
+                -- Set QOL keymaps
+                vim.keymap.set("n", "q", function()
+                    vim.api.nvim_win_close(win, true)
+                end, { buffer = buf, silent = true })
+            end
+            vim.api.nvim_create_user_command("TSInstallInfo", parser_info, { desc = "Show Treesitter Parsers Status" })
         end,
     },
 }
