@@ -73,15 +73,24 @@ return {
                     -- W503 - Fix line break before binary operator -- prefer W504 (line break after operator) instead
                     prepend_args = { "--ignore=W503,E401,E402" },
                 },
-                -- prettierd = {
-                --     -- use .editorconfig instead
-                --     --prepend_args = { "--tab-width=4" }, -- "--jsx-single-quote", "--no-semi", "--single-quote",
-                -- },
-                -- shfmt = {
-                --     -- The base args are { "-filename", "$FILENAME" } so the final args will be
-                --     -- { "-i", "2", "-filename", "$FILENAME" }
-                --     prepend_args = { "-i", "2" },
-                -- }
+                prettierd = {
+                    prepend_args = function(_, ctx)
+                        if vim.fs.find(".editorconfig", { path = ctx.dirname, upward = true })[1] ~= nil then
+                            return {}
+                        end
+                        return { "--tab-width=4" } -- "--jsx-single-quote", "--no-semi"
+                    end,
+                },
+                shfmt = {
+                    -- default conform args for shfmt combined with guess-indent.nvim mess with my indents
+                    args = function(_, ctx)
+                        if vim.fs.find(".editorconfig", { path = ctx.dirname, upward = true })[1] ~= nil then
+                            return {}
+                        end
+                        -- use bash, indent 4 spaces, indent switch cases and follow redirect operators by a space
+                        return { "-ln", "bash", "-i", "4", "-ci", "-sr", "-filename", "$FILENAME" }
+                    end,
+                },
             },
         },
         config = function(_, opts)
