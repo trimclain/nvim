@@ -115,7 +115,7 @@ return {
                 -- inlay_hints = false,
             },
             show = {
-                -- statusline = true, -- can only be shown when using the global statusline
+                statusline = true, -- can only be shown when using the global statusline
             },
             win = {
                 backdrop = { transparent = false, blend = 40 }, -- default: { transparent = true, blend = 40 }
