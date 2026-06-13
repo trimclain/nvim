@@ -7,7 +7,7 @@ return {
         cond = CONFIG.ui.colorscheme == "catppuccin", -- `cond` is now the same as `enabled`, but skips clean
         opts = {
             -- flavour = "frappe", -- mocha, frappe, macchiato, latte
-            transparent_background = CONFIG.ui.transparent_background,
+            transparent_background = CONFIG.ui.transparent_background and vim.g.neovide == nil,
             styles = {
                 comments = CONFIG.ui.italic_comments and { "italic" } or {},
                 conditionals = {},
@@ -80,7 +80,7 @@ return {
         cond = CONFIG.ui.colorscheme == "tokyonight",
         opts = {
             style = "storm", -- The theme comes in three styles, `storm`, `moon`, a darker variant `night` and `day`
-            transparent = CONFIG.ui.transparent_background, -- Enable this to disable setting the background color
+            transparent = CONFIG.ui.transparent_background and vim.g.neovide == nil, -- Enable this to disable setting the background color
             styles = {
                 -- Style to be applied to different syntax groups
                 -- Value is any valid attr-list value for `:help nvim_set_hl`
@@ -191,7 +191,7 @@ return {
             terminal_colors = false, -- default: true
             dev = false,
             style = {
-                transparent = CONFIG.ui.transparent_background,
+                transparent = CONFIG.ui.transparent_background and vim.g.neovide == nil,
                 inactive = false,
                 float = true,
                 neotree = true,
@@ -232,7 +232,7 @@ return {
         priority = 1000,
         cond = CONFIG.ui.colorscheme == "vague",
         opts = {
-            transparent = CONFIG.ui.transparent_background,
+            transparent = CONFIG.ui.transparent_background and vim.g.neovide == nil,
             bold = true,
             italic = true,
             style = {
@@ -290,7 +290,7 @@ return {
         priority = 1000,
         cond = vim.list_contains({ "nightfox", "duskfox", "carbonfox" }, CONFIG.ui.colorscheme),
         opts = {
-            transparent = CONFIG.ui.transparent_background,
+            transparent = CONFIG.ui.transparent_background and vim.g.neovide == nil,
             dim_inactive = false, -- non focused panes set to alternative background
         },
         config = function(_, opts)
@@ -305,7 +305,7 @@ return {
         priority = 1000,
         cond = CONFIG.ui.colorscheme == "vscode",
         opts = {
-            transparent = CONFIG.ui.transparent_background,
+            transparent = CONFIG.ui.transparent_background and vim.g.neovide == nil,
             italic_comments = CONFIG.ui.italic_comments,
         },
         config = function(_, opts)
@@ -325,7 +325,7 @@ return {
                 comments = CONFIG.ui.italic_comments,
             },
             contrast = "hard", -- "hard", "soft" or "" (default)
-            transparent_mode = CONFIG.ui.transparent_background,
+            transparent_mode = CONFIG.ui.transparent_background and vim.g.neovide == nil,
         },
         config = function(_, opts)
             require("gruvbox").setup(opts)
@@ -340,7 +340,7 @@ return {
         cond = CONFIG.ui.colorscheme == "github-dark",
         opts = {
             options = {
-                transparent = CONFIG.ui.transparent_background,
+                transparent = CONFIG.ui.transparent_background and vim.g.neovide == nil,
                 styles = { -- Style to be applied to different syntax groups
                     comments = CONFIG.ui.italic_comments and "italic" or "NONE",
                     functions = "NONE",
@@ -379,7 +379,7 @@ return {
         cond = CONFIG.ui.colorscheme == "onedark",
         opts = {
             style = "darker", --"dark", "darker", "cool", "deep", "warm", "warmer" and "light"
-            transparent = CONFIG.ui.transparent_background, -- Show/hide background
+            transparent = CONFIG.ui.transparent_background and vim.g.neovide == nil, -- Show/hide background
 
             -- Change code style ---
             -- Options are italic, bold, underline, none

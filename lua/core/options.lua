@@ -94,7 +94,9 @@ if vim.g.neovide or vim.fn.has("gui_running") == 1 then
     end, { nargs = "?", desc = "Update gui font size" })
 end
 if vim.g.neovide then
-    vim.g.neovide_opacity = 1 -- 0.95
+    vim.g.neovide_opacity = CONFIG.ui.transparent_background and 0.75 or 1
+    -- vim.g.neovide_normal_opacity = 0.75
+
     -- vim.g.neovide_cursor_trail_legnth = 0
     -- vim.g.neovide_cursor_animation_length = 0
 end
