@@ -1,34 +1,26 @@
--- comments with some nice keybindings and treesitter integration
+-- comments with treesitter integration
 return {
+    -- RIP numToStr/Comment.nvim. Feautures like block comments and gco/gcO mappings will be missed.
     {
-        "numToStr/Comment.nvim",
-        -- NOTE: nvim-treesitter is not officially a dependency, but I've had my issues without it
-        cond =  CONFIG.plugins.treesitter,
+        "echasnovski/mini.comment",
         event = "VeryLazy",
-        config = function()
-            ---@diagnostic disable-next-line: missing-fields
-            require("Comment").setup({
-                ignore = "^$", -- ignores empty lines
-                pre_hook = require("ts_context_commentstring.integrations.comment_nvim").create_pre_hook(),
-            })
-
-            local comment_ft = require("Comment.ft")
-            comment_ft.set("rasi", { "//%s", "/*%s*/" }) -- rofi config
-            comment_ft.set("lf", { "#%s" }) -- lf config
-            -- comment_ft.set("lua", { "--%s", "--[[%s]]" })
-            -- comment_ft.set("markdown", { "[//]:%s", "<!--%s-->" })
-        end,
+        opts = {
+            options = {
+                ignore_blank_line = true,
+                custom_commentstring = function()
+                    return require("ts_context_commentstring").calculate_commentstring() or vim.bo.commentstring
+                end,
+            },
+        },
     },
 
     {
         "JoosepAlviste/nvim-ts-context-commentstring",
         lazy = true,
         -- dependencies = "nvim-treesitter",
-        config = function()
+        init = function()
             vim.g.skip_ts_context_commentstring_module = true
-            require("ts_context_commentstring").setup({
-                enable_autocmd = false,
-            })
         end,
+        opts = { enable_autocmd = false },
     },
 }
