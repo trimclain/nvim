@@ -170,48 +170,81 @@ return {
             local function parser_info()
                 local icons = require("core.icons").actions
                 local lines = {}
+                local entries = {}
 
-                -- Get longest parser name to determine the width of the column
                 -- stylua: ignore
-                local max_len = math.max(0, unpack(vim.tbl_map(function(p) return #p end, available_parsers)))
+                local longest_parser_name = math.max(0, unpack(vim.tbl_map(function(p) return #p end, available_parsers)))
 
-                -- Display each parser with installation status
+                local installed = {}
+                local uninstalled = {}
+
                 for _, parser in ipairs(available_parsers) do
-                    local is_installed = #vim.api.nvim_get_runtime_file("parser/" .. parser .. ".so", false) > 0
-                    -- local installed_status = require("core.icons").actions.Check .. " installed"
-                    -- local uninstalled_status = require("core.icons").actions.Close .. " not installed"
-                    local icon = is_installed and icons.Check or icons.Close
-                    local text = is_installed and " installed" or " not installed"
-                    local padding = string.rep(" ", max_len - #parser + 1)
-                    table.insert(lines, parser .. padding .. icon .. text)
+                    local is_installed = #vim.api.nvim_get_runtime_file("parser/" .. parser .. ".*", false) > 0
+                    table.insert(is_installed and installed or uninstalled, parser)
                 end
 
-                -- Create a buffer with the content
+                local function add_section(title, parsers, is_installed)
+                    local header = string.format("%s (%d)", title, #parsers)
+                    table.insert(lines, "")
+                    table.insert(entries, { kind = "spacer" })
+                    table.insert(lines, header)
+                    table.insert(entries, { kind = "header", text = header })
+
+                    for _, parser in ipairs(parsers) do
+                        local icon = is_installed and icons.Check or icons.Close
+                        local text = is_installed and " installed" or " not installed"
+                        local padding = string.rep(" ", longest_parser_name - #parser + 1)
+
+                        table.insert(lines, parser .. padding .. icon .. text)
+                        table.insert(entries, {
+                            kind = "parser",
+                            parser = parser,
+                            installed = is_installed,
+                        })
+                    end
+                end
+
+                add_section("Installed", installed, true)
+
+                if #installed > 0 and #uninstalled > 0 then
+                    table.insert(lines, "")
+                    table.insert(entries, { kind = "spacer" })
+                end
+
+                add_section("Available", uninstalled, false)
+
                 local buf = vim.api.nvim_create_buf(false, true)
                 vim.api.nvim_buf_set_lines(buf, 0, -1, false, lines)
 
                 -- Add highlights using extmarks
                 local ns_id = vim.api.nvim_create_namespace("parser_status")
-                for i, parser in ipairs(available_parsers) do
-                    local is_installed = #vim.api.nvim_get_runtime_file("parser/" .. parser .. ".so", false) > 0
+                for row, entry in ipairs(entries) do
+                    if entry.kind == "header" then
+                        vim.api.nvim_buf_set_extmark(buf, ns_id, row - 1, 0, {
+                            end_col = #entry.text,
+                            hl_group = "MasonHighlightBlockBold",
+                        })
+                    elseif entry.kind == "parser" then
+                        vim.api.nvim_buf_set_extmark(buf, ns_id, row - 1, 0, {
+                            end_col = #entry.parser,
+                            hl_group = "Identifier",
+                        })
 
-                    -- Highlight parser name
-                    vim.api.nvim_buf_set_extmark(buf, ns_id, i - 1, 0, {
-                        end_col = #parser,
-                        hl_group = "Identifier",
-                    })
-
-                    -- Highlight status icon
-                    local status_col = max_len + 1
-                    vim.api.nvim_buf_set_extmark(buf, ns_id, i - 1, status_col, {
-                        end_col = status_col + 1,
-                        hl_group = is_installed and "DiagnosticInfo" or "DiagnosticError",
-                    })
+                        local status_col = longest_parser_name + 1
+                        vim.api.nvim_buf_set_extmark(buf, ns_id, row - 1, status_col, {
+                            end_col = status_col + 1,
+                            hl_group = entry.installed and "DiagnosticInfo" or "DiagnosticError",
+                        })
+                    end
                 end
 
-                -- Open floating window
-                local width = max_len + 20
+                -- stylua: ignore
+                local longest_line = math.max(0, unpack(vim.tbl_map(function(line) return #line end, lines)))
+
+                -- local width = longest_parser_name + 20
+                local width = math.min(longest_line + 2, vim.o.columns - 4)
                 local height = math.min(#lines, 30)
+                -- local height = math.min(#lines, vim.o.lines - 4)
                 local win = vim.api.nvim_open_win(buf, true, {
                     relative = "editor",
                     width = width,
@@ -223,11 +256,9 @@ return {
                     title_pos = "center",
                 })
 
-                -- Set buffer options
                 vim.bo[buf].modifiable = false
                 vim.bo[buf].bufhidden = "wipe"
 
-                -- Set QOL keymaps
                 vim.keymap.set("n", "q", function()
                     vim.api.nvim_win_close(win, true)
                 end, { buffer = buf, silent = true })
