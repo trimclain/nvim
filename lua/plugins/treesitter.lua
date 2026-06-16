@@ -184,14 +184,26 @@ return {
                     table.insert(is_installed and installed or uninstalled, parser)
                 end
 
+                local all_parser_details = require("nvim-treesitter.parsers")
+
                 local function parser_details(parser)
+                    local details = {}
+
                     local ok, filetypes = pcall(vim.treesitter.language.get_filetypes, parser)
                     if not ok or type(filetypes) ~= "table" or #filetypes == 0 then
-                        return "  filetypes: none"
+                        table.insert(details, "  filetypes: none")
+                    else
+                        table.sort(filetypes)
+                        table.insert(details, "  filetypes: " .. table.concat(filetypes, ", "))
                     end
 
-                    table.sort(filetypes)
-                    return "  filetypes: " .. table.concat(filetypes, ", ")
+                    local url = all_parser_details[parser].install_info.url or "none"
+                    table.insert(details, "  url:       " .. url)
+
+                    local revision = all_parser_details[parser].install_info.revision or "none"
+                    table.insert(details, "  revision:  " .. revision)
+
+                    return details
                 end
 
                 local buf = vim.api.nvim_create_buf(false, true)
@@ -213,22 +225,29 @@ return {
                             local icon = is_installed and icons.Check or icons.Close
                             local text = is_installed and " installed" or " not installed"
                             local padding = string.rep(" ", longest_parser_name - #parser + 1)
+                            local parser_line = parser .. padding .. icon .. text
+                            local status_col = #(parser .. padding)
 
-                            table.insert(lines, parser .. padding .. icon .. text)
+                            table.insert(lines, parser_line)
                             table.insert(entries, {
                                 kind = "parser",
                                 parser = parser,
                                 installed = is_installed,
+                                line = parser_line,
+                                status_col = status_col,
+                                status_end_col = status_col + #icon,
                             })
 
                             if expanded[parser] then
-                                local detail = parser_details(parser)
-                                table.insert(lines, detail)
-                                table.insert(entries, {
-                                    kind = "details",
-                                    parser = parser,
-                                    text = detail,
-                                })
+                                local details = parser_details(parser)
+                                for _, detail in ipairs(details) do
+                                    table.insert(lines, detail)
+                                    table.insert(entries, {
+                                        kind = "details",
+                                        parser = parser,
+                                        text = detail,
+                                    })
+                                end
                             end
                         end
                     end
@@ -258,9 +277,8 @@ return {
                                 hl_group = "Identifier",
                             })
 
-                            local status_col = longest_parser_name + 1
-                            vim.api.nvim_buf_set_extmark(buf, ns_id, row - 1, status_col, {
-                                end_col = status_col + 1,
+                            vim.api.nvim_buf_set_extmark(buf, ns_id, row - 1, entry.status_col, {
+                                end_col = entry.status_end_col,
                                 hl_group = entry.installed and "DiagnosticInfo" or "DiagnosticError",
                             })
                         elseif entry.kind == "details" then
