@@ -210,6 +210,7 @@ return {
                 end
 
                 local buf = vim.api.nvim_create_buf(false, true)
+                vim.bo[buf].filetype = "treesitter_install_info"
                 local ns_id = vim.api.nvim_create_namespace("parser_status")
                 local win, width, height
 

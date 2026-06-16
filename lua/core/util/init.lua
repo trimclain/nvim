@@ -31,6 +31,7 @@ function M.get_disabled_filetypes(type)
         "notify",
         "toggleterm",
         "Trouble",
+        "treesitter_install_info",
         "undotree",
     }
 
