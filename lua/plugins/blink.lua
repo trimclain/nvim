@@ -100,12 +100,12 @@ return {
                             },
                         },
                     },
-                    border = CONFIG.ui.border,
+                    border = CONFIG.ui.colorscheme == "astrotheme" and "none" or CONFIG.ui.border,
                 },
                 documentation = {
                     auto_show = true,
                     auto_show_delay_ms = 200, -- default: 500
-                    window = { border = CONFIG.ui.border },
+                    window = { border = CONFIG.ui.colorscheme == "astrotheme" and "none" or CONFIG.ui.border },
                 },
                 ghost_text = { enabled = CONFIG.ui.ghost_text },
             },
@@ -193,7 +193,7 @@ return {
                 enabled = CONFIG.lsp.show_signature_help,
                 window = {
                     show_documentation = true,
-                    border = CONFIG.ui.border,
+                    border = CONFIG.ui.colorscheme == "astrotheme" and "none" or CONFIG.ui.border,
                 },
             },
         },
