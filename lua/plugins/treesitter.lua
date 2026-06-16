@@ -171,6 +171,7 @@ return {
                 local icons = require("core.icons").actions
                 local lines = {}
                 local entries = {}
+                local expanded = {}
 
                 -- stylua: ignore
                 local longest_parser_name = math.max(0, unpack(vim.tbl_map(function(p) return #p end, available_parsers)))
@@ -183,69 +184,119 @@ return {
                     table.insert(is_installed and installed or uninstalled, parser)
                 end
 
-                local function add_section(title, parsers, is_installed)
-                    local header = string.format("%s (%d)", title, #parsers)
-                    table.insert(lines, "")
-                    table.insert(entries, { kind = "spacer" })
-                    table.insert(lines, header)
-                    table.insert(entries, { kind = "header", text = header })
-
-                    for _, parser in ipairs(parsers) do
-                        local icon = is_installed and icons.Check or icons.Close
-                        local text = is_installed and " installed" or " not installed"
-                        local padding = string.rep(" ", longest_parser_name - #parser + 1)
-
-                        table.insert(lines, parser .. padding .. icon .. text)
-                        table.insert(entries, {
-                            kind = "parser",
-                            parser = parser,
-                            installed = is_installed,
-                        })
+                local function parser_details(parser)
+                    local ok, filetypes = pcall(vim.treesitter.language.get_filetypes, parser)
+                    if not ok or type(filetypes) ~= "table" or #filetypes == 0 then
+                        return "  filetypes: none"
                     end
+
+                    table.sort(filetypes)
+                    return "  filetypes: " .. table.concat(filetypes, ", ")
                 end
-
-                add_section("Installed", installed, true)
-
-                if #installed > 0 and #uninstalled > 0 then
-                    table.insert(lines, "")
-                    table.insert(entries, { kind = "spacer" })
-                end
-
-                add_section("Available", uninstalled, false)
 
                 local buf = vim.api.nvim_create_buf(false, true)
-                vim.api.nvim_buf_set_lines(buf, 0, -1, false, lines)
-
-                -- Add highlights using extmarks
                 local ns_id = vim.api.nvim_create_namespace("parser_status")
-                for row, entry in ipairs(entries) do
-                    if entry.kind == "header" then
-                        vim.api.nvim_buf_set_extmark(buf, ns_id, row - 1, 0, {
-                            end_col = #entry.text,
-                            hl_group = "MasonHighlightBlockBold",
-                        })
-                    elseif entry.kind == "parser" then
-                        vim.api.nvim_buf_set_extmark(buf, ns_id, row - 1, 0, {
-                            end_col = #entry.parser,
-                            hl_group = "Identifier",
-                        })
+                local win, width, height
 
-                        local status_col = longest_parser_name + 1
-                        vim.api.nvim_buf_set_extmark(buf, ns_id, row - 1, status_col, {
-                            end_col = status_col + 1,
-                            hl_group = entry.installed and "DiagnosticInfo" or "DiagnosticError",
+                local function render()
+                    lines = {}
+                    entries = {}
+
+                    local function add_section(title, parsers, is_installed)
+                        local header = string.format("%s (%d)", title, #parsers)
+                        table.insert(lines, "")
+                        table.insert(entries, { kind = "spacer" })
+                        table.insert(lines, header)
+                        table.insert(entries, { kind = "header", text = header })
+
+                        for _, parser in ipairs(parsers) do
+                            local icon = is_installed and icons.Check or icons.Close
+                            local text = is_installed and " installed" or " not installed"
+                            local padding = string.rep(" ", longest_parser_name - #parser + 1)
+
+                            table.insert(lines, parser .. padding .. icon .. text)
+                            table.insert(entries, {
+                                kind = "parser",
+                                parser = parser,
+                                installed = is_installed,
+                            })
+
+                            if expanded[parser] then
+                                local detail = parser_details(parser)
+                                table.insert(lines, detail)
+                                table.insert(entries, {
+                                    kind = "details",
+                                    parser = parser,
+                                    text = detail,
+                                })
+                            end
+                        end
+                    end
+
+                    add_section("Installed", installed, true)
+
+                    if #installed > 0 and #uninstalled > 0 then
+                        table.insert(lines, "")
+                        table.insert(entries, { kind = "spacer" })
+                    end
+
+                    add_section("Available", uninstalled, false)
+
+                    vim.bo[buf].modifiable = true
+                    vim.api.nvim_buf_set_lines(buf, 0, -1, false, lines)
+                    vim.api.nvim_buf_clear_namespace(buf, ns_id, 0, -1)
+
+                    for row, entry in ipairs(entries) do
+                        if entry.kind == "header" then
+                            vim.api.nvim_buf_set_extmark(buf, ns_id, row - 1, 0, {
+                                end_col = #entry.text,
+                                hl_group = "MasonHighlightBlockBold",
+                            })
+                        elseif entry.kind == "parser" then
+                            vim.api.nvim_buf_set_extmark(buf, ns_id, row - 1, 0, {
+                                end_col = #entry.parser,
+                                hl_group = "Identifier",
+                            })
+
+                            local status_col = longest_parser_name + 1
+                            vim.api.nvim_buf_set_extmark(buf, ns_id, row - 1, status_col, {
+                                end_col = status_col + 1,
+                                hl_group = entry.installed and "DiagnosticInfo" or "DiagnosticError",
+                            })
+                        elseif entry.kind == "details" then
+                            vim.api.nvim_buf_set_extmark(buf, ns_id, row - 1, 0, {
+                                end_col = #entry.text,
+                                hl_group = "Comment",
+                            })
+                        end
+                    end
+
+                    vim.bo[buf].modifiable = false
+
+                    -- stylua: ignore
+                    local longest_line = math.max(0, unpack(vim.tbl_map(function(line) return #line end, lines)))
+
+                    width = math.min(longest_line + 2, vim.o.columns - 4)
+                    height = math.min(#lines, 30)
+
+                    if win and vim.api.nvim_win_is_valid(win) then
+                        vim.api.nvim_win_set_config(win, {
+                            relative = "editor",
+                            width = width,
+                            height = height,
+
+                            col = math.floor((vim.o.columns - width) / 2),
+                            row = math.floor((vim.o.lines - height) / 2),
+                            style = "minimal",
+                            title = " TSInstallInfo ",
+                            title_pos = "center",
                         })
                     end
                 end
 
-                -- stylua: ignore
-                local longest_line = math.max(0, unpack(vim.tbl_map(function(line) return #line end, lines)))
+                render()
 
-                -- local width = longest_parser_name + 20
-                local width = math.min(longest_line + 2, vim.o.columns - 4)
-                local height = math.min(#lines, 30)
-                -- local height = math.min(#lines, vim.o.lines - 4)
-                local win = vim.api.nvim_open_win(buf, true, {
+                win = vim.api.nvim_open_win(buf, true, {
                     relative = "editor",
                     width = width,
                     height = height,
@@ -259,8 +310,28 @@ return {
                 vim.bo[buf].modifiable = false
                 vim.bo[buf].bufhidden = "wipe"
 
+                vim.keymap.set("n", "<CR>", function()
+                    local row = vim.api.nvim_win_get_cursor(win)[1]
+                    local entry = entries[row]
+                    if not entry or (entry.kind ~= "parser" and entry.kind ~= "details") then
+                        return
+                    end
+
+                    expanded[entry.parser] = not expanded[entry.parser]
+                    render()
+
+                    local new_row = row
+                    if entry.kind == "details" and not expanded[entry.parser] then
+                        new_row = row - 1
+                    end
+
+                    vim.api.nvim_win_set_cursor(win, { math.max(1, math.min(new_row, #lines)), 0 })
+                end, { buffer = buf, silent = true })
+
                 vim.keymap.set("n", "q", function()
-                    vim.api.nvim_win_close(win, true)
+                    if vim.api.nvim_win_is_valid(win) then
+                        vim.api.nvim_win_close(win, true)
+                    end
                 end, { buffer = buf, silent = true })
             end
             vim.api.nvim_create_user_command("TSInstallInfo", parser_info, { desc = "Show Treesitter Parsers Status" })
