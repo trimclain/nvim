@@ -168,6 +168,9 @@ return {
             end, { desc = "Enable Treesitter for current buffer" })
 
             local function parser_info()
+                local left_pad = "  "
+                local detail_pad = left_pad .. "  "
+
                 local icons = require("core.icons").actions
                 local lines = {}
                 local entries = {}
@@ -191,17 +194,17 @@ return {
 
                     local ok, filetypes = pcall(vim.treesitter.language.get_filetypes, parser)
                     if not ok or type(filetypes) ~= "table" or #filetypes == 0 then
-                        table.insert(details, "  filetypes: none")
+                        table.insert(details, detail_pad .. "filetypes: none")
                     else
                         table.sort(filetypes)
-                        table.insert(details, "  filetypes: " .. table.concat(filetypes, ", "))
+                        table.insert(details, detail_pad .. "filetypes: " .. table.concat(filetypes, ", "))
                     end
 
                     local url = all_parser_details[parser].install_info.url or "none"
-                    table.insert(details, "  url:       " .. url)
+                    table.insert(details, detail_pad .. "url:       " .. url)
 
                     local revision = all_parser_details[parser].install_info.revision or "none"
-                    table.insert(details, "  revision:  " .. revision)
+                    table.insert(details, detail_pad .. "revision:  " .. revision)
 
                     return details
                 end
@@ -225,8 +228,8 @@ return {
                             local icon = is_installed and icons.Check or icons.Close
                             local text = is_installed and " installed" or " not installed"
                             local padding = string.rep(" ", longest_parser_name - #parser + 1)
-                            local parser_line = parser .. padding .. icon .. text
-                            local status_col = #(parser .. padding)
+                            local parser_line = left_pad .. parser .. padding .. icon .. text
+                            local status_col = #(left_pad .. parser .. padding)
 
                             table.insert(lines, parser_line)
                             table.insert(entries, {
@@ -234,6 +237,8 @@ return {
                                 parser = parser,
                                 installed = is_installed,
                                 line = parser_line,
+                                name_col = #left_pad,
+                                name_end_col = #left_pad + #parser,
                                 status_col = status_col,
                                 status_end_col = status_col + #icon,
                             })
@@ -272,8 +277,8 @@ return {
                                 hl_group = "MasonHighlightBlockBold",
                             })
                         elseif entry.kind == "parser" then
-                            vim.api.nvim_buf_set_extmark(buf, ns_id, row - 1, 0, {
-                                end_col = #entry.parser,
+                            vim.api.nvim_buf_set_extmark(buf, ns_id, row - 1, entry.name_col, {
+                                end_col = entry.name_end_col,
                                 hl_group = "Identifier",
                             })
 
