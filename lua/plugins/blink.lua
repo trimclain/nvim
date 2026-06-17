@@ -113,6 +113,21 @@ return {
                 kind_icons = require("core.icons").kinds,
             },
             snippets = { preset = "luasnip" },
+            fuzzy = {
+                sorts = {
+                    function(a, b) -- Make sure snippets are always above spell suggestions
+                        if a.source_id == "snippets" and b.source_id == "spell" then
+                            return true
+                        end
+                        if a.source_id == "spell" and b.source_id == "snippets" then
+                            return false
+                        end
+                    end,
+                    "score", -- Primary sort: by fuzzy matching score
+                    "sort_text", -- Secondary sort: by sortText field if scores are equal
+                    "label", -- Tertiary sort: by label if still tied
+                },
+            },
             sources = {
                 default = { "lsp", "path", "snippets", "buffer", "spell" },
                 -- Dynamically picking providers by treesitter node/filetype
@@ -157,7 +172,7 @@ return {
                     spell = {
                         name = "Spell",
                         module = "blink-cmp-spell",
-                        score_offset = -4, -- prefer snippets over this
+                        score_offset = -10, -- prefer snippets (-3) over this
                         -- opts = {
                         --     -- EXAMPLE: Only enable source in `@spell` captures, and disable it
                         --     -- in `@nospell` captures.
