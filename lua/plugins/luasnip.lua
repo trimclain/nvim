@@ -33,7 +33,7 @@ return {
                 if luasnip.jumpable(1) then
                     luasnip.jump(1)
                 elseif luasnip.expandable() then
-                    luasnip.expand({}) -- TODO: (await) remove {} in luasnip v2.5
+                    luasnip.expand()
                 end
             end,
             silent = true,
