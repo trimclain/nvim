@@ -11,9 +11,10 @@ return {
             mappings = {},
             hide_cursor = false, -- Hide cursor while scrolling (default: true)
             stop_eof = true, -- Stop at <EOF> when scrolling downwards (default: true)
-            respect_scrolloff = false, -- Stop scrolling when the cursor reaches the scrolloff margin of the file
+            respect_scrolloff = false, -- Stop scrolling when the cursor reaches the scrolloff margin of the file (default: false)
             -- Docs: https://github.com/karb94/neoscroll.nvim?tab=readme-ov-file#easing-functions
-            easing = "sine", -- Default easing function. Options: linear, quadratic, cubic, quartic, quintic, circular, sine
+            easing = "sine", -- Default easing function. Options: linear (default), quadratic, cubic, quartic, quintic, circular, sine
+            performance_mode = ON_INFERIOR_OS, -- (default: false)
         },
         config = function(_, opts)
             local neoscroll = require("neoscroll")
@@ -44,8 +45,7 @@ return {
         enabled = vim.fn.has("nvim-0.10.2") == 1,
         cond = CONFIG.plugins.smear_cursor and vim.g.neovide == nil,
         opts = {
-            hide_target_hack = true,
-            -- cursor_color = "none",
+            -- time_interval = 7, -- animation framerate in ms (default: 17)
         },
     },
 }
