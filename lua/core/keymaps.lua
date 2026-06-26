@@ -170,11 +170,12 @@ keymap("n", "<C-q>", Util.toggle_quickfix, add_desc("Toggle QuickFixList"))
 -- Commands
 -------------------------------------------------------------------------------
 -- convert fileformat from dos/unix to unix (https://vim.fandom.com/wiki/File_format#Converting_the_current_file)
-vim.api.nvim_create_user_command(
-    "ConvertDos2Unix",
-    ":update<cr> :e ++ff=dos<cr> :setlocal ff=unix<cr> :w<cr>",
-    { desc = "Change fileformat from dos to unix" }
-)
+vim.api.nvim_create_user_command("ConvertDos2Unix", function()
+    vim.cmd.update()
+    vim.cmd("edit ++ff=dos")
+    vim.opt_local.fileformat = "unix"
+    vim.cmd.write()
+end, { desc = "Change fileformat from dos to unix" })
 
 -- enable building with color
 vim.api.nvim_create_user_command("BuildWithColor", function()
