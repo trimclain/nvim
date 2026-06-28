@@ -164,7 +164,8 @@ return {
                     path = {
                         opts = {
                             trailing_slash = false,
-                            -- TODO: show hidden ONLY after I type .
+                            -- BUG(upstream): can't show hidden ONLY after I type .
+                            -- Too lazy to create a Issue/PR, hope it's fixed in v2
                             -- show_hidden_files_by_default = true,
                         },
                     },
