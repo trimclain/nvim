@@ -3,7 +3,7 @@ return {
     {
         -- Alternative: https://github.com/brenoprata10/nvim-highlight-colors
         "catgoose/nvim-colorizer.lua",
-        event = "VeryLazy",
+        event = { "BufReadPost", "BufNewFile" },
         -- keys = {
         --     { "<leader>cr",  "<cmd>ColorizerReloadAllBuffers<cr>", desc = "ColorizeReload" },
         -- },
