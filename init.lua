@@ -81,6 +81,10 @@ _G.CONFIG = {
         todo_comments = mode == "default",
         treesj = mode == "default",
         treesitter = not ON_INFERIOR_OS,
+
+        -- these have sadly no lazy loading support
+        oil = true,
+        debugprint = true,
     },
 }
 

@@ -2,6 +2,7 @@
 return {
     {
         "andrewferrier/debugprint.nvim",
+        cond = CONFIG.plugins.debugprint,
         version = "*", -- use the stable version
         lazy = false, -- make line highlighting work before debugprint is first used
         -- dependencies = {

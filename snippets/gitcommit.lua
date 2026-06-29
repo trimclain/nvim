@@ -40,6 +40,7 @@ for _, commit_type in ipairs({
 end
 
 local all_snippets = {
+    -- stylua: ignore
     s({ trig = "co", desc = "Co-authored-by trailer" }, fmt("Co-authored-by: {} <{}>", { i(1, "name"), i(2, "email") })),
     s({ trig = "si", desc = "Signed-off-by trailer" }, fmt("Signed-off-by: {} <{}>", { i(1, "name"), i(2, "email") })),
     s({ trig = "on", desc = "On-behalf-of trailer" }, fmt("On-behalf-of: {} <{}>", { i(1, "org"), i(2, "email") })),

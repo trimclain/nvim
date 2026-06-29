@@ -25,8 +25,8 @@ end
 
 --- Stop the timer and print the results
 function M.stop()
-    local result_time_passed = time_passed(vim.b.start_time)
-    require("core.util.notify").defer_notify(vim.b.timer_name .. " took " .. result_time_passed .. "ms", "Performance Debugger")
+    local notification_message = vim.b.timer_name .. " took " .. time_passed(vim.b.start_time) .. "ms"
+    require("core.util.notify").defer_notify(notification_message, "Performance Debugger")
     vim.b.start_time, vim.b.timer_name = nil, nil
 end
 
