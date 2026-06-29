@@ -30,38 +30,33 @@ return {
         -- Node
         if vim.fn.executable("node") == 1 then
             local node = open_in_toggleterm("node")
-            function _NODE_TOGGLE()
+            vim.keymap.set("n", "<leader>tn", function()
                 node:toggle()
-            end
-            vim.keymap.set("n", "<leader>tn", "<cmd>lua _NODE_TOGGLE()<cr>", { desc = "Open Node in Terminal" })
+            end, { desc = "Open Node in Terminal" })
         end
 
         -- Python3
         if vim.fn.executable("python3") == 1 then
             local python = open_in_toggleterm("python3")
-            function _PYTHON_TOGGLE()
+            vim.keymap.set("n", "<leader>tp", function()
                 python:toggle()
-            end
-            vim.keymap.set("n", "<leader>tp", "<cmd>lua _PYTHON_TOGGLE()<cr>", { desc = "Open Python in Terminal" })
+            end, { desc = "Open Python in Terminal" })
         end
 
         -- Htop
         if vim.fn.executable("htop") == 1 then
             local htop = open_in_toggleterm("htop")
-            function _HTOP_TOGGLE()
+            vim.keymap.set("n", "<leader>th", function()
                 htop:toggle()
-            end
-            vim.keymap.set("n", "<leader>th", "<cmd>lua _HTOP_TOGGLE()<cr>", { desc = "Open HTOP in Terminal" })
+            end, { desc = "Open HTOP in Terminal" })
         end
 
         -- Lazygit
         -- if vim.fn.executable("lazygit") == 1 then
         --     local lazygit = open_in_toggleterm("lazygit")
-        --     function _LAZYGIT_TOGGLE()
+        --     vim.keymap.set("n", "<leader>gs", function()
         --         lazygit:toggle()
-        --     end
-        --     -- stylua: ignore
-        --     vim.keymap.set("n", "<leader>gs", "<cmd>lua _LAZYGIT_TOGGLE()<cr>", { desc = "Open Lazygit in Terminal" })
+        --     end, { desc = "Open Lazygit in Terminal" })
         -- end
     end,
 }
