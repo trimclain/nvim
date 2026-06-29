@@ -3,7 +3,6 @@ return {
     "MagicDuck/grug-far.nvim",
     enabled = vim.fn.has("nvim-0.11") == 1,
     cond = vim.fn.executable("rg") == 1,
-    opts = { headerMaxWidth = 80 },
     cmd = "GrugFar",
     keys = {
         {
@@ -24,4 +23,5 @@ return {
             desc = "Search and Replace",
         },
     },
+    opts = { headerMaxWidth = 80 },
 }

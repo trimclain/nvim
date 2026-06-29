@@ -1,116 +1,114 @@
 -- formatting
 return {
-    {
-        "stevearc/conform.nvim",
-        -- event = { "BufWritePre" },
-        cmd = { "ConformInfo" },
-        keys = {
-            {
-                "<leader>c",
-                function()
-                    require("conform").format({ async = true, lsp_fallback = true })
-                end,
-                mode = "",
-                desc = "Conform: Format buffer",
-            },
-            {
-                "<leader>F",
-                function()
-                    require("conform").format({ async = true, lsp_fallback = true })
-                end,
-                mode = "",
-                desc = "Conform: Format buffer",
-            },
-        },
-        opts = {
-            -- notify_on_error = false,
-            format_on_save = function(bufnr)
-                -- Disable with a global or buffer-local variable
-                if not CONFIG.lsp.format_on_save or vim.b[bufnr].disable_autoformat then
-                    return
-                end
-                local disable_filetypes = { c = true, cpp = true }
-                local lsp_format_opt
-                if disable_filetypes[vim.bo[bufnr].filetype] then
-                    lsp_format_opt = "never"
-                else
-                    lsp_format_opt = "fallback"
-                end
-                return {
-                    timeout_ms = 500,
-                    lsp_format = lsp_format_opt,
-                }
+    "stevearc/conform.nvim",
+    -- event = { "BufWritePre" },
+    cmd = { "ConformInfo" },
+    keys = {
+        {
+            "<leader>c",
+            function()
+                require("conform").format({ async = true, lsp_fallback = true })
             end,
-            formatters_by_ft = {
-                lua = { "stylua" },
-                sh = { "shfmt" }, -- beautysh
-                go = { "gofumpt" },
-                python = { "usort", "autopep8" }, -- ruff
-                typst = { "typstyle" },
-                cs = { "csharpier" },
+            mode = "",
+            desc = "Conform: Format buffer",
+        },
+        {
+            "<leader>F",
+            function()
+                require("conform").format({ async = true, lsp_fallback = true })
+            end,
+            mode = "",
+            desc = "Conform: Format buffer",
+        },
+    },
+    opts = {
+        -- notify_on_error = false,
+        format_on_save = function(bufnr)
+            -- Disable with a global or buffer-local variable
+            if not CONFIG.lsp.format_on_save or vim.b[bufnr].disable_autoformat then
+                return
+            end
+            local disable_filetypes = { c = true, cpp = true }
+            local lsp_format_opt
+            if disable_filetypes[vim.bo[bufnr].filetype] then
+                lsp_format_opt = "never"
+            else
+                lsp_format_opt = "fallback"
+            end
+            return {
+                timeout_ms = 500,
+                lsp_format = lsp_format_opt,
+            }
+        end,
+        formatters_by_ft = {
+            lua = { "stylua" },
+            sh = { "shfmt" }, -- beautysh
+            go = { "gofumpt" },
+            python = { "usort", "autopep8" }, -- ruff
+            typst = { "typstyle" },
+            cs = { "csharpier" },
 
-                javascript = { "prettierd", "prettier", stop_after_first = true },
-                javascriptreact = { "prettierd", "prettier", stop_after_first = true },
-                typescript = { "prettierd", "prettier", stop_after_first = true },
-                typescriptreact = { "prettierd", "prettier", stop_after_first = true },
-                vue = { "prettierd", "prettier", stop_after_first = true },
-                css = { "prettierd", "prettier", stop_after_first = true },
-                scss = { "prettierd", "prettier", stop_after_first = true },
-                html = { "prettierd", "prettier", stop_after_first = true },
-                json = { "prettierd", "prettier", stop_after_first = true },
-                jsonc = { "prettierd", "prettier", stop_after_first = true },
-                yaml = { "prettierd", "prettier", stop_after_first = true },
-                toml = { "prettierd", "prettier", stop_after_first = true },
-                -- graphql = { { "prettierd", "prettier" } },
-                -- svelte = { { "prettierd", "prettier" } },
-                -- astro = { { "prettierd", "prettier" } },
+            javascript = { "prettierd", "prettier", stop_after_first = true },
+            javascriptreact = { "prettierd", "prettier", stop_after_first = true },
+            typescript = { "prettierd", "prettier", stop_after_first = true },
+            typescriptreact = { "prettierd", "prettier", stop_after_first = true },
+            vue = { "prettierd", "prettier", stop_after_first = true },
+            css = { "prettierd", "prettier", stop_after_first = true },
+            scss = { "prettierd", "prettier", stop_after_first = true },
+            html = { "prettierd", "prettier", stop_after_first = true },
+            json = { "prettierd", "prettier", stop_after_first = true },
+            jsonc = { "prettierd", "prettier", stop_after_first = true },
+            yaml = { "prettierd", "prettier", stop_after_first = true },
+            toml = { "prettierd", "prettier", stop_after_first = true },
+            -- graphql = { { "prettierd", "prettier" } },
+            -- svelte = { { "prettierd", "prettier" } },
+            -- astro = { { "prettierd", "prettier" } },
+        },
+        formatters = {
+            autopep8 = {
+                -- Ignoring:
+                -- E401 - Put imports on separate lines -- let usort format the imports
+                -- E402 - Fix module level import not at top of file -- let usort format the imports
+                -- W503 - Fix line break before binary operator -- prefer W504 (line break after operator) instead
+                prepend_args = { "--ignore=W503,E401,E402" },
             },
-            formatters = {
-                autopep8 = {
-                    -- Ignoring:
-                    -- E401 - Put imports on separate lines -- let usort format the imports
-                    -- E402 - Fix module level import not at top of file -- let usort format the imports
-                    -- W503 - Fix line break before binary operator -- prefer W504 (line break after operator) instead
-                    prepend_args = { "--ignore=W503,E401,E402" },
-                },
-                prettierd = {
-                    prepend_args = function(_, ctx)
-                        if vim.fs.find(".editorconfig", { path = ctx.dirname, upward = true })[1] ~= nil then
-                            return {}
-                        end
-                        return { "--tab-width=4" } -- "--jsx-single-quote", "--no-semi"
-                    end,
-                },
-                shfmt = {
-                    -- default conform args for shfmt combined with guess-indent.nvim mess with my indents
-                    args = function(_, ctx)
-                        if vim.fs.find(".editorconfig", { path = ctx.dirname, upward = true })[1] ~= nil then
-                            return {}
-                        end
-                        -- use bash, indent 4 spaces, indent switch cases and follow redirect operators by a space
-                        return { "-ln", "bash", "-i", "4", "-ci", "-sr", "-filename", "$FILENAME" }
-                    end,
-                },
+            prettierd = {
+                prepend_args = function(_, ctx)
+                    if vim.fs.find(".editorconfig", { path = ctx.dirname, upward = true })[1] ~= nil then
+                        return {}
+                    end
+                    return { "--tab-width=4" } -- "--jsx-single-quote", "--no-semi"
+                end,
+            },
+            shfmt = {
+                -- default conform args for shfmt combined with guess-indent.nvim mess with my indents
+                args = function(_, ctx)
+                    if vim.fs.find(".editorconfig", { path = ctx.dirname, upward = true })[1] ~= nil then
+                        return {}
+                    end
+                    -- use bash, indent 4 spaces, indent switch cases and follow redirect operators by a space
+                    return { "-ln", "bash", "-i", "4", "-ci", "-sr", "-filename", "$FILENAME" }
+                end,
             },
         },
-        config = function(_, opts)
-            require("conform").setup(opts)
-
-            -- Use conform for gq.
-            vim.o.formatexpr = "v:lua.require'conform'.formatexpr()"
-
-            if CONFIG.lsp.format_on_save then
-                vim.api.nvim_create_user_command("FormatToggle", function()
-                    vim.b.disable_autoformat = not vim.b.disable_autoformat
-                    vim.notify(
-                        string.format("%s formatting...", vim.b.disable_autoformat and "Enabling" or "Disabling"),
-                        vim.log.levels.INFO
-                    )
-                end, {
-                    desc = "Toggle autoformat-on-save for current buffer",
-                    bang = true,
-                })
-            end
-        end,
     },
+    config = function(_, opts)
+        require("conform").setup(opts)
+
+        -- Use conform for gq.
+        vim.o.formatexpr = "v:lua.require'conform'.formatexpr()"
+
+        if CONFIG.lsp.format_on_save then
+            vim.api.nvim_create_user_command("FormatToggle", function()
+                vim.b.disable_autoformat = not vim.b.disable_autoformat
+                vim.notify(
+                    string.format("%s formatting...", vim.b.disable_autoformat and "Enabling" or "Disabling"),
+                    vim.log.levels.INFO
+                )
+            end, {
+                desc = "Toggle autoformat-on-save for current buffer",
+                bang = true,
+            })
+        end
+    end,
 }
