@@ -85,6 +85,7 @@ _G.CONFIG = {
         -- these have sadly no lazy loading support
         oil = true,
         debugprint = true,
+        fff = false,
     },
 }
 
