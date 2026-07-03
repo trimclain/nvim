@@ -105,13 +105,14 @@ end
 -- Fuzzy Finder
 -------------------------------------------------------------------------------
 
--- Return a function that calls snacks.picker
----@param source string picker source
----@param params? PickerOptions picker opts
----@class PickerOptions
+---@class core.util.PickerOpts
 ---@field cwd? string picker cwd
 ---@field title? string picker title
 ---@field preview? boolean whether to enable preview
+
+--- Return a function that calls snacks.picker
+---@param source string picker source
+---@param params? core.util.PickerOpts picker opts
 function M.pick(source, params)
     params = params or {}
     local opts = {
@@ -186,6 +187,7 @@ function M.open_project()
     vim.ui.select(lines, opts, on_choice)
 end
 
+--- Open Notes using fuzzy finder with preview
 function M.open_notes()
     local notes = vim.env.NOTES or vim.fs.joinpath(vim.env.HOME, "notes")
     if not M.dir_exists(notes) then
@@ -193,7 +195,7 @@ function M.open_notes()
         return
     end
 
-    M.pick("files", { cwd = notes, title = "Notes" })()
+    M.pick("files", { cwd = notes, title = "Notes", preview = true })()
 end
 
 -------------------------------------------------------------------------------
