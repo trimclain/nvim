@@ -341,7 +341,7 @@ return {
         "mason-org/mason.nvim",
         cond = CONFIG.lsp.enable_completion,
         cmd = "Mason",
-        keys = { { "<leader>M", "<cmd>Mason<cr>", desc = "[M]ason" } },
+        keys = { { "<leader>M", "<cmd>Mason<cr>", desc = "Open Mason" } },
         config = function()
             local Icons = require("core.icons")
             require("mason").setup({

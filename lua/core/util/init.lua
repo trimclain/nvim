@@ -186,6 +186,16 @@ function M.open_project()
     vim.ui.select(lines, opts, on_choice)
 end
 
+function M.open_notes()
+    local notes = vim.env.NOTES or vim.fs.joinpath(vim.env.HOME, "notes")
+    if not M.dir_exists(notes) then
+        require("core.util.notify").notify("Directory not found", "Notes")
+        return
+    end
+
+    M.pick("files", { cwd = notes, title = "Notes" })()
+end
+
 -------------------------------------------------------------------------------
 -- Previewer
 -------------------------------------------------------------------------------

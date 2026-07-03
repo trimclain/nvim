@@ -205,7 +205,10 @@ return {
             },
 
             -- find my projects
-            { "<leader>fp", Util.open_project, desc = "Open [P]roject" },
+            { "<leader>fp", Util.open_project, desc = "Open Project" },
+
+            -- find my notes
+            { "<leader>N", Util.open_notes, desc = "Open Notes" },
 
             -- Plugins
             { "<leader>fP", function() require("snacks").picker.lazy() end, desc = "Plugin Spec" },
