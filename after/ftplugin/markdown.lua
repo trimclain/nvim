@@ -102,4 +102,4 @@ local toggle_checkbox = function()
 end
 vim.keymap.set("n", "<C-s>", toggle_checkbox, add_desc("Toggle a checkbox"))
 
-vim.keymap.set("i", "--", "—", opts)
+-- vim.keymap.set("i", "--", "—", opts)
