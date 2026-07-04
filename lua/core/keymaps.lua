@@ -194,3 +194,6 @@ end, { desc = "Empty :registers" })
 vim.api.nvim_create_user_command("FixCmdheight", function()
     vim.opt.cmdheight = 1
 end, { desc = "Restore cmdheight" })
+
+-- bring back the thing we love
+vim.api.nvim_create_user_command("LspInfo", "checkhealth vim.lsp", { desc = "Show LSP Info" })
