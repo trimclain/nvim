@@ -21,16 +21,6 @@ local c = ls.choice_node
 local fmt = require("luasnip.extras.fmt").fmt
 
 local all_snippets = {
-    -- s(
-    --     { trig = "cu", desc = "config update commit" },
-    --     fmt("chore{scope}: update config", {
-    --         scope = c(1, {
-    --             t(""),
-    --             fmt("({})", { i(1, "scope") }),
-    --         }),
-    --     })
-    -- ),
-
     --- Ported from: https://github.com/rafamadriz/friendly-snippets/blob/main/snippets/global.json
     -- s({ trig = "copyright", desc = "Snippet to put copyright" }, {
     --     t("Copyright (c) "),
