@@ -162,11 +162,12 @@ vim.api.nvim_create_autocmd({ "VimResized", "WinResized" }, {
     callback = function(event)
         local old_cmdheight = vim.o.cmdheight
         if old_cmdheight > 1 then
-            vim.notify(
-                "Event fired: " .. event.event .. "\nResizing cmdheight from " .. old_cmdheight,
-                vim.log.levels.INFO,
-                { title = "Thank You Kitty and Neovim" }
-            )
+            -- TODO: create an issue upstream someday
+            -- vim.notify(
+            --     "Event fired: " .. event.event .. "\nResizing cmdheight from " .. old_cmdheight,
+            --     vim.log.levels.INFO,
+            --     { title = "Thank You Kitty and Neovim" }
+            -- )
             vim.opt.cmdheight = 1
         end
     end,
