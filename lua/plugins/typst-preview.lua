@@ -25,6 +25,7 @@ return {
     config = function(_, opts)
         -- Detect installed browser
         local browserlist = {
+            "helium-browser",
             "thorium-browser",
             "google-chrome",
             "brave",
