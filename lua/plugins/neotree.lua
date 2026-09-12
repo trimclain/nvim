@@ -53,6 +53,7 @@ return {
                     ["<space>"] = "none",
                     ["w"] = "none",
                     ["<tab>"] = "open",
+                    ["<Tab>"] = "open",
                     -- Open allowed filetypes with xdg-open
                     ["o"] = function(state)
                         local node = state.tree:get_node()
