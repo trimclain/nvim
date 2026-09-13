@@ -50,6 +50,12 @@ return {
                 position = "float", -- left, right, float, current (like netrw)
                 width = 35,
                 mappings = {
+                    -- TODO: searching stuff with / is annoying since hitting Enter opens the highlighted file.
+                    -- I want just to hover it and remove the filter.
+                    -- TODO: creating stuff with a/A is annoying because it always goes one deeper when I'm hovering a directory.
+                    -- I want it to do that only if the directory is expanded.
+                    -- TODO: sometimes if I have a vsplit and open the neotree from the right split window to open a file there,
+                    -- it will instead use the left split window.
                     ["<space>"] = "none",
                     ["w"] = "none",
                     ["<tab>"] = "open",

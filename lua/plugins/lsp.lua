@@ -74,7 +74,10 @@ local servers = {
     -- yamlls = { name = "yaml-language-server" },
     -- texlab = {}, -- latex
     tinymist = { cond = vim.fn.executable("typst") == 1 }, -- typst
+    -- TODO: remove after porting hyprland config to lua
     hyprls = { cond = vim.fn.executable("hyprctl") == 1 }, -- hyprland config files
+    -- TODO: enable for quickshell
+    -- qmlls = { name = "qmlls" },
     -- julials = { name = "julia-lsp" },
     -- ansiblels = { name = "ansible-language-server" },
     vimls = { name = "vim-language-server" },

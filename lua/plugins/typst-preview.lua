@@ -1,5 +1,6 @@
 -- preview typst document instantly on type
 return {
+    -- TODO: make a PR to ask the to also close the browser window on preview finish like iamcco/markdown-preview.nvim
     "chomosuke/typst-preview.nvim",
     enabled = not ON_INFERIOR_OS, -- curl is required to download necessary binaries
     ft = "typst",
