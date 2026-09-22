@@ -308,6 +308,51 @@ function M.toggle_diagnostics()
     end
 end
 
+--- Toggle colorscheme transparency. Works reliably only in neovide,
+--- since proper transparency requires terminal config to update too.
+function M.toggle_colorscheme_transparency()
+    local colorscheme = CONFIG.ui.colorscheme
+    local transparent = not CONFIG.ui.transparent_background
+
+    if vim.g.neovide then
+        vim.g.neovide_opacity = CONFIG.ui.transparent_background and 0.75 or 1
+        CONFIG.ui.transparent_background = transparent
+        return
+    end
+
+    local ok, opts = pcall(function()
+        -- Some of them WILL fail, e.g. tundra, github-dark
+        local plugin = require("lazy.core.config").plugins[colorscheme]
+        return plugin and plugin.opts
+    end)
+
+    if not ok or type(opts) ~= "table" then
+        require("core.util.notify").notify("No opts found for colorscheme " .. colorscheme, "Transparency Toggler")
+        return
+    end
+
+    if colorscheme == "astrotheme" then
+        opts.style.transparent = transparent
+    elseif colorscheme == "catppuccin" then
+        opts.transparent_background = transparent
+    elseif
+        colorscheme == "tokyonight"
+        or colorscheme == "vague"
+        or colorscheme == "nightfox"
+        or colorscheme == "vscode"
+        or colorscheme == "onedark"
+    then
+        opts.transparent = transparent
+    elseif colorscheme == "gruvbox" then
+        opts.transparent_mode = transparent
+    end
+
+    require(colorscheme).setup(opts)
+    vim.cmd.colorscheme(colorscheme)
+
+    CONFIG.ui.transparent_background = transparent
+end
+
 -------------------------------------------------------------------------------
 
 -- SOMEDAY: statusline component for autoformat_status

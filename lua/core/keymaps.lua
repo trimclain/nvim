@@ -150,6 +150,7 @@ keymap("n", "<leader>os", function() Util.toggle_option("spell") end, add_desc("
 keymap("n", "<leader>ot", Util.toggle_shiftwidth, add_desc("Toggle [T]ab Width"))
 keymap("n", "<leader>od", Util.toggle_diagnostics, add_desc("Toggle LSP [D]iagnostics"))
 keymap("n", "<leader>oc", Util.toggle_conceallevel, add_desc("Toggle [C]onceallevel"))
+keymap("n", "<leader>oT", Util.toggle_colorscheme_transparency, add_desc("Toggle [T]ransparency"))
 -- stylua: ignore end
 
 -------------------------------------------------------------------------------
