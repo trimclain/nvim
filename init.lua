@@ -91,10 +91,12 @@ _G.CONFIG = {
 
 -- local Timer = require("core.util.timer")
 -- Timer.start("Sourcing Local Config")
-local local_config = vim.fs.joinpath(vim.fn.stdpath("config"), "local.lua")
-if require("core.util").file_exists(local_config) then
-    dofile(local_config)
-end
+--local local_config = vim.fs.joinpath(vim.fn.stdpath("config"), "local.lua")
+--if require("core.util").file_exists(local_config) then
+--    dofile(local_config)
+--end
+-- Load local config at ~/.config/nvim/lua/local.lua
+pcall(require, "local")
 -- Timer.stop()
 
 require("core.options")
