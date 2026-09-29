@@ -286,7 +286,7 @@ return {
                 -- -- Needs `justinsgithub/wezterm-types` to be installed
                 --{ path = "wezterm-types", mods = { "wezterm" } },
                 {
-                    path = vim.fn.stdpath("data") .. "/lazy/plenary.nvim/lua", -- plenary.nvim / busted
+                    path = vim.fs.joinpath(vim.fn.stdpath("data"), "lazy", "plenary.nvim", "lua"), -- plenary.nvim / busted
                     words = { "describe", "it", "before_each", "after_each", "assert%.are" },
                 },
                 { path = "/usr/share/awesome/lib", words = { "awesome", "client", "root", "screen", "tag", "mouse" } }, -- awesomewm

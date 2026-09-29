@@ -212,7 +212,7 @@ return {
 
             -- Plugins
             { "<leader>fP", function() require("snacks").picker.lazy() end, desc = "Plugin Spec" },
-            { "<leader>pe", Util.pick("files", { cwd = vim.fn.stdpath("data") .. "/lazy" }), desc = "Edit Plugins" },
+            { "<leader>pe", Util.pick("files", { cwd = vim.fs.joinpath(vim.fn.stdpath("data"), "lazy") }), desc = "Edit Plugins" },
 
             -- Used Often
             { "<leader>fh", function() require("snacks").picker.help() end, desc = "Help Pages" },

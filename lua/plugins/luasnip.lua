@@ -18,9 +18,9 @@ return {
         require("luasnip.loaders.from_lua").lazy_load({
             paths = {
                 -- Load local snippets if present
-                -- vim.fn.getcwd() .. "/.snippets",
+                -- vim.fs.joinpath(vim.fn.getcwd(), ".snippets"),
                 -- Global snippets
-                vim.fn.stdpath("config") .. "/snippets",
+                vim.fs.joinpath(vim.fn.stdpath("config"), "snippets"),
             },
         })
     end,
