@@ -100,11 +100,6 @@ local servers = {
                 diagnostics = {
                     globals = {
                         "vim",
-                        -- plenary test
-                        "describe",
-                        "it",
-                        "before_each",
-                        "after_each",
                         -- awesomewm
                         "awesome",
                         "client",
