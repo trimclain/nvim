@@ -48,6 +48,7 @@ return {
             typst = { "typstyle" },
             cs = { "csharpier" },
 
+            markdown = { "prettierd", "prettier", stop_after_first = true },
             javascript = { "prettierd", "prettier", stop_after_first = true },
             javascriptreact = { "prettierd", "prettier", stop_after_first = true },
             typescript = { "prettierd", "prettier", stop_after_first = true },
@@ -76,6 +77,12 @@ return {
                 prepend_args = function(_, ctx)
                     if vim.fs.find(".editorconfig", { path = ctx.dirname, upward = true })[1] ~= nil then
                         return {}
+                    end
+                    if vim.bo[ctx.buf].filetype == "markdown" then
+                        return {
+                            "--print-width=120", -- =80
+                            "--prose-wrap=always",
+                        }
                     end
                     return { "--tab-width=4" } -- "--jsx-single-quote", "--no-semi"
                 end,
