@@ -164,6 +164,7 @@ local formatters = {
     prettierd = {},
     stylua = {},
     shfmt = { cond = not ON_INFERIOR_OS }, -- "beautysh",
+    mbake = { cond = not ON_INFERIOR_OS }, -- makefile formatter and linter
     typstyle = { cond = servers.tinymist.cond },
     gofumpt = { cond = servers.gopls.cond },
     csharpier = { cond = servers.omnisharp.cond },

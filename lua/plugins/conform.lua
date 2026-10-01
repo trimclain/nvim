@@ -43,6 +43,7 @@ return {
         formatters_by_ft = {
             lua = { "stylua" },
             sh = { "shfmt" }, -- beautysh
+            make = { "bake" },
             go = { "gofumpt" },
             python = { "usort", "autopep8" }, -- ruff
             typst = { "typstyle" },
