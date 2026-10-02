@@ -1,8 +1,30 @@
 -- LSP Server Settings
 -- Servers listed here will be autoinstalled
--- Docs: https://github.com/neovim/nvim-lspconfig/blob/master/doc/configs.md
--- Configs: https://github.com/neovim/nvim-lspconfig/tree/master/lsp
--- Mason Server List: https://mason-registry.dev/registry/list
+--
+-- To add a server:
+-- 1. Find it in [Neovim LspConfig Configs]
+-- 2. Find it in [Mason Registry]
+-- 3. Add a new entry to the servers table below:
+--      <lspconfig-name> = { name = "<mason-name>" },
+--    where <lspconfig-name> is the name of the lua file for that server
+--    and <mason-name> is the name of the mason package in the registry
+-- Note:
+-- - The `name` variable in the new entry is only required when it differs from the <lspconfig-name>
+-- - Server config goes under the `settings` variable
+-- - Conditions for installing and enabling the server go under the `cond` variable
+--
+-- To add a formatter/linter:
+-- 1. Find it in [Mason Registry]
+-- 2. Add a new entry to the formatters/linters table below:
+--      <mason-name> = {},
+--    where <mason-name> is the name of the mason package in the registry;
+--    optionally put conditions for installing the formatter/linter
+--    under the `cond` variable
+-- 3. Configure conform.nvim and/or nvim-lint accordingly
+--
+-- [Neovim LspConfig Docs]: https://github.com/neovim/nvim-lspconfig/blob/master/doc/configs.md
+-- [Neovim LspConfig Configs]: https://github.com/neovim/nvim-lspconfig/tree/master/lsp
+-- [Mason Registry]: https://mason-registry.dev/registry/list
 local servers = {
     gopls = {
         cond = vim.fn.executable("go") == 1,
@@ -60,6 +82,7 @@ local servers = {
     -- markdown_oxide = { name = "markdown-oxide" }, -- markdown
     -- harper-ls = {}, -- grammar checker for devs
     dockerls = { name = "dockerfile-language-server", cond = not ON_INFERIOR_OS },
+    just = { name = "just-lsp" }, -- `just` command runner
 
     html = { name = "html-lsp" },
     cssls = { name = "css-lsp", cond = not ON_INFERIOR_OS },
@@ -387,6 +410,7 @@ return {
                     local p = mr.get_package(ensure_installed[tool].name or tool)
 
                     -- let me know how u doin
+                    -- TODO: with Mason opened the notifications are duplicated. Can we fix this?
                     local notify = function(msg, lvl)
                         if not lvl then
                             lvl = vim.log.levels.INFO
