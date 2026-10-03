@@ -85,6 +85,9 @@ return {
                             "--prose-wrap=always",
                         }
                     end
+                    if vim.bo[ctx.buf].filetype == "yaml" then
+                        return {}
+                    end
                     return { "--tab-width=4" } -- "--jsx-single-quote", "--no-semi"
                 end,
             },
