@@ -67,44 +67,46 @@ local function follow_markdown_heading_on_current_line()
 end
 vim.keymap.set("n", "<cr>", follow_markdown_heading_on_current_line, add_desc("Follow heading link on current line"))
 
----Detects if a string starts with whitespaces and returns the length of them.
----@param str string The string to check.
----@return integer|nil The length of the leading whitespaces, nil if no leading whitespaces.
-local function get_leading_whitespaces_length(str)
-    local length = string.len(str)
-    for i = 1, length do
-        local char = string.sub(str, i, i)
-        -- find a non-whitespace character
-        if char:match("%S") then
-            return i - 1
+--- Check/uncheck a checkbox or convert a list item into a checkbox.
+--- In Visual mode, apply to every line touched by the selection.
+local toggle_checkbox = function()
+    local first_line = vim.fn.line(".")
+    local last_line = first_line
+
+    local mode = vim.fn.mode()
+    if mode == "v" or mode == "V" or mode == "\22" then
+        local selection_start = vim.fn.getpos("v")[2]
+        first_line = math.min(selection_start, last_line)
+        last_line = math.max(selection_start, last_line)
+    end
+
+    local lines = vim.api.nvim_buf_get_lines(0, first_line - 1, last_line, false)
+    local changed = false
+
+    for i, line in ipairs(lines) do
+        -- Preserve the original indentation, including tabs.
+        local indentation, trimmed_line = line:match("^(%s*)(.*)$")
+        local replacement
+
+        if vim.startswith(trimmed_line, "- [ ] ") then
+            replacement = "- [x] " .. string.sub(trimmed_line, 7)
+        elseif vim.startswith(trimmed_line, "- [x] ") then
+            replacement = "- [ ] " .. string.sub(trimmed_line, 7)
+        elseif vim.startswith(trimmed_line, "- ") then
+            replacement = "- [ ] " .. string.sub(trimmed_line, 3)
+        end
+
+        if replacement then
+            lines[i] = indentation .. replacement
+            changed = true
         end
     end
-    -- if the string contains only whitespaces or is empty
-    return nil
+
+    if changed then
+        vim.api.nvim_buf_set_lines(0, first_line - 1, last_line, false, lines)
+    end
 end
 
---- Check/uncheck the checkbox or convert the list item into the checkbox in current line
-local toggle_checkbox = function()
-    local line = vim.api.nvim_get_current_line()
-    local leading_whitespace_length = get_leading_whitespaces_length(line)
-
-    if leading_whitespace_length == nil then
-        return
-    end
-
-    local trimmed_line = string.sub(line, leading_whitespace_length + 1)
-    if vim.startswith(trimmed_line, "- [ ] ") then
-        trimmed_line = "- [x] " .. string.sub(trimmed_line, 7)
-    elseif vim.startswith(trimmed_line, "- [x] ") then
-        trimmed_line = "- [ ] " .. string.sub(trimmed_line, 7)
-    elseif vim.startswith(trimmed_line, "- ") then
-        trimmed_line = "- [ ] " .. string.sub(trimmed_line, 3)
-    else
-        return
-    end
-
-    vim.api.nvim_set_current_line(string.rep(" ", leading_whitespace_length) .. trimmed_line)
-end
-vim.keymap.set("n", "<C-s>", toggle_checkbox, add_desc("Toggle a checkbox"))
+vim.keymap.set({ "n", "x" }, "<C-s>", toggle_checkbox, add_desc("Toggle a checkbox"))
 
 -- vim.keymap.set("i", "--", "—", opts)
