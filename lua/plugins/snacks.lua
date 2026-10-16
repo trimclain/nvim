@@ -104,7 +104,27 @@ return {
 
         -- configure image support
         if not ON_INFERIOR_OS then
-            opts.image = { doc = { enabled = false } }
+            opts.image = {
+                formats = {
+                    "png",
+                    "jpg",
+                    "jpeg",
+                    "gif",
+                    "bmp",
+                    "webp",
+                    "tiff",
+                    "heic",
+                    "avif",
+                    "mp4",
+                    "mov",
+                    "avi",
+                    "mkv",
+                    "webm",
+                    -- "pdf",
+                    "icns",
+                },
+                doc = { enabled = false },
+            }
         end
 
         -- zen mode
