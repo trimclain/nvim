@@ -120,8 +120,14 @@ keymap("x", "p", "P", opts) -- when replacing a higlighted text, don't yank it
 keymap({ "i", "c", "s" }, "<C-r>", "<C-r>+", opts) -- paste from clipboard in insert, command and select modes
 keymap("n", "M", "<cmd>Man<cr>", opts) -- open manual entry for word under cursor
 keymap("n", "<leader>r.", ":%s/\\<<c-r><c-w>\\>/", add_desc("Replace Word Vim Style"))
--- stylua: ignore
-keymap("n", "<leader>y", function() vim.fn.setreg("+", vim.fn.histget(":", -1)) end, add_desc("Yank last command"))
+keymap("n", "<leader>y", function()
+    local text = vim.fn.histget(":", -1)
+    if vim.env.SSH_CONNECTION or vim.env.SSH_TTY then
+        require("vim.ui.clipboard.osc52").copy("+")({ text })
+    else
+        vim.fn.setreg("+", text)
+    end
+end, add_desc("Yank last command"))
 keymap("n", "<leader>Y", 'gg"+yG', add_desc("Yank Whole File"))
 keymap("n", "<leader>w", "<cmd>update<cr>", add_desc("Update File"))
 

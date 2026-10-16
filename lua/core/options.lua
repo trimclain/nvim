@@ -50,11 +50,27 @@ for k, v in pairs(options) do
     vim.opt[k] = v
 end
 
--- Schedule the setting after `UiEnter` because it can increase startup-time
-vim.schedule(function()
-    -- sync clipboard between OS and Neovim.
-    vim.o.clipboard = "unnamedplus"
-end)
+-- Clipboard: native integration locally, yank-only OSC 52 over SSH.
+local is_ssh = vim.env.SSH_CONNECTION ~= nil or vim.env.SSH_TTY ~= nil
+if is_ssh then
+    -- Keep p/P, deletes, and changes on Neovim's internal registers.
+    vim.opt.clipboard = ""
+    local copy = require("vim.ui.clipboard.osc52").copy("+")
+    vim.api.nvim_create_autocmd("TextYankPost", {
+        group = vim.api.nvim_create_augroup("SSHClipboard", { clear = true }),
+        desc = "Forward yanks to the local clipboard over SSH",
+        callback = function()
+            if vim.v.event.operator == "y" then
+                copy(vim.v.event.regcontents)
+            end
+        end,
+    })
+else
+    -- Schedule the setting after `UiEnter` because it can increase startup-time (© kickstart.nvim)
+    vim.schedule(function()
+        vim.opt.clipboard = "unnamedplus"
+    end)
+end
 
 -----------------------------------------------------------------------------------------------------------------------
 -- Settings for Neovide or GUI nvim
