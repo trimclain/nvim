@@ -45,6 +45,7 @@ return {
             sh = { "shfmt" }, -- beautysh
             make = { "bake" },
             go = { "gofumpt" },
+            rust = { "rustfmt" },
             python = { "usort", "autopep8" }, -- ruff
             typst = { "typstyle" },
             cs = { "csharpier" },
