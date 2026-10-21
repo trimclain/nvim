@@ -24,7 +24,10 @@ return {
             -- lua = "lua %", -- this will override the `enable_builtin` for lua
             -- markdown = "glow %", -- needs color=true
             python = "python3 %",
-            rust = "cargo run",
+            rust = {
+                cmd = "rustc % && ./$basename",
+                alt = "cargo run",
+            },
             sh = "sh %",
             tex = "tectonic --chatter=minimal %",
             typescript = "ts-node %",
