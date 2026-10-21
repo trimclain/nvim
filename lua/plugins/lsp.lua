@@ -38,6 +38,17 @@ local servers = {
             },
         },
     },
+    rust_analyzer = {
+        name = "rust-analyzer",
+        cond = vim.fn.executable("cargo") == 1,
+        settings = {
+            ["rust-analyzer"] = {
+                diagnostics = {
+                    enable = false,
+                },
+            },
+        },
+    },
     -- For now disabled in favor of python-lsp-server
     -- basedpyright = {
     --     name = "basedpyright",
