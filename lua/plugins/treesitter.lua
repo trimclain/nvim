@@ -27,6 +27,21 @@ return {
         },
     },
     config = function()
+        -- Register Lean parser
+        vim.api.nvim_create_autocmd("User", {
+            pattern = "TSUpdate",
+            callback = function()
+                require("nvim-treesitter.parsers").lean = {
+                    install_info = {
+                        url = "https://github.com/Julian/tree-sitter-lean",
+                        queries = "queries",
+                        revision = "main",
+                    },
+                    tier = 3,
+                }
+            end,
+        })
+
         -- List of Parsers: https://github.com/nvim-treesitter/nvim-treesitter/blob/main/SUPPORTED_LANGUAGES.md
         local ensure_installed = {
             "python",
